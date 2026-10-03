@@ -141,18 +141,6 @@ a{color:inherit}
   font-size:14.5px;line-height:1.65;
 }
 
-.quicklinks{
-  margin-top:clamp(38px,4.6vw,54px);
-  display:flex;flex-wrap:wrap;gap:12px 28px;
-}
-.quicklinks a{
-  font-size:14.5px;text-decoration:none;
-  color:var(--ink);
-  padding-bottom:4px;
-  border-bottom:1px solid var(--sand);
-  transition:color .3s var(--ease),border-color .3s var(--ease);
-}
-.quicklinks a:hover{color:var(--indigo);border-bottom-color:var(--indigo)}
 
 
 /* ── 区块标题 ─────────────────────────────────────────── */
@@ -237,11 +225,6 @@ a{color:inherit}
   font-size:15px;line-height:1.78;color:var(--body);
 }
 
-.note{
-  margin-top:24px;max-width:76ch;
-  font:500 12.5px/1.8 var(--mono);
-  color:var(--muted);
-}
 
 
 /* ── 经历 ─────────────────────────────────────────────── */
@@ -262,11 +245,6 @@ a{color:inherit}
 .path .what span{
   display:block;margin-top:5px;
   font-size:14px;color:var(--muted);
-}
-.honor{
-  margin-top:26px;
-  font:500 13px/1.7 var(--mono);
-  color:var(--muted);
 }
 
 
@@ -357,7 +335,6 @@ footer{
     border-top:1px solid var(--sand);
   }
   .facts>div:first-child{border-top:0;padding-top:0}
-  .quicklinks{gap:10px 22px}
   .rows li{grid-template-columns:1fr;gap:10px;padding:26px 0}
   .rows .n{padding-top:0}
   .row-meta{padding-top:6px}
