@@ -291,22 +291,6 @@ a{color:inherit}
 }
 
 
-/* ── 方法 ─────────────────────────────────────────────── */
-.creed{list-style:none;border-top:1px solid var(--sand);max-width:78ch}
-.creed li{
-  padding:26px 0;
-  border-bottom:1px solid var(--sand);
-}
-.creed b{
-  display:block;
-  font-size:17.5px;font-weight:600;letter-spacing:-.01em;line-height:1.5;
-}
-.creed span{
-  display:block;margin-top:9px;
-  font-size:15.5px;line-height:1.75;color:var(--body);
-}
-
-
 /* ── 页脚 ─────────────────────────────────────────────── */
 footer{
   background:var(--dark);
@@ -315,15 +299,8 @@ footer{
   padding-block:clamp(60px,8vw,110px) clamp(40px,5vw,60px);
 }
 .foot-in{max-width:var(--shell);margin-inline:auto;padding-inline:var(--gutter)}
-.foot-lead{
-  max-width:44ch;
-  font-size:clamp(17px,1.4vw,20px);
-  line-height:1.7;
-  color:#9BA196;
-}
 .foot-mail{
   display:inline-block;
-  margin-top:26px;
   font-size:clamp(24px,3.6vw,46px);
   line-height:1.15;font-weight:600;letter-spacing:-.025em;
   color:#E9E7E1;text-decoration:none;
