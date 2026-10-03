@@ -1,0 +1,6 @@
+把你自己的域名写在这里，不要带 https://，然后把本文件改名为 CNAME（无扩展名）再提交。
+用于让 GitHub Pages 识别自定义域名并自动签发 HTTPS 证书。
+
+示例：
+adenzhou.me
+zhouxc.dev
