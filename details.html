@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>深入 · 周栩丞</title>
+<meta name="description" content="周栩丞（Aden Zhou）向上游项目提交的具体改动：PR 标题、真实 diff 片段、kernel_opt_agent 的 PR 分布，以及两个系统的结构。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2310130F'/%3E%3Ccircle cx='16' cy='16' r='6.5' fill='none' stroke='%232F49E0' stroke-width='2.2'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%23E0A33C'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body class="page-details">
+
+<div class="progress" aria-hidden="true"><i></i></div>
+
+<header class="topbar">
+  <a class="brand" href="index.html">周栩丞</a>
+  <nav class="nav" aria-label="主导航">
+    <a class="is-here" aria-current="page">深入</a>
+    <a href="index.html#work">在做什么</a>
+    <a href="index.html#oss">开源</a>
+    <a href="index.html#bg">背景</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ══ 深入页头 ═══════════════════════════════════ -->
+  <section class="d-hero">
+    <div class="d-hero-in">
+      <p class="eyebrow" data-reveal>深入</p>
+      <h1 data-reveal>具体改了什么</h1>
+      <p class="lede" data-reveal>
+        下面每一条都对应一个真实的上游 PR，标题、编号、日期和 diff 都从 GitHub 上直接取，
+        点进去能看完整改动和讨论。主页只写了结论，这里放过程。
+      </p>
+    </div>
+  </section>
+
+
+  <!-- ══ 上游改动 ═══════════════════════════════════ -->
+  <section class="sec" id="upstream">
+    <div class="sec-head" data-reveal>
+      <h2>上游改动</h2>
+      <p>5 个项目，5 个已合并 PR。从新到旧。</p>
+    </div>
+
+    <!-- 1. flash-linear-attention -->
+    <article class="pr" data-reveal>
+      <div class="pr-meta">
+        <span class="pr-repo">fla-org/flash-linear-attention</span>
+        <a class="pr-num" href="https://github.com/fla-org/flash-linear-attention/pull/1320" target="_blank" rel="noopener noreferrer">#1320 ↗</a>
+      </div>
+      <h3 class="pr-title">[Fix] Preserve RWKV7 orthogonal initialization for low-precision weights</h3>
+      <p class="pr-note">
+        原来的写法把权重复制成 float 做正交初始化，再 <code>.to()</code> 转回原精度。
+        这个 round-trip 会重新分配张量，低精度下丢掉已经算好的数值。改成在 float 副本上初始化完
+        <code>copy_</code> 回原张量，不再走一次转换。
+      </p>
+      <pre class="diff"><code><span class="d">-        oringinal_dtype = weight.dtype
+-        weight = weight.float()
+-        nn.init.orthogonal_(weight, gain=gain)
+-        weight = weight.to(oringinal_dtype)</span>
+<span class="a">+        float_weight = weight.float()
++        nn.init.orthogonal_(float_weight, gain=gain)
++        weight.copy_(float_weight)</span></code></pre>
+      <p class="pr-stat">1 个文件 · +3 −4 · 合并于 2026-10-03</p>
+    </article>
+
+    <!-- 2. TIRx-harness -->
+    <article class="pr" data-reveal>
+      <div class="pr-meta">
+        <span class="pr-repo">mlc-ai/TIRx-harness</span>
+        <a class="pr-num" href="https://github.com/mlc-ai/TIRx-harness/pull/12" target="_blank" rel="noopener noreferrer">#12 ↗</a>
+      </div>
+      <h3 class="pr-title">Keep ptxas resource counts scoped to the first kernel report</h3>
+      <p class="pr-note">
+        <code>parse_ptxas</code> 原来在整份日志里搜数字。一个 cubin 里有多个 kernel 时，
+        第一个 kernel 可能压根不报静态 smem，于是它的寄存器数会配上后面某个 kernel 的 smem 或 spill，
+        拼出一个从来没存在过的组合。改成先把日志切到第一个 report 再解析。PR 里带了 CUDA 13.0 SM103a 的真实编译日志做回归。
+      </p>
+      <pre class="diff"><code><span class="a">+    # Optional fields may be absent for the first kernel. Searching the entire
++    # log would then borrow a resource count from a later, unrelated function.
++    entries = list(re.finditer(r"(?m)^ptxas info\s*:\s*Compiling entry function", log))
++    if not entries:
++        entries = list(re.finditer(r"(?m)^ptxas info\s*:\s*Function properties for", log))
++    if entries:
++        end = entries[1].start() if len(entries) &gt; 1 else len(log)
++        log = log[entries[0].start():end]</span></code></pre>
+      <p class="pr-stat">2 个文件 · +37 −0 · 合并于 2026-09-30</p>
+    </article>
+
+    <!-- 3. Mooncake -->
+    <article class="pr" data-reveal>
+      <div class="pr-meta">
+        <span class="pr-repo">kvcache-ai/Mooncake</span>
+        <a class="pr-num" href="https://github.com/kvcache-ai/Mooncake/pull/4063" target="_blank" rel="noopener noreferrer">#4063 ↗</a>
+      </div>
+      <h3 class="pr-title">[TE] Bound pooled TCP admission by queued bytes</h3>
+      <p class="pr-note">
+        经典 TCP 路径按 item 条数限制每个连接组能排多少活，但每个 item 在真正开始或离开队列之前
+        都攥着自己的源 buffer 不放。条数相同，一次几 MB 的请求和一个几 KB 的请求占的资源差两个量级。
+        加了按字节计的上界 <code>MC_TCP_MAX_QUEUED_BYTES_PER_PEER</code>，超了返回 <code>QUEUE_FULL</code>。
+      </p>
+      <p class="pr-note pr-note-2">
+        这个 PR 花了 360 行，其中 266 行是可见性测试：验证被拒绝的传输不会改到目标内存、
+        已准入的字节在传输完成后正确释放、以及批量准入中途失败不会让调用方误以为源 buffer 已可用。
+      </p>
+      <pre class="diff"><code>  <span class="c">// Bytes whose source buffers remain owned by the queue or pending
+  // admission. Active lanes are excluded and already bounded by
+  // lanes_per_peer.</span>
+  uint64_t queued_byte_capacity;
+  uint64_t admitted_bytes = 0;</code></pre>
+      <p class="pr-stat">5 个文件 · +360 −7 · 合并于 2026-09-24</p>
+    </article>
+
+    <!-- 4. lmdeploy -->
+    <article class="pr" data-reveal>
+      <div class="pr-meta">
+        <span class="pr-repo">InternLM/lmdeploy</span>
+        <a class="pr-num" href="https://github.com/InternLM/lmdeploy/pull/5000" target="_blank" rel="noopener noreferrer">#5000 ↗</a>
+      </div>
+      <h3 class="pr-title">fix: restore getenv after environment parsing errors</h3>
+      <p class="pr-note">
+        <code>set_envs()</code> 是个 context manager，解析模块级环境配置时会临时替换 <code>os.getenv</code>。
+        原来 <code>yield</code> 后面直接跟还原语句，没包 try。任何一个环境变量取值非法导致解析抛异常，
+        <code>os.getenv</code> 就永远停在打补丁的版本上，后面所有读环境变量的代码都拿到错的东西。
+      </p>
+      <pre class="diff"><code><span class="d">-    yield
+-    os.getenv = _origin_get_env</span>
+<span class="a">+    try:
++        yield
++    finally:
++        os.getenv = _origin_get_env</span></code></pre>
+      <p class="pr-stat">1 个文件 · +4 −2 · 合并于 2026-09-23</p>
+    </article>
+
+    <!-- 5. vLLM -->
+    <article class="pr" data-reveal>
+      <div class="pr-meta">
+        <span class="pr-repo">vllm-project/vllm</span>
+        <a class="pr-num" href="https://github.com/vllm-project/vllm/pull/56882" target="_blank" rel="noopener noreferrer">#56882 ↗</a>
+      </div>
+      <h3 class="pr-title">[Bugfix][Multimodal] Preserve DeepSeek V4 image block spacing</h3>
+      <p class="pr-note">
+        DeepSeek V4 的 renderer 让 <code>parse_chat_messages</code> 返回 flatten 成字符串的内容，
+        text 和 image block 之间的结构边界在 tokenizer 套用官方空行模板之前就没了。
+        修完之后，两张图的输入会正确产出下面这段 token 序列——图片前后各有独立分隔符，而不是被并成一片。
+      </p>
+      <pre class="diff"><code>&lt;｜begin▁of▁sentence｜&gt;You are a helpful vision assistant.&lt;｜User｜&gt;请按"第一张、第二张"的顺序回答：第一张图
+
+&lt;｜deepseek_image｜&gt;
+
+和第二张图
+
+&lt;｜deepseek_image｜&gt;
+
+中分别是什么食材？&lt;｜Assistant｜&gt;&lt;/think&gt;</code></pre>
+      <p class="pr-stat">5 个文件 · +60 −12 · 合并于 2026-09-18</p>
+    </article>
+  </section>
+
+
+  <!-- ══ kernel_opt_agent ═══════════════════════════ -->
+  <section class="sec" id="koa">
+    <div class="sec-head" data-reveal>
+      <h2>kernel_opt_agent</h2>
+      <p>自用的 kernel 优化 Agent，上面累计 46 个已合并 PR。绝大多数不是让模型多生成点东西，是让它的产出可被信任。</p>
+    </div>
+
+    <ul class="koa" data-reveal>
+      <li>
+        <span class="koa-n">21</span>
+        <div>
+          <b>检索与发现</b>
+          <span>控制源码扫描窗口的大小和顺序，跳过已看过的窗口，把重复的 owner 交接合并起来，避免在同一个候选上反复打转。</span>
+        </div>
+      </li>
+      <li>
+        <span class="koa-n">9</span>
+        <div>
+          <b>证据与复现</b>
+          <span>候选要独立复现过才算数，复现不了也要把反例留下来；issue 证据和源码扫描分开刷新；owner 分数审计时把 PR 数量和质量分开算。</span>
+        </div>
+      </li>
+      <li>
+        <span class="koa-n">16</span>
+        <div>
+          <b>门禁与交付</b>
+          <span>交付前的准入检查、dtype 校验和人工复核；检索预算上限；Windows/WSL 边界；没有新证据的仓库进入冷却而不是继续轮询。</span>
+        </div>
+      </li>
+    </ul>
+
+    <p class="fine" data-reveal>
+      数字按 PR 标题归类，不是仓库里的官方分类。
+      <a href="https://github.com/adenzhou1350/kernel_opt_agent/pulls?q=is%3Apr+is%3Amerged" target="_blank" rel="noopener noreferrer">全部 46 个已合并 PR ↗</a>
+    </p>
+  </section>
+
+
+  <!-- ══ 结构 ═══════════════════════════════════════ -->
+  <section class="sec" id="shape">
+    <div class="sec-head" data-reveal>
+      <h2>两个系统的形状</h2>
+    </div>
+
+    <h3 class="sub" data-reveal>具身 Agent 的任务长链</h3>
+    <figure class="fig" data-reveal>
+      <ol class="chain">
+        <li>语音交互</li>
+        <li>意图理解</li>
+        <li>工具调用</li>
+        <li>动作执行</li>
+      </ol>
+      <div class="chain-spine">
+        <span>Redis 消息同步 · 超时熔断 · 断点可续</span>
+      </div>
+      <figcaption>横穿整条链路的不是模型能力，是让链路断掉之后还能接着走的那几件事。</figcaption>
+    </figure>
+
+    <h3 class="sub" data-reveal>kernel 优化 Agent 的门禁流程</h3>
+    <figure class="fig" data-reveal>
+      <ol class="chain">
+        <li>候选筛选</li>
+        <li>独立复现</li>
+        <li>预算约束</li>
+        <li>人工把关</li>
+        <li>合并</li>
+      </ol>
+      <div class="chain-spine">
+        <span>证据与反例全程留存，不通过就带着证据退回上一步</span>
+      </div>
+      <figcaption>上面 46 个 PR 里的「证据与复现」「门禁与交付」两类，就是这条链上的每一环。</figcaption>
+    </figure>
+  </section>
+
+
+  <!-- ══ 回主页 ═════════════════════════════════════ -->
+  <section class="sec">
+    <a class="back" href="index.html" data-reveal>
+      <span aria-hidden="true">←</span> 回到主页
+    </a>
+  </section>
+
+</main>
+
+<footer id="contact">
+  <div class="foot-in">
+    <a class="foot-mail" href="mailto:aden1350@outlook.com" data-reveal>aden1350@outlook.com</a>
+  </div>
+</footer>
+
+<script src="assets/main.js"></script>
+</body>
+</html>

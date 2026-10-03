@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>周栩丞 · AI Agent 研发工程师</title>
-<meta name="description" content="周栩丞（Aden Zhou），AI Agent 研发工程师。关注 Agent 链路与底层推理落地，往 vLLM、lmdeploy、Mooncake 等上游项目提交过代码。">
+<meta name="description" content="周栩丞（Aden Zhou），AI Agent 研发工程师，深圳。往 vLLM、lmdeploy、Mooncake、flash-linear-attention 等上游项目提交过改动。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2310130F'/%3E%3Ccircle cx='16' cy='16' r='6.5' fill='none' stroke='%232F49E0' stroke-width='2.2'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%23E0A33C'/%3E%3C/svg%3E" />
 <link rel="stylesheet" href="assets/styles.css">
 </head>
@@ -13,11 +13,13 @@
 <div class="progress" aria-hidden="true"><i></i></div>
 
 <header class="topbar">
-  <a class="brand" href="#top">周栩丞</a>
+  <a class="brand" href="index.html">周栩丞</a>
   <nav class="nav" aria-label="主导航">
+    <a href="#stance">判断</a>
     <a href="#work">在做什么</a>
-    <a href="#path">经历</a>
-    <a href="#contact">联系</a>
+    <a href="#oss">开源</a>
+    <a href="#bg">背景</a>
+    <a class="nav-more" href="details.html">深入<span aria-hidden="true">→</span></a>
   </nav>
 </header>
 
@@ -26,7 +28,7 @@
   <!-- ══ HERO ══════════════════════════════════════ -->
   <section class="hero">
     <div class="hero-in">
-      <p class="eyebrow" data-reveal>周栩丞 · ADEN ZHOU · 深圳</p>
+      <p class="eyebrow" data-reveal>周栩丞 · ADEN ZHOU · 深圳 可远程</p>
 
       <h1 data-reveal>做 Agent，<br>也做它底下的<em>推理</em>。</h1>
 
@@ -34,23 +36,29 @@
         比某一段做得多准更在意的，是整条链路在真实场景里能不能跑通，断掉之后还能不能续上。
         这两年从模型底下的推理，往 Agent 这一层挪。
       </p>
+    </div>
+  </section>
 
-      <hr class="hr" data-reveal>
 
-      <dl class="facts" data-reveal>
-        <div>
-          <dt>在做</dt>
-          <dd>具身 Agent 闭环<br>模块封装与调度</dd>
-        </div>
-        <div>
-          <dt>开源</dt>
-          <dd>50+ 个已合并 PR<br>vLLM · lmdeploy · Mooncake</dd>
-        </div>
-        <div>
-          <dt>地点</dt>
-          <dd>深圳<br>可远程</dd>
-        </div>
-      </dl>
+  <!-- ══ 判断（深色断点）═════════════════════════════ -->
+  <section class="stance" id="stance">
+    <div class="stance-in">
+      <h2 class="stance-h" data-reveal>几个一直在用的判断</h2>
+
+      <ol class="stance-list">
+        <li data-reveal>
+          <p class="claim">状态要有上界。</p>
+          <p class="why">Agent 的可靠性问题最后都会落到这一条上：慢连接占着资源不放、解析抛了异常不把环境还原、长任务链走到一半断掉——都是同一类。上了界，链路才谈得上续跑。</p>
+        </li>
+        <li data-reveal>
+          <p class="claim">一个数字如果可能从别处借来，就不该进报表。</p>
+          <p class="why">统计口径比统计本身重要。口径不干净，后面的优化都是在拟合噪声。</p>
+        </li>
+        <li data-reveal>
+          <p class="claim">让 Agent 写 kernel，难的不是写出来，是让它知道自己写的是不是对的。</p>
+          <p class="why">所以在 kernel_opt_agent 上，力气大多花在证据和门禁上，不在生成上。</p>
+        </li>
+      </ol>
     </div>
   </section>
 
@@ -61,67 +69,88 @@
       <h2>在做什么</h2>
     </div>
 
-    <ul class="rows" data-reveal>
-      <li>
-        <span class="n">01</span>
-        <div class="row-main">
-          <h3>具身 Agent 闭环</h3>
-          <p>在真实家庭场景里，把语音交互、意图理解、工具调用和动作执行接成一条任务长链。超时熔断和消息同步是为了让长链路不至于中途断掉。</p>
-        </div>
-        <div class="row-meta">
-          <b>自变量机器人</b>
-          <span>AI Agent 研发工程师</span>
-          <span>2026.03 — 至今</span>
-        </div>
-      </li>
-      <li>
-        <span class="n">02</span>
-        <div class="row-main">
-          <h3>推理服务</h3>
-          <p>H100 上千亿参数模型跑起来，再把部署这件事从脚本变成流水线。做过 Q4 权重量化的显存布局、批处理调度和 KV Cache 调优。</p>
-        </div>
-        <div class="row-meta">
-          <b>华为 OD</b>
-          <span>软件开发工程师</span>
-          <span>2025.03 — 2026.03</span>
-        </div>
-      </li>
-      <li>
-        <span class="n">03</span>
-        <div class="row-main">
-          <h3>模型平台</h3>
-          <p>把训练、部署、评测放回同一条链路。做的事很杂，但目标只有一个：让每一次调整都有数据可依，而不是靠感觉。</p>
-        </div>
-        <div class="row-meta">
-          <b>华为 OD</b>
-          <span>软件开发工程师</span>
-          <span>2025.03 — 2026.03</span>
-        </div>
-      </li>
-    </ul>
+    <div class="group" data-reveal>
+      <div class="group-head">
+        <b>自变量机器人</b>
+        <span>AI Agent 研发工程师 · 2026.03 — 至今</span>
+      </div>
+      <ul class="rows">
+        <li>
+          <span class="n">01</span>
+          <div class="row-main">
+            <h3>具身 Agent 闭环</h3>
+            <p>在真实家庭场景里，把语音交互、意图理解、工具调用和动作执行接成一条任务长链。超时熔断和消息同步是为了让长链路不至于中途断掉。</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="group" data-reveal>
+      <div class="group-head">
+        <b>华为 OD</b>
+        <span>软件开发工程师 · 大模型平台 · 2025.03 — 2026.03</span>
+      </div>
+      <ul class="rows">
+        <li>
+          <span class="n">02</span>
+          <div class="row-main">
+            <h3>推理服务</h3>
+            <p>H100 上千亿参数模型跑起来，再把部署这件事从脚本变成流水线。做过 Q4 权重量化的显存布局、批处理调度和 KV Cache 调优。</p>
+          </div>
+        </li>
+        <li>
+          <span class="n">03</span>
+          <div class="row-main">
+            <h3>模型平台</h3>
+            <p>把训练、部署、评测放回同一条链路。做的事很杂，但目标只有一个：让每一次调整都有数据可依，而不是靠感觉。</p>
+          </div>
+        </li>
+      </ul>
+    </div>
   </section>
 
 
-  <!-- ══ 经历与开源 ═════════════════════════════════ -->
-  <section class="sec" id="path">
+  <!-- ══ 开源 ═══════════════════════════════════════ -->
+  <section class="sec" id="oss">
     <div class="sec-head" data-reveal>
-      <h2>经历与开源</h2>
-      <p>工作之外，往上游推理框架和基础设施也提交了不少改动。</p>
+      <h2>开源</h2>
+      <p>50 多个已合并 PR，散在推理框架、KV Cache 传输、kernel 编译和一个自用的 kernel 优化工具上。</p>
+    </div>
+
+    <ul class="areas" data-reveal>
+      <li>
+        <b>推理框架</b>
+        <span>vLLM 的多模态输入保留 DeepSeek 图像块的间距；lmdeploy 在环境变量解析出错后把 <code>os.getenv</code> 还原；flash-linear-attention 里 RWKV7 低精度权重的正交初始化。</span>
+      </li>
+      <li>
+        <b>KV Cache 传输</b>
+        <span>Mooncake 的池化 TCP 准入从按条数计改成按已排队字节数计，慢连接不再能把整个池拖住。</span>
+      </li>
+      <li>
+        <b>Kernel 编译</b>
+        <span>TIRx-harness 里 ptxas 的资源统计限定在第一个 kernel report，不往后借后面的数字。</span>
+      </li>
+      <li>
+        <b>工具链</b>
+        <span>kernel_opt_agent 上累计 46 个已合并 PR。</span>
+      </li>
+    </ul>
+
+    <a class="deep" href="details.html" data-reveal>
+      <span class="deep-t">想知道具体改了什么</span>
+      <span class="deep-s">5 个上游 PR 的原始标题、真实 diff 片段、kernel_opt_agent 的 46 个 PR 分布，和两个系统的结构图</span>
+      <span class="deep-a" aria-hidden="true">→</span>
+    </a>
+  </section>
+
+
+  <!-- ══ 背景 ═══════════════════════════════════════ -->
+  <section class="sec" id="bg">
+    <div class="sec-head" data-reveal>
+      <h2>背景</h2>
     </div>
 
     <ul class="path" data-reveal>
-      <li>
-        <span class="when">2026.03 — 至今</span>
-        <div class="what"><b>自变量机器人</b><span>AI Agent 研发工程师 · 具身 Agent</span></div>
-      </li>
-      <li>
-        <span class="when">2025.04 — 至今</span>
-        <div class="what"><b>开源贡献</b><span>50+ 个已合并 PR，其中 5 个进了上游项目</span></div>
-      </li>
-      <li>
-        <span class="when">2025.03 — 2026.03</span>
-        <div class="what"><b>华为 OD</b><span>软件开发工程师 · 大模型平台</span></div>
-      </li>
       <li>
         <span class="when">2023.02 — 2025.01</span>
         <div class="what"><b>悉尼大学</b><span>硕士 · 网络与分布式系统</span></div>
@@ -129,27 +158,6 @@
       <li>
         <span class="when">2018.08 — 2022.12</span>
         <div class="what"><b>宾夕法尼亚州立大学</b><span>学士 · 计算机工程</span></div>
-      </li>
-    </ul>
-
-    <h3 class="sub" data-reveal>改动主要集中在这些地方</h3>
-
-    <ul class="areas" data-reveal>
-      <li>
-        <b>推理框架</b>
-        <span>vLLM 的多模态输入处理，DeepSeek 图像块间距的保留；lmdeploy 的部署环境解析，出错后恢复环境变量状态。</span>
-      </li>
-      <li>
-        <b>KV Cache 传输</b>
-        <span>Mooncake 的池化连接准入控制，按已排队字节数限流，避免慢连接把整个池拖住。</span>
-      </li>
-      <li>
-        <b>Kernel 编译</b>
-        <span>TIRx-harness 里 ptxas 资源统计的取值口径，只认第一次 kernel report。</span>
-      </li>
-      <li>
-        <b>工具链</b>
-        <span>在 kernel_opt_agent 上累计了 45 个已合并 PR，主要是持续打磨：候选筛选、复现验证、预算约束和交付前的人工把关。另外还写了 soul-generator 之类的小工具。</span>
       </li>
     </ul>
   </section>
@@ -164,7 +172,7 @@
 
     <ul class="foot-links" data-reveal>
       <li><a href="https://github.com/adenzhou1350" target="_blank" rel="noopener noreferrer">GitHub<span>adenzhou1350</span></a></li>
-      <li><a href="https://leetcode.cn/u/thirsty-margulistrz/" target="_blank" rel="noopener noreferrer">力扣<span>thirsty-margulistrz</span></a></li>
+      <li><a href="https://leetcode.cn/u/thirsty-margul-paid/" target="_blank" rel="noopener noreferrer">力扣<span>thirsty-margul-paid</span></a></li>
       <li><a href="assets/files/aden-zhou-xucheng-cv.pdf" download>简历<span>PDF · 中文</span></a></li>
       <li><span class="foot-static">微信 / 电话<span>15989479476</span></span></li>
     </ul>
