@@ -88,7 +88,7 @@ a{color:inherit}
 
 
 /* ── 通用容器 ─────────────────────────────────────────── */
-.sec,.plate,.hero{
+.sec,.hero{
   max-width:var(--shell);
   margin-inline:auto;
   padding-inline:var(--gutter);
@@ -213,27 +213,6 @@ a{color:inherit}
 }
 .row-meta span{display:block}
 
-
-/* ── 插图大图（留白）──────────────────────────────────── */
-.plate{
-  max-width:940px;
-  margin-top:clamp(20px,3vw,40px);
-  margin-bottom:clamp(40px,6vw,90px);
-  padding-inline:var(--gutter);
-}
-.plate img{
-  width:100%;
-  background:var(--card);
-  border:1px solid var(--sand);
-  border-radius:14px;
-  padding:clamp(24px,3vw,40px);
-}
-.plate figcaption{
-  margin-top:20px;
-  max-width:62ch;
-  font-size:14px;line-height:1.75;color:var(--muted);
-}
-.plate-sm{margin-top:0;margin-bottom:clamp(50px,7vw,100px)}
 
 
 /* ── 贡献方向 ────────────────────────────────────────── */
@@ -384,7 +363,5 @@ footer{
   .row-meta{padding-top:6px}
   .path li{grid-template-columns:1fr;gap:6px;padding:18px 0}
   .areas li{grid-template-columns:1fr;gap:6px;padding:18px 0}
-  .plate{padding-inline:var(--gutter)}
-  .plate img{padding:20px;border-radius:12px}
   .foot-links{grid-template-columns:1fr;gap:22px}
 }
