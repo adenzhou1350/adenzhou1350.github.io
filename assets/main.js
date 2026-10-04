@@ -89,4 +89,38 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     update();
   })();
+
+  /* ---------- 4. 开源数据（读 JSON，失败则保留页面里的静态值） ---------- */
+  (function ossStats() {
+    var root = document.getElementById('oss-stats');
+    if (!root) return;
+
+    fetch('oss-stats.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d) return;
+
+        var own = d.ownRepo && d.ownRepo.merged;
+        var fields = {
+          mergedTotal: d.mergedTotal,
+          upstreamMerged: d.upstreamMerged,
+          own: own,
+          reviewedTotal: d.reviewedTotal
+        };
+
+        Object.keys(fields).forEach(function (k) {
+          if (typeof fields[k] !== 'number') return;
+          root.querySelectorAll('[data-oss="' + k + '"]').forEach(function (el) {
+            el.textContent = fields[k];
+          });
+        });
+
+        var stamp = document.getElementById('oss-stamp');
+        if (stamp && d.generatedAt) {
+          stamp.insertAdjacentHTML('afterbegin',
+            '更新于 ' + d.generatedAt + ' · ');
+        }
+      })
+      .catch(function () { /* 静默失败：页面里的静态值仍然正确 */ });
+  })();
 })();

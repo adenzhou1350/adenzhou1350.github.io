@@ -1,0 +1,43 @@
+{
+  "generatedAt": "2026-10-04 10:06 UTC",
+  "mergedTotal": 52,
+  "upstreamMerged": 5,
+  "upstreamRepos": [
+    "fla-org/flash-linear-attention",
+    "mlc-ai/TIRx-harness",
+    "InternLM/lmdeploy",
+    "vllm-project/vllm",
+    "kvcache-ai/Mooncake"
+  ],
+  "upstreamBreakdown": [
+    {
+      "repo": "fla-org/flash-linear-attention",
+      "count": 1
+    },
+    {
+      "repo": "mlc-ai/TIRx-harness",
+      "count": 1
+    },
+    {
+      "repo": "InternLM/lmdeploy",
+      "count": 1
+    },
+    {
+      "repo": "vllm-project/vllm",
+      "count": 1
+    },
+    {
+      "repo": "kvcache-ai/Mooncake",
+      "count": 1
+    }
+  ],
+  "ownRepo": {
+    "repo": "adenzhou1350/kernel_opt_agent",
+    "merged": 46
+  },
+  "openTotal": 121,
+  "openRepoCount": 25,
+  "reviewedTotal": 9,
+  "publicRepos": 35,
+  "followers": 3
+}
