@@ -128,7 +128,7 @@
       </li>
       <li>
         <b>Kernel 编译</b>
-        <span>TIRx-harness 里 ptxas 的资源统计限定在第一个 kernel report，不往后借后面的数字。</span>
+        <span>TIRx-harness 里 ptxas 的资源统计限定在第一个 kernel report，不往后借后面的数字；CUDA 工具超时也改走正常的结果接口，而不是抛异常打断调用方的错误处理。</span>
       </li>
       <li>
         <b>工具链</b>
@@ -138,7 +138,7 @@
 
     <a class="deep" href="details.html" data-reveal>
       <span class="deep-t">想知道具体改了什么</span>
-      <span class="deep-s">5 个上游 PR 的原始标题、真实 diff 片段、kernel_opt_agent 的 46 个 PR 分布，和两个系统的结构图</span>
+      <span class="deep-s">6 个上游 PR 的原始标题、真实 diff 片段、kernel_opt_agent 的 PR 分布，和两个系统的结构图</span>
       <span class="deep-a" aria-hidden="true">→</span>
     </a>
   </section>

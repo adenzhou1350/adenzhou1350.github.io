@@ -30,8 +30,8 @@
       <p class="eyebrow" data-reveal>深入</p>
       <h1 data-reveal>具体改了什么</h1>
       <p class="lede" data-reveal>
-        下面每一条都对应一个真实的上游 PR，标题、编号、日期和 diff 都从 GitHub 上直接取，
-        点进去能看完整改动和讨论。主页只写了结论，这里放过程。
+        主页只写了结论，这里放过程：每个 PR 的原始标题、真实 diff 片段和验证方式，
+        以及两个系统实际的结构。都能点开回到源头核对。
       </p>
     </div>
   </section>
@@ -41,17 +41,17 @@
   <section class="sec" id="upstream">
     <div class="sec-head" data-reveal>
       <h2>开源贡献</h2>
-      <p>5 个已合并进上游项目的 PR，从新到旧。每一条都标了原始标题和编号，点进去能看完整 diff。</p>
+      <p>6 个已合并进上游项目的 PR，从新到旧。每一条都标了原始标题和编号，点进去能看完整 diff。</p>
     </div>
 
     <dl class="live-stats" id="oss-stats">
       <div>
         <dt>已合并 PR</dt>
-        <dd><span data-oss="mergedTotal">52</span><small>全部仓库合计</small></dd>
+        <dd><span data-oss="mergedTotal">53</span><small>全部仓库合计</small></dd>
       </div>
       <div>
         <dt>进入上游项目</dt>
-        <dd><span data-oss="upstreamMerged">5</span><small>vLLM / Mooncake / lmdeploy / fla / TIRx</small></dd>
+        <dd><span data-oss="upstreamMerged">6</span><small>vLLM / Mooncake / lmdeploy / fla / TIRx</small></dd>
       </div>
       <div>
         <dt>自建工具</dt>
@@ -68,7 +68,41 @@
       <a href="oss-stats.json" target="_blank" rel="noopener">查看原始 JSON</a>
     </p>
 
-    <h3 class="sub" data-reveal>进入上游项目的 5 个 PR</h3>
+    <h3 class="sub" data-reveal>进入上游项目的 PR</h3>
+
+    <!-- 1. TIRx-harness #14 -->
+    <article class="pr" data-reveal>
+      <div class="pr-meta">
+        <span class="pr-repo">mlc-ai/TIRx-harness</span>
+        <a class="pr-num" href="https://github.com/mlc-ai/TIRx-harness/pull/14" target="_blank" rel="noopener noreferrer">#14 ↗</a>
+      </div>
+      <h3 class="pr-title">Report CUDA inspection tool timeouts through DumpResult</h3>
+      <p class="pr-note">
+        CUDA 检查流程里的各个 stage helper 已经会把「非零退出码」翻译成一个失败的检查结果。
+        但底层的 <code>_run</code> 只处理了「可执行文件不存在」这一种失败——
+        <code>nvcc</code> 或 <code>cuobjdump</code> 卡住时抛出的 <code>TimeoutExpired</code> 会直接逃出
+        <code>dump_module</code>，调用方拿不到 <code>DumpResult.errors</code>，
+        <b>失败走了另一条通道，整条错误处理链就断了</b>。
+      </p>
+      <p class="pr-note pr-note-2">
+        改成把超时也转成 <code>CompletedProcess</code>，复用既有的失败路径；同时保住部分
+        stdout/stderr（<code>TimeoutExpired</code> 在 <code>text=True</code> 下也可能携带 bytes，
+        需要显式解码）。原有的 300 秒上限不动。
+      </p>
+      <pre class="diff"><code><span class="a">+    except subprocess.TimeoutExpired as e:
++        # TimeoutExpired can carry bytes even with text=True. Keep any partial
++        # diagnostics, but let the existing stage helpers report a failed run.
++        stdout = e.stdout or ""
++        stderr = e.stderr or ""
++        if isinstance(stdout, bytes):
++            stdout = stdout.decode(errors="replace")</span></code></pre>
+      <p class="pr-stat">2 个文件 · +68 −1 · 合并于 2026-10-05</p>
+      <p class="pr-note pr-note-2">
+        验证：3 个回归用例用<strong>真实卡住的 Python 子进程</strong>顶替 CUDA 工具并调短超时，
+        覆盖 ptx / cubin / SASS 三条路径，另外单独覆盖 bytes、text 和无部分输出三种情况。
+        原 main 上 6 failed / 5 passed，打上补丁后 11 passed。
+      </p>
+    </article>
 
     <!-- 1. flash-linear-attention -->
     <article class="pr" data-reveal>
