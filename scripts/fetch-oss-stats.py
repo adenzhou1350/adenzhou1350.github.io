@@ -27,6 +27,15 @@ UPSTREAM = {
 }
 OWN = f"{USER}/kernel_opt_agent"
 
+# Windows 控制台默认 GBK，编不了 ✓/✗。这里统一降级为 errors 替换，
+# 否则一条成功日志就能让进程以非零码退出，把成功判成失败。
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(errors="replace")
+    except Exception:  # noqa: BLE001  非 TextIO（如被重定向）时跳过
+        pass
+
+
 HEADERS = {
     "Accept": "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28",

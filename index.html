@@ -114,10 +114,10 @@
   <section class="sec" id="oss">
     <div class="sec-head" data-reveal>
       <h2>开源</h2>
-      <p>50 多个已合并 PR，散在推理框架、KV Cache 传输、kernel 编译和一个自用的 kernel 优化工具上。</p>
+      <p><b class="oss-live"><span data-oss="mergedTotal">53</span> 个已合并 PR</b>，散在推理框架、KV Cache 传输、kernel 编译和一个自用的 kernel 优化工具上。</p>
     </div>
 
-    <ul class="areas" data-reveal>
+    <ul class="areas" data-reveal id="oss-stats">
       <li>
         <b>推理框架</b>
         <span>vLLM 的多模态输入保留 DeepSeek 图像块的间距；lmdeploy 在环境变量解析出错后把 <code>os.getenv</code> 还原；flash-linear-attention 里 RWKV7 低精度权重的正交初始化。</span>
@@ -132,7 +132,7 @@
       </li>
       <li>
         <b>工具链</b>
-        <span>kernel_opt_agent 上累计 46 个已合并 PR。</span>
+        <span>kernel_opt_agent 上累计 <span data-oss="own">46</span> 个已合并 PR。</span>
       </li>
     </ul>
 

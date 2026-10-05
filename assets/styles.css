@@ -253,6 +253,10 @@ code{font-family:var(--mono);font-size:.92em}
 .areas span{max-width:70ch;font-size:15px;line-height:1.78;color:var(--body)}
 .areas code{background:var(--card);padding:1px 5px;border-radius:4px;font-size:13.5px}
 
+/* 主页上被 JSON 覆盖的数字：字重与颜色略微抬起，说明它会自己变 */
+.oss-live{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.areas span span[data-oss]{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+
 
 /* ── 进深度页的入口 ───────────────────────────────────── */
 .deep{
