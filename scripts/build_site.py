@@ -10,7 +10,7 @@ import html
 import json
 import re
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import urlencode, urlparse
 from xml.sax.saxutils import escape as xml_escape
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,6 +18,13 @@ BASE = "https://adenzhou1350.github.io"
 SITE_DATE = "2026-10-09"
 NAME = "周栩丞 · Aden Zhou"
 EMAIL = "aden1350@outlook.com"
+
+
+def github_pr_search(state=""):
+    query = "is:pr is:public author:adenzhou1350 -user:adenzhou1350 sort:updated-desc"
+    if state:
+        query += f" is:{state}"
+    return "https://github.com/search?" + urlencode({"q": query, "type": "pullrequests"})
 
 
 def esc(value):
@@ -177,7 +184,8 @@ def page_hero(kicker, title, description, number=""):
 
 
 def section_head(kicker, title, url, label, desc=""):
-    return f'<div class="section-heading"><div class="section-title"><p class="eyebrow">{kicker}</p><h2>{title}</h2>{f"<p>{desc}</p>" if desc else ""}</div><a class="text-link" href="{url}">{label}<span class="arrow" aria-hidden="true">↗</span></a></div>'
+    link = external(url, label) if url.startswith('https://') else f'<a class="text-link" href="{esc(url)}">{label}<span class="arrow" aria-hidden="true">↗</span></a>'
+    return f'<div class="section-heading"><div class="section-title"><p class="eyebrow">{kicker}</p><h2>{title}</h2>{f"<p>{desc}</p>" if desc else ""}</div>{link}</div>'
 
 
 def article_url(item):
@@ -208,7 +216,7 @@ def home(catalog, projects, contributions):
 <section class="section">{section_head('01 / SELECTED PROJECTS','从想法，到能用的东西。','/projects/','全部项目')}<article class="featured-project"><div class="project-copy"><div class="project-kicker">FEATURED PROJECT <span class="badge">个人预览版</span></div><h3>栖伴 Nest</h3><p class="project-tagline">连接自己的模型，<br>把日常行动留在工作台。</p><p>待办、日历、资料查询与邮件草稿。可以查看执行记录，完成与否回到实际结果核对。</p><ul class="tag-list"><li>Python 3.10+</li><li>Agent</li><li>原生 Web</li><li>MIT</li></ul><div class="project-links">{external(projects[0]['url'],'查看项目')}<a class="text-link" href="/learn/nest-first-workflow/">上手教程<span class="arrow">→</span></a></div></div><div class="project-visual"><div class="window-bar"><i></i><i></i><i></i><span>NEST / PERSONAL WORKSPACE</span></div><img class="project-screen" src="/assets/images/nest-overview.jpg" alt="栖伴 Nest 工作台开发演示，包含待办、日程和本地草稿入口" width="1264" height="1054" loading="lazy"><p class="image-caption"><span>真实开发界面 · 合成示例</span><span>本地记录 / 自选模型</span></p></div></article><div class="project-secondary"><a class="project-tile project-tile-featured" href="/learn/bonsai-low-bit/"><span class="tile-number">02 / LOW-BIT LEARNING</span><h3>Bonsai 量化教学</h3><p>从 CPU 三值编码到 35B QAT，再读 122B MoE 单卡推理实验。把训练、恢复与质量评测的证据放在一起。</p><div class="tile-bottom"><span>PyTorch · 教学与研究</span><span aria-hidden="true">→</span></div></a><a class="project-tile" href="https://github.com/adenzhou1350/minimind-diffusion"><span class="tile-number">03 / MODEL EXPERIMENTS</span><h3>minimind-diffusion</h3><p>用小模型理解掩码扩散。把训练、采样和图文实验放进同一个可以阅读、运行的仓库。</p><div class="tile-bottom"><span>PyTorch · 学习实验</span><span aria-hidden="true">↗</span></div></a></div></section>
 <section class="section notes-section">{section_head('02 / FIELD NOTES','把过程写下来。','/blog/','所有文章')}<div>{''.join(note_row(p) for p in posts)}</div></section></div>
 <section class="learning-band"><div class="shell learning-grid"><div class="learning-intro"><p class="eyebrow">03 / LEARN BY BUILDING</p><h2>把复杂问题，<br>拆成能动手的一小步。</h2><p>从浏览器小实验、Agent 上手到低比特模型。先观察一个具体行为，再理解机制和验证方法。</p><a class="text-link" href="/learn/">进入教学专区<span class="arrow">↗</span></a></div><ol class="learning-list">{''.join(f'<li><a href="{article_url(item)}"><span class="num">0{i+1}</span><div><h3>{esc(item["title"])}</h3><p>{esc(item["category"])} · 约 {item["minutes"]} 分钟</p></div><span aria-hidden="true">↗</span></a></li>' for i,item in enumerate(lessons))}</ol></div></section>
-<div class="shell"><section class="section">{section_head('04 / OPEN-SOURCE CONTRIBUTIONS','让改进回到真实的系统。','/contributions/','贡献详情')}<div class="contribution-grid">{''.join(f'<article class="contribution"><span class="repo">{esc(item["repo"])} / {item["number"]}</span><h3>{esc(item["title"])}</h3><p>{esc(item["description"])}</p>{external(item["url"],"查看已合并 PR")}</article>' for item in contributions[:3])}</div><p class="section-footnote">精选上游贡献。个人项目、fork 扩展与上游合并分别展示；具体改动与验证记录见原始 PR。</p></section><section class="contact-strip"><div><h2>有一个值得一起拆解的问题？</h2><p>欢迎交流 Agent 工程、推理系统与可复现的故障。</p></div><a class="button button-outline" href="mailto:{EMAIL}">工作联系<span aria-hidden="true">↗</span></a></section></div>'''
+<div class="shell"><section class="section">{section_head('04 / SELECTED CONTRIBUTIONS','让改进回到真实的系统。',github_pr_search(),'GitHub PR 记录')}<div class="contribution-grid">{''.join(f'<article class="contribution"><span class="repo">{esc(item["repo"])} / {item["number"]}</span><h3>{esc(item["title"])}</h3><p>{esc(item["description"])}</p>{external(item["url"],"查看已合并 PR")}</article>' for item in contributions[:3])}</div><div class="contribution-context"><p class="section-footnote">精选修复案例。更多公开 PR 与最新状态可在 GitHub 查看，搜索排除本人名下仓库。</p><a class="text-link" href="/contributions/">阅读精选案例<span class="arrow" aria-hidden="true">→</span></a></div></section><section class="contact-strip"><div><h2>有一个值得一起拆解的问题？</h2><p>欢迎交流 Agent 工程、推理系统与可复现的故障。</p></div><a class="button button-outline" href="mailto:{EMAIL}">工作联系<span aria-hidden="true">↗</span></a></section></div>'''
     return page("让智能体真正跑起来", "周栩丞 Aden Zhou 的技术作品集：具身 Agent、LLM 推理、Nest 工作台、Bonsai 低比特教学与工程复盘。", body)
 
 
@@ -249,12 +257,13 @@ def article_page(item):
 
 
 def contributions_page(items, path="/contributions/"):
-    body = page_hero("OPEN SOURCE / CONTRIBUTIONS", "从问题复现，走到上游改动。", "精选已合并的工程修复。这里展示具体问题与代码证据，不把个人 fork 的合并数当成上游贡献。", f'{len(items):02d} SELECTED PRS')
+    body = page_hero("OPEN SOURCE / CONTRIBUTIONS", "持续参与，持续改进。", "最新提交、讨论与合并状态，直接在 GitHub 查看。这里也保留一些代表性修复，记录问题、方法与验证。")
+    body += f'''<div class="shell page-content"><section class="contribution-hub" aria-labelledby="github-activity-title"><div><p class="eyebrow orange">GITHUB / LATEST ACTIVITY</p><h2 id="github-activity-title">最新 PR 与合并状态</h2><p>公开 PR，排除本人名下仓库，按最近更新排序。</p></div><div class="contribution-actions">{external(github_pr_search(), '全部 PR', 'button')}{external(github_pr_search('merged'), '已合并', 'button button-outline')}{external(github_pr_search('open'), '进行中', 'button button-outline')}</div><p class="contribution-hub-note">个人项目、其他公开活动与贡献日历见 {external('https://github.com/adenzhou1350', 'GitHub 主页')}。</p></section><div class="section-heading"><div class="section-title"><p class="eyebrow">SELECTED CHANGES</p><h2>精选贡献解读</h2><p>挑几项具体修复，展开看改动解决了什么。</p></div></div>'''
     cards = []
     for item in items:
         cards.append(f'<article class="evidence-card"><p class="eyebrow orange">{esc(item["repo"])} / {item["number"]}</p><h2>{esc(item["title"])}</h2><p>{esc(item["description"])}</p><p class="meta">{esc(item["area"])} · 已合并 {item["merged"]}</p>{external(item["url"],"查看原始改动与验证")}</article>')
-    body += '<div class="shell page-content"><div class="evidence-list">' + ''.join(cards) + '</div><p class="section-footnote">这是一组精选记录，非实时完整统计。合并日期沿用公开 PR 记录，项目后续状态请以 GitHub 为准。</p><div class="learning-note"><strong>kernel_opt_agent：fork 扩展与持续研究</strong><br>围绕研究候选、实验编排、证据复用和环境治理持续改进。<a href="https://github.com/adenzhou1350/kernel_opt_agent">查看个人 fork ↗</a> · <a href="https://github.com/dasikuzi2/kernel_opt_agent">查看上游项目 ↗</a>。具体是否被上游接受，以每一条 PR 的状态为准。</div></div>'
-    return page("开源贡献", "vLLM、Mooncake、TIRx-harness、lmdeploy 和 flash-linear-attention 的精选上游改动与原始 PR。", body, path, "contributions")
+    body += '<div class="evidence-list">' + ''.join(cards) + '</div><p class="section-footnote">精选案例核对日期：2026-10-09；合并日期来自公开 PR 记录。后续进展请通过上方 GitHub 入口查看。</p><div class="learning-note"><strong>kernel_opt_agent：fork 扩展与持续研究</strong><br>围绕研究候选、实验编排、证据复用和环境治理持续改进。<a href="https://github.com/adenzhou1350/kernel_opt_agent">查看个人 fork ↗</a> · <a href="https://github.com/dasikuzi2/kernel_opt_agent">查看上游项目 ↗</a>。具体是否被上游接受，以每一条 PR 的状态为准。</div></div>'
+    return page("开源贡献", "在 GitHub 查看最新公开 PR、已合并改动和进行中的讨论，并阅读 vLLM、Mooncake 等项目的精选修复案例。", body, path, "contributions")
 
 
 def about_page():

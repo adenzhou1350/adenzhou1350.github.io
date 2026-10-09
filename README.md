@@ -8,7 +8,7 @@ AI Infra 与具身 Agent 的作品集、博客和教学空间。
 - `/blog/`：技术复盘，支持分类和关键词筛选。
 - `/learn/`：Bonsai 低比特专题、Nest 入门和浏览器交互实验。
 - `/learn/bonsai-low-bit/`：从纯 Python 三值打包，进入 Linux CPU 测试、35B QAT 与 122B MoE 单卡推理的专题导读。
-- `/contributions/`：精选上游 PR，可回到原始记录核对。
+- `/contributions/`：GitHub 最新 PR、已合并与进行中入口，以及精选修复案例。首页贡献区直接链接 GitHub 搜索。
 - `/about/`：公开职业经历、教育和工作联系。
 
 纯静态 HTML/CSS/JavaScript；Python 标准库生成内容页。访问网站不需要 Python、账号或后台。保留旧 `details.html` 地址，以便已有分享链接继续可用。
@@ -92,7 +92,7 @@ assets/images/                已公开项目的开发演示图片
 - 项目依据对应公开仓库。Nest 标注个人预览版，Bonsai 标注公开教学与持续实验，minimind-diffusion 标注学习实验，kernel_opt_agent 标注 fork 扩展。
 - Bonsai 导读依据公开仓库 `7248f7f` 的 README、METHOD、REPRODUCING 与实验索引。35B 全专家 QAT 与 122B 低秩补偿分开介绍，保留 MoE、资源、权重和质量边界。
 - Bonsai 的网页编码小实验只使用 Python 标准功能。仓库 CPU 检查点测试使用 POSIX 目录同步，教程按 Linux CPU 路线说明；没有宣称 Windows 原生支持或完整 122B 一键复刻。
-- 六个精选贡献链接与合并日期已于 2026-10-09 核对。它们不是自动更新的完整 PR 统计；原来的 `oss-stats.json` 保留为历史数据，不作为新首页实时业绩。
+- 精选贡献链接与合并日期已于 2026-10-09 核对。最新活动通过 GitHub 搜索查看，限定作者为 `adenzhou1350`、公开 PR、排除本人名下仓库，按最近更新排序；已合并与进行中分别用 `is:merged` 和 `is:open`。网站不缓存完整数量，个人项目及其他公开活动另链 GitHub 主页；原来的 `oss-stats.json` 仅保留为历史数据。
 - Nest 图片取自其公开仓库 `docs/assets/overview.jpg`，使用合成示例，标注开发演示。
 - 博客保留实验条件与失败边界；浏览器缓存演示仅解析字符串，不调用模型，也不提供性能数字。
 - 原有私人试学课程未复制到这个公开网站。
