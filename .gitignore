@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+.qa/
+.preview.log
+.preview-error.log

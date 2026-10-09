@@ -1,95 +1,95 @@
-# 周栩丞 · 个人站
+# Aden / 周栩丞 · 个人网站
 
-单页静态站点。零依赖、零构建、没有 npm，纯 HTML + CSS + JS，推上 GitHub 就能直接跑。
+AI Infra 与具身 Agent 的作品集、博客和教学空间。
 
-## 目录结构
+线上入口：https://adenzhou1350.github.io/
 
-```
-index.html                              整个页面
-assets/
-  styles.css                            全部样式
-  main.js                               淡入上移 + 滚动进度线 + 顶栏收拢
-  art/stack-layers.svg                  分层示意图
-  files/aden-zhou-xucheng-cv.pdf        简历原件
-```
+- `/projects/`：Nest、模型实验、Agent 工具与 fork 扩展。
+- `/blog/`：技术复盘，支持分类和关键词筛选。
+- `/learn/`：Nest 入门和浏览器交互实验。
+- `/contributions/`：精选上游 PR，可回到原始记录核对。
+- `/about/`：公开职业经历、教育和工作联系。
 
-改内容只需要动 `index.html`，改样式只需要动 `assets/styles.css`。没有构建步骤，改完 push 就生效。
+纯静态 HTML/CSS/JavaScript；Python 标准库生成内容页。访问网站不需要 Python、账号或后台。保留旧 `details.html` 地址，以便已有分享链接继续可用。
 
----
+## 本地预览
 
-## 一、发布到 GitHub Pages
+构建工具使用 Python 3.12+（本次在 Windows 原生 Python 3.14 验证）：
 
-### 1. 建仓库
-
-在 GitHub 新建仓库，**仓库名必须是 `adenzhou1350.github.io`**。
-
-这个名字很关键 —— 填对之后网址就是 `https://adenzhou1350.github.io`，不需要买任何域名。这是 GitHub 为每个用户免费提供的。
-
-- 不要勾选 "Add a README file"
-- 选 Public
-
-### 2. 推送文件
-
-在 `aden-github-pages` 目录下执行：
-
-```bash
-git init
-git add .
-git commit -m "个人站上线"
-git branch -M main
-git remote add origin https://github.com/adenzhou1350/adenzhou1350.github.io.git
-git push -u origin main
+```powershell
+python -X utf8 scripts/build_site.py
+python -X utf8 scripts/check_site.py
+python -m http.server 18491 --bind 127.0.0.1
 ```
 
-### 3. 打开 Pages
+打开 http://127.0.0.1:18491 。请通过 HTTP 预览，站内根路径不适合直接双击 HTML。不会启动 WSL、Docker 或模型。
 
-仓库页面 → **Settings** → 左侧 **Pages** → Build and deployment：
+## 写一篇文章
 
-- Source 选 `Deploy from a branch`
-- Branch 选 `main`，目录选 `/ (root)`
-- 保存
-
-等 1 分钟左右，`https://adenzhou1350.github.io` 就能访问。
-
----
-
-## 二、以后绑定自己的域名
-
-现在这个 `adenzhou1350.github.io` 已经够用了。如果以后想要 `adenzhou.me` 这种更短的：
-
-**1. 买域名。** `.dev` / `.me` / `.site` 首年通常几十到一百多块，Namecheap、Cloudflare Registrar、阿里云都行。
-
-**2. 加 DNS 记录。** 在域名的 DNS 面板加一条 CNAME：
-
-| 类型 | 主机 | 指向 |
-|---|---|---|
-| CNAME | `@` | `adenzhou1350.github.io` |
-
-**3. 提交 CNAME 文件。** 把本目录的 `CNAME.example` 复制一份改名为 `CNAME`（无扩展名），内容改成你的域名，**不要带 `https://`**：
-
-```
-adenzhou.me
+```powershell
+python -X utf8 scripts/new_content.py blog my-first-note "文章标题" --description "一句话说明解决了什么问题"
 ```
 
-```bash
-git add CNAME
-git commit -m "绑定自定义域名"
-git push
+新条目默认 `draft: true`，不会出现在生成的页面、RSS 或站点地图里。
+
+1. 编辑 `content/posts/my-first-note.md`，填写实际正文。
+2. 编辑 `content/catalog.json` 中该条目的分类、标签、日期和预估阅读时间；检查内容后将 `draft` 改为 `false`。
+3. 运行构建与检查，浏览本地效果后一起提交 Markdown、目录及生成的 HTML。
+
+教学内容把命令中的 `blog` 换成 `learn`。同名内容不会被覆盖。已发布文章撤回时，除了改为草稿，还需从 Git 删除对应的生成目录，避免旧地址继续访问。
+
+```powershell
+python -X utf8 scripts/build_site.py
+python -X utf8 scripts/check_site.py
+git diff --check
 ```
 
-**4. 等证书。** Settings → Pages 里的 Custom domain 会自动变成你的域名，GitHub 会自动签发 HTTPS 证书，通常几分钟到一天。
+现有 GitHub Pages 从已提交的静态文件发布；只改 Markdown 而不重建不会更新正文。推送到网站的发布分支后，以线上页面实际内容确认完成。
 
----
+## 支持的正文格式
 
-## 三、需要注意的
+- `##`、`###` 标题；一级标题由目录元数据提供。
+- 普通段落、非嵌套有序或无序列表、链接、粗体与行内代码。
+- 带语言名的三反引号代码块、引用块和简单 Markdown 表格。
+- 独占一行的图片：`![图片说明](/assets/images/example.jpg)`。先把图片放入 `assets/images/`；说明同时用作替代文本和图注。暂不支持外链图片。
+- `{{CACHE_DEMO}}` 是本站缓存教学实验的专用组件标记。
 
-**简历 PDF 是公开的。** `assets/files/aden-zhou-xucheng-cv.pdf` 含完整个人信息（姓名、邮箱、电话、教育、工作经历），仓库是公开的话，任何人都能 clone 下来。这和当前已发布站点的状态一致，但要注意 GitHub 仓库比静态托管更容易被搜索引擎和第三方镜像抓取。
+HTML 源码会被转义，正文不运行任意 HTML 或 JavaScript。复制代码需要浏览器允许剪贴板写入；失败时仍可手动选择代码。
 
-如果不希望 PDF 随仓库公开，两个选择：
+## 文件结构
 
-- 把 PDF 换成图床链接，从页面里去掉本地文件
-- 或者把仓库设为 Private（但 GitHub Pages 对 Private 仓库需要 GitHub Pro）
+```text
+content/catalog.json          文章和教程目录
+content/posts/*.md            博客正文
+content/learn/*.md            教学正文
+content/projects.json         项目事实、边界与链接
+content/contributions.json    精选贡献与合并日期
+scripts/build_site.py         模板与静态内容生成
+scripts/new_content.py        新建草稿
+scripts/check_site.py         链接、锚点、元数据和内容边界检查
+assets/site.css               当前设计与响应式布局
+assets/site.js                菜单、筛选、复制、教学交互
+assets/images/                已公开项目的开发演示图片
+```
 
-**力扣主页链接待确认。** `index.html` 里那个 `leetcode.cn/u/...` 地址是从旧记录还原的，leetcode.cn 对任何 slug 都返回 200，无法自动验证它是否有效。发布前请自己点开确认一次，在 `index.html` 的两处（首屏 quicklinks 和页脚 foot-links）都要改。
+`index.html`、各栏目及内容目录、`details.html`、`feed.xml`、`sitemap.xml` 由构建生成；不要把新文章只写进生成文件。
 
-**站内链接用的是相对路径。** 所以这个目录可以整体搬到任何静态托管上，不需要改代码。
+## 内容来源与范围
+
+- 项目依据对应公开仓库。Nest 标注个人预览版，minimind-diffusion 标注学习实验，kernel_opt_agent 标注 fork 扩展。
+- 六个精选贡献链接与合并日期已于 2026-10-09 核对。它们不是自动更新的完整 PR 统计；原来的 `oss-stats.json` 保留为历史数据，不作为新首页实时业绩。
+- Nest 图片取自其公开仓库 `docs/assets/overview.jpg`，使用合成示例，标注开发演示。
+- 博客保留实验条件与失败边界；浏览器缓存演示仅解析字符串，不调用模型，也不提供性能数字。
+- 原有私人试学课程未复制到这个公开网站。
+- 关于页和简历沿用原站已公开资料；这次没有新增电话或外部追踪服务。
+
+## 发布检查
+
+```powershell
+python -X utf8 scripts/build_site.py --check
+python -X utf8 scripts/check_site.py
+python -X utf8 -m unittest discover -s tests -v
+node --check assets/site.js
+```
+
+浏览器还需检查桌面和手机、菜单、博客筛选与空结果、复制代码、缓存实验的更新/改名/重置。页面源码检查不替代浏览器验证。
