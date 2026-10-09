@@ -4,9 +4,10 @@ AI Infra 与具身 Agent 的作品集、博客和教学空间。
 
 线上入口：https://adenzhou1350.github.io/
 
-- `/projects/`：Nest、模型实验、Agent 工具与 fork 扩展。
+- `/projects/`：Nest、Bonsai 低比特教学、模型实验、Agent 工具与 fork 扩展。
 - `/blog/`：技术复盘，支持分类和关键词筛选。
-- `/learn/`：Nest 入门和浏览器交互实验。
+- `/learn/`：Bonsai 低比特专题、Nest 入门和浏览器交互实验。
+- `/learn/bonsai-low-bit/`：从纯 Python 三值打包，进入 Linux CPU 测试、35B QAT 与 122B MoE 单卡推理的专题导读。
 - `/contributions/`：精选上游 PR，可回到原始记录核对。
 - `/about/`：公开职业经历、教育和工作联系。
 
@@ -37,6 +38,18 @@ python -X utf8 scripts/new_content.py blog my-first-note "文章标题" --descri
 3. 运行构建与检查，浏览本地效果后一起提交 Markdown、目录及生成的 HTML。
 
 教学内容把命令中的 `blog` 换成 `learn`。同名内容不会被覆盖。已发布文章撤回时，除了改为草稿，还需从 Git 删除对应的生成目录，避免旧地址继续访问。
+
+当前内容目录：
+
+| 栏目 | 文章 / 专题 | 源文件 |
+|---|---|---|
+| 博客 | 图片更新了，模型为什么还看到旧画面？ | `content/posts/image-cache-identity.md` |
+| 博客 | 一份日志，两个 kernel：资源数字为什么会串台 | `content/posts/kernel-report-boundaries.md` |
+| 教学专题 | 低比特大模型实战：从三值 QAT 到单卡推理 | `content/learn/bonsai-low-bit.md` |
+| 交互教程 | 同一个文件名，为什么取到了旧结果？ | `content/learn/cache-identity.md` |
+| 上手教程 | 用 Nest 跑通第一个可核对工作流 | `content/learn/nest-first-workflow.md` |
+
+Bonsai 在目录中设置 `featured: true`，由教学页的专题组件呈现；实验状态以公开仓库为准。项目页计数按 `content/projects.json` 的实际条目生成。
 
 ```powershell
 python -X utf8 scripts/build_site.py
@@ -76,7 +89,9 @@ assets/images/                已公开项目的开发演示图片
 
 ## 内容来源与范围
 
-- 项目依据对应公开仓库。Nest 标注个人预览版，minimind-diffusion 标注学习实验，kernel_opt_agent 标注 fork 扩展。
+- 项目依据对应公开仓库。Nest 标注个人预览版，Bonsai 标注公开教学与持续实验，minimind-diffusion 标注学习实验，kernel_opt_agent 标注 fork 扩展。
+- Bonsai 导读依据公开仓库 `7248f7f` 的 README、METHOD、REPRODUCING 与实验索引。35B 全专家 QAT 与 122B 低秩补偿分开介绍，保留 MoE、资源、权重和质量边界。
+- Bonsai 的网页编码小实验只使用 Python 标准功能。仓库 CPU 检查点测试使用 POSIX 目录同步，教程按 Linux CPU 路线说明；没有宣称 Windows 原生支持或完整 122B 一键复刻。
 - 六个精选贡献链接与合并日期已于 2026-10-09 核对。它们不是自动更新的完整 PR 统计；原来的 `oss-stats.json` 保留为历史数据，不作为新首页实时业绩。
 - Nest 图片取自其公开仓库 `docs/assets/overview.jpg`，使用合成示例，标注开发演示。
 - 博客保留实验条件与失败边界；浏览器缓存演示仅解析字符串，不调用模型，也不提供性能数字。
