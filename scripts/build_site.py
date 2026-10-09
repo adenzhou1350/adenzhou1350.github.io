@@ -6,6 +6,7 @@ Python standard library only. Generated HTML is committed for GitHub Pages.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import html
 import json
 import re
@@ -170,13 +171,14 @@ def footer():
 
 
 def page(title, description, body, path="/", active="", article=None):
+    style_version = hashlib.sha256((ROOT / 'assets/site.css').read_text(encoding='utf-8').encode('utf-8')).hexdigest()[:12]
     canonical = BASE + path
     data = {"@context": "https://schema.org", "@type": "WebSite", "name": NAME, "url": BASE}
     if article:
         data = {"@context": "https://schema.org", "@type": "TechArticle", "headline": article["title"], "description": article["description"], "datePublished": article["date"], "dateModified": article.get("updated", article["date"]), "author": {"@type": "Person", "name": "周栩丞", "url": BASE + "/about/"}, "mainEntityOfPage": canonical}
     encoded_data = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
     return f'''<!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{esc(title)} · {esc(NAME)}</title><meta name="description" content="{esc(description)}"><meta name="theme-color" content="#f5f4ef"><link rel="canonical" href="{canonical}"><meta property="og:type" content="{'article' if article else 'website'}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(description)}"><meta property="og:url" content="{canonical}"><meta property="og:locale" content="zh_CN"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css"><link rel="alternate" type="application/rss+xml" title="Aden 的博客" href="/feed.xml"><script type="application/ld+json">{encoded_data}</script><script defer src="/assets/site.js"></script></head><body>{header(active)}<main id="main">{body}</main>{footer()}</body></html>'''
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{esc(title)} · {esc(NAME)}</title><meta name="description" content="{esc(description)}"><meta name="theme-color" content="#f5f4ef"><link rel="canonical" href="{canonical}"><meta property="og:type" content="{'article' if article else 'website'}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(description)}"><meta property="og:url" content="{canonical}"><meta property="og:locale" content="zh_CN"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css?v={style_version}"><link rel="alternate" type="application/rss+xml" title="Aden 的博客" href="/feed.xml"><script type="application/ld+json">{encoded_data}</script><script defer src="/assets/site.js"></script></head><body>{header(active)}<main id="main">{body}</main>{footer()}</body></html>'''
 
 
 def page_hero(kicker, title, description, number=""):
