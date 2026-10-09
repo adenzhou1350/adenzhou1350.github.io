@@ -41,6 +41,8 @@ print("restored:", restored)
 
 ## 接着读代码，检查一个可解释的结果
 
+仓库的[四节动手课程](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/LABS.md)已把各入口串成练习，列出预期输出、验收问题与资源限制；可以配合下面的顺序阅读。
+
 1. 阅读[方法说明](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/METHOD.md)，先回答“哪些参数训练，哪些参数冻结”。
 2. 在 Linux CPU 环境按[复刻步骤](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/REPRODUCING.md)安装匹配依赖，运行 CPU 测试 `test_equations.py`。预期得到以 `PASS: ternary grid, identity STE, packing` 开始的通过信息。检查点实现使用 POSIX 目录同步，这条测试路线尚未验证 Windows 原生支持；上面的纯 Python 编码小实验没有这个依赖。
 3. 对照[测试源码](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/test_equations.py)，找出打包往返、STE 梯度和检查点恢复各自对应的断言。思考为什么只检查 loss 下降还不够。
@@ -63,4 +65,4 @@ print("restored:", restored)
 
 读完这个专题，可以用四句话检查自己的结论：编码能否还原？恢复后下一步是否相同？独立评测是否达标？速度在什么条件下测得？它们是四个不同的问题。
 
-本导读依据公开仓库 `7248f7f` 的方法、复刻步骤和实验记录整理；状态为 2026-10-09 的记录。后续进展以仓库中带日期的实验索引为准。这是 Bonsai 风格教学与实验，尚未建立完整 Bonsai 训练方案复现或能力恢复的结论。
+本导读依据公开仓库 `0516f45` 的方法、复刻步骤和实验记录整理；状态为 2026-10-09 的记录。后续进展以仓库中带日期的实验索引为准。这是 Bonsai 风格教学与实验，尚未建立完整 Bonsai 训练方案复现或能力恢复的结论。
