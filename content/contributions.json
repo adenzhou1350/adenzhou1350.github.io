@@ -1,8 +1,56 @@
 [
-  {"repo":"vLLM","number":"#56882","title":"保留多模态输入的结构边界","description":"在 DeepSeek V4 图像块进入模板前保留结构，避免文本与图片之间的间距被提前压平。","area":"多模态输入","url":"https://github.com/vllm-project/vllm/pull/56882","merged":"2026-09-18"},
-  {"repo":"Mooncake","number":"#4063","title":"让队列预算与真实资源占用对齐","description":"为池化 TCP 引入按排队字节数计算的准入上限，并检查拒绝、完成与部分准入时的资源行为。","area":"KV Cache 传输","url":"https://github.com/kvcache-ai/Mooncake/pull/4063","merged":"2026-09-24"},
-  {"repo":"TIRx-harness","number":"#12","title":"给 kernel 资源统计划清边界","description":"先定位第一份 kernel report，再读取资源字段，避免寄存器、共享内存和 spill 数字来自不同报告。","area":"Kernel 工具链","url":"https://github.com/mlc-ai/TIRx-harness/pull/12","merged":"2026-09-30"},
-  {"repo":"TIRx-harness","number":"#14","title":"让 CUDA 工具超时回到既有错误链路","description":"将子进程超时转换为可处理的检查结果，保留部分诊断输出，让调用方沿既有失败路径处理。","area":"异常与恢复","url":"https://github.com/mlc-ai/TIRx-harness/pull/14","merged":"2026-10-05"},
-  {"repo":"lmdeploy","number":"#5000","title":"环境解析失败后恢复 getenv","description":"为临时替换 os.getenv 的上下文补齐 finally 清理，避免解析异常把修改后的函数遗留给后续代码。","area":"资源清理","url":"https://github.com/InternLM/lmdeploy/pull/5000","merged":"2026-09-23"},
-  {"repo":"flash-linear-attention","number":"#1320","title":"把低精度初始化结果写回原权重","description":"在 float 副本上完成 RWKV7 正交初始化后，使用 copy_ 写回原张量，让原参数真正得到更新。","area":"数值与张量","url":"https://github.com/fla-org/flash-linear-attention/pull/1320","merged":"2026-10-03"}
+  {
+    "repo": "vLLM",
+    "number": "#56882",
+    "title": "保留 DeepSeek V4 多模态输入结构",
+    "description": "图像块进入模板前，保留文本与图片的结构及间距，修复它们被提前压平的问题。",
+    "area": "多模态输入",
+    "url": "https://github.com/vllm-project/vllm/pull/56882",
+    "merged": "2026-09-18"
+  },
+  {
+    "repo": "Mooncake",
+    "number": "#4063",
+    "title": "限制 TCP 队列的排队字节数",
+    "description": "给池化 TCP 队列加上排队字节数上限，并检查拒绝、完成和部分准入时的资源占用。",
+    "area": "KV Cache 传输",
+    "url": "https://github.com/kvcache-ai/Mooncake/pull/4063",
+    "merged": "2026-09-24"
+  },
+  {
+    "repo": "TIRx-harness",
+    "number": "#12",
+    "title": "避免混读多份 kernel report",
+    "description": "先截取第一份 kernel report，再读取寄存器、共享内存和 spill 字段，避免把不同 kernel 的数字拼在一起。",
+    "area": "Kernel 工具链",
+    "url": "https://github.com/mlc-ai/TIRx-harness/pull/12",
+    "merged": "2026-09-30"
+  },
+  {
+    "repo": "TIRx-harness",
+    "number": "#14",
+    "title": "处理 CUDA 工具的子进程超时",
+    "description": "让超时返回调用方能处理的检查结果，同时保留已经输出的诊断信息。",
+    "area": "异常与恢复",
+    "url": "https://github.com/mlc-ai/TIRx-harness/pull/14",
+    "merged": "2026-10-05"
+  },
+  {
+    "repo": "lmdeploy",
+    "number": "#5000",
+    "title": "环境解析失败后恢复 getenv",
+    "description": "给临时替换 os.getenv 的上下文补上 finally 清理。即使环境解析抛出异常，也会恢复原来的函数。",
+    "area": "资源清理",
+    "url": "https://github.com/InternLM/lmdeploy/pull/5000",
+    "merged": "2026-09-23"
+  },
+  {
+    "repo": "flash-linear-attention",
+    "number": "#1320",
+    "title": "修复 RWKV7 低精度权重初始化",
+    "description": "在 float 副本上完成正交初始化后，用 copy_ 写回原张量，修复原参数没有被更新的问题。",
+    "area": "数值与张量",
+    "url": "https://github.com/fla-org/flash-linear-attention/pull/1320",
+    "merged": "2026-10-03"
+  }
 ]

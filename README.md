@@ -43,11 +43,11 @@ python -X utf8 scripts/new_content.py blog my-first-note "文章标题" --descri
 
 | 栏目 | 文章 / 专题 | 源文件 |
 |---|---|---|
-| 博客 | 图片更新了，模型为什么还看到旧画面？ | `content/posts/image-cache-identity.md` |
-| 博客 | 一份日志，两个 kernel：资源数字为什么会串台 | `content/posts/kernel-report-boundaries.md` |
-| 教学专题 | 低比特大模型实战：从三值 QAT 到单卡推理 | `content/learn/bonsai-low-bit.md` |
-| 交互教程 | 同一个文件名，为什么取到了旧结果？ | `content/learn/cache-identity.md` |
-| 上手教程 | 用 Nest 跑通第一个可核对工作流 | `content/learn/nest-first-workflow.md` |
+| 博客 | 截图更新了，为什么评分还是旧的？ | `content/posts/image-cache-identity.md` |
+| 博客 | ptxas 解析器混读了两份 kernel 报告 | `content/posts/kernel-report-boundaries.md` |
+| 教学专题 | Bonsai 量化入门：三值编码、QAT 和单卡推理 | `content/learn/bonsai-low-bit.md` |
+| 交互教程 | 文件名没变，缓存为什么会返回旧结果？ | `content/learn/cache-identity.md` |
+| 上手教程 | Nest 上手：添加待办、修改记录和写邮件草稿 | `content/learn/nest-first-workflow.md` |
 
 Bonsai 在目录中设置 `featured: true`，由教学页的专题组件呈现；实验状态以公开仓库为准。项目页计数按 `content/projects.json` 的实际条目生成。
 
@@ -58,6 +58,12 @@ git diff --check
 ```
 
 现有 GitHub Pages 从已提交的静态文件发布；只改 Markdown 而不重建不会更新正文。推送到网站的发布分支后，以线上页面实际内容确认完成。
+
+## 文案约定
+
+项目先说用途和当前能做什么，文章直接写遇到的问题。栏目标题用内容名称，少用口号、排比和抽象总结。可以用第一人称，但不要编造经历、客户或成果。
+
+编辑时保留代码、链接、实验数字和使用限制。AI 辅助整理的说明照常保留。2026-10-10 的文案修订参考了 [Humanizer](https://github.com/blader/humanizer/blob/main/SKILL.md)，按段落重写后再检查事实是否变化。
 
 ## 支持的正文格式
 

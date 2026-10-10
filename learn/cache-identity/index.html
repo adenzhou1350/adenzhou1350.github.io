@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>同一个文件名，为什么取到了旧结果？ · 周栩丞 · Aden Zhou</title><meta name="description" content="在浏览器里更新输入，观察两种缓存键的不同结果。无需模型、GPU 或安装环境。"><meta name="theme-color" content="#f5f4ef"><link rel="canonical" href="https://adenzhou1350.github.io/learn/cache-identity/"><meta property="og:type" content="article"><meta property="og:title" content="同一个文件名，为什么取到了旧结果？"><meta property="og:description" content="在浏览器里更新输入，观察两种缓存键的不同结果。无需模型、GPU 或安装环境。"><meta property="og:url" content="https://adenzhou1350.github.io/learn/cache-identity/"><meta property="og:locale" content="zh_CN"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css?v=0c57b62d56aa"><link rel="alternate" type="application/rss+xml" title="Aden 的博客" href="/feed.xml"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "同一个文件名，为什么取到了旧结果？", "description": "在浏览器里更新输入，观察两种缓存键的不同结果。无需模型、GPU 或安装环境。", "datePublished": "2026-10-09", "dateModified": "2026-10-09", "author": {"@type": "Person", "name": "周栩丞", "url": "https://adenzhou1350.github.io/about/"}, "mainEntityOfPage": "https://adenzhou1350.github.io/learn/cache-identity/"}</script><script defer src="/assets/site.js"></script></head><body><a class="skip" href="#main">跳到正文</a><header class="site-header"><div class="header-inner shell"><a class="brand" href="/" aria-label="周栩丞，首页"><span class="brand-symbol" aria-hidden="true">a.</span><span class="brand-name">Aden<span>周栩丞</span></span></a><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">菜单 +</button><nav id="site-nav" class="site-nav" aria-label="主导航"><a href="/projects/">项目</a><a href="/blog/">博客</a><a href="/learn/" aria-current="page">教学</a><a href="/contributions/">开源贡献</a><a href="/about/">关于</a><a class="github-link" href="https://github.com/adenzhou1350" target="_blank" rel="noopener noreferrer">GitHub ↗<span class="sr-only">（新窗口）</span></a></nav></div></header><main id="main"><div class="shell"><header class="article-top"><div class="breadcrumb"><a href="/">首页</a><span>/</span><a href="/learn/">教学</a></div><p class="eyebrow orange">推理小实验 / 交互教程</p><h1>同一个文件名，为什么取到了旧结果？</h1><p class="article-deck">在浏览器里更新输入，观察两种缓存键的不同结果。无需模型、GPU 或安装环境。</p><div class="article-meta"><span>周栩丞 · Aden</span><time datetime="2026-10-09">2026-10-09</time><span>约 8 分钟</span></div></header><div class="article-layout"><article class="article-body"><p>这节课只回答一个问题：<strong>缓存凭什么认为，这次输入和上一次是同一个输入？</strong> 你会在浏览器里看到一个可重复的错误，再通过改变缓存键消除它。</p>
-<p>不需要安装软件。下面的“编码器”只是读取虚构文本中的按钮名，不调用模型，也不处理真实图片。</p>
-<h2 id="section-5">先运行，再猜一次</h2>
-<p>两种实现最初都读到 <code>screen.txt</code>，内容为 <code>button=save</code>。左边按文件名保存结果，右边按完整内容保存结果。</p>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>文件名没变，缓存为什么会返回旧结果？ · 周栩丞 · Aden Zhou</title><meta name="description" content="改了文件内容，缓存为什么还返回旧结果？在浏览器里点几下就能看到，不需要模型或 GPU。"><meta name="theme-color" content="#f5f4ef"><link rel="canonical" href="https://adenzhou1350.github.io/learn/cache-identity/"><meta property="og:type" content="article"><meta property="og:title" content="文件名没变，缓存为什么会返回旧结果？"><meta property="og:description" content="改了文件内容，缓存为什么还返回旧结果？在浏览器里点几下就能看到，不需要模型或 GPU。"><meta property="og:url" content="https://adenzhou1350.github.io/learn/cache-identity/"><meta property="og:locale" content="zh_CN"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css?v=0c57b62d56aa"><link rel="alternate" type="application/rss+xml" title="Aden 的博客" href="/feed.xml"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "文件名没变，缓存为什么会返回旧结果？", "description": "改了文件内容，缓存为什么还返回旧结果？在浏览器里点几下就能看到，不需要模型或 GPU。", "datePublished": "2026-10-09", "dateModified": "2026-10-10", "author": {"@type": "Person", "name": "周栩丞", "url": "https://adenzhou1350.github.io/about/"}, "mainEntityOfPage": "https://adenzhou1350.github.io/learn/cache-identity/"}</script><script defer src="/assets/site.js"></script></head><body><a class="skip" href="#main">跳到正文</a><header class="site-header"><div class="header-inner shell"><a class="brand" href="/" aria-label="周栩丞，首页"><span class="brand-symbol" aria-hidden="true">a.</span><span class="brand-name">Aden<span>周栩丞</span></span></a><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">菜单 +</button><nav id="site-nav" class="site-nav" aria-label="主导航"><a href="/projects/">项目</a><a href="/blog/">博客</a><a href="/learn/" aria-current="page">教学</a><a href="/contributions/">开源贡献</a><a href="/about/">关于</a><a class="github-link" href="https://github.com/adenzhou1350" target="_blank" rel="noopener noreferrer">GitHub ↗<span class="sr-only">（新窗口）</span></a></nav></div></header><main id="main"><div class="shell"><header class="article-top"><div class="breadcrumb"><a href="/">首页</a><span>/</span><a href="/learn/">教学</a></div><p class="eyebrow orange">推理小实验 / 交互教程</p><h1>文件名没变，缓存为什么会返回旧结果？</h1><p class="article-deck">改了文件内容，缓存为什么还返回旧结果？在浏览器里点几下就能看到，不需要模型或 GPU。</p><div class="article-meta"><span>周栩丞 · Aden</span><time datetime="2026-10-09">2026-10-09</time><span>约 8 分钟</span></div></header><div class="article-layout"><article class="article-body"><p>截图内容变了，文件名没变，缓存会返回什么？下面的交互演示可以直接试，看看按文件名缓存和按内容缓存会给出什么结果。</p>
+<p>不用安装软件。演示中的“编码器”只读取虚构文本里的按钮名，不调用模型，也不处理真实图片。</p>
+<h2 id="section-5">改内容，再改文件名</h2>
+<p>两种实现一开始读到的都是 <code>screen.txt</code>，内容为 <code>button=save</code>。左边用文件名作为缓存键，右边用完整内容。</p>
 <section class="cache-demo" data-cache-demo aria-label="输入身份与缓存交互实验">
 <div class="demo-top"><div><h3>换了内容，缓存知道吗？</h3><p>逐步改变同一文件，比较两种缓存键。</p></div><span class="badge badge-neutral">教学模拟</span></div>
 <noscript><p>开启 JavaScript 后可以操作演示；下方 Python 示例也完整解释了两种行为。</p></noscript>
@@ -12,10 +12,10 @@
 <div class="demo-result right"><div class="label">B / 以完整内容为键</div><div class="value" data-content-value>save</div><div class="state" data-content-state>初次计算</div></div></div>
 <div class="demo-live" data-demo-live aria-live="polite" aria-atomic="true">初始输入的预期结果是 save。</div>
 <p class="demo-hint">只模拟字符串解析与 Map 缓存。没有模型调用、图像处理或性能测量。</p></section>
-<p>先点击“更新内容，保留文件名”。预期按钮已经变成 <code>cancel</code>，左边却仍可能返回 <code>save</code>。原因是缓存检查了名字，没有检查内容。</p>
-<p>再点击“只换文件名”。这次按路径的缓存会重新计算；按内容的缓存可以继续复用，因为实际内容没有变化。点“重置”即可重复这两个步骤。</p>
+<p>先点“更新内容，保留文件名”。按钮已经变成 <code>cancel</code>，左边却仍可能返回 <code>save</code>：它发现文件名没变，就直接取出了上次的结果。</p>
+<p>再点“只换文件名”。按路径缓存的实现会重新计算，按内容缓存的实现可以继续用上次的结果，因为内容没有变化。点“重置”可以从头再试。</p>
 <h2 id="section-15">错误是怎样产生的</h2>
-<p>下面是机制示意。<code>encode</code> 只解析字符串，不是模型的图像编码器。</p>
+<p>把按文件名缓存的逻辑写成 Python，就是下面这样。<code>encode</code> 只解析字符串，不是模型的图像编码器。</p>
 <div class="code-wrap"><div class="code-label">python</div><button class="copy-code" type="button" aria-label="复制代码">复制</button><pre><code>cache = {}
 
 def encode(content):
@@ -28,9 +28,9 @@ def by_path(path, content):
 
 assert by_path(&quot;screen.txt&quot;, &quot;button=save&quot;) == &quot;save&quot;
 assert by_path(&quot;screen.txt&quot;, &quot;button=cancel&quot;) == &quot;save&quot;</code></pre></div>
-<p>第二个断言描述的是这个实现的错误行为。文件名相同，让它跳过了对新内容的处理。</p>
-<h2 id="section-36">用实际内容确定身份</h2>
-<p>在这个小实验里，完整字符串足以作为键。工程里通常用字节摘要，避免把整个输入放进键，但还需要把会影响结果的处理条件一起考虑。</p>
+<p>第二个断言会通过，但通过的恰好是一个错误结果：文件名相同，函数就跳过了新内容，返回旧值。</p>
+<h2 id="section-36">把内容放进缓存键</h2>
+<p>这个小实验可以直接用完整字符串作键。实际系统通常使用字节摘要，省去在键里保存整个输入的开销。会影响结果的处理条件也要考虑进去，例如这里的编码器版本。</p>
 <div class="code-wrap"><div class="code-label">python</div><button class="copy-code" type="button" aria-label="复制代码">复制</button><pre><code>from hashlib import sha256
 
 cache = {}
@@ -44,11 +44,11 @@ def by_content(content, encoder_version=&quot;demo-v1&quot;):
 
 assert by_content(&quot;button=save&quot;) == &quot;save&quot;
 assert by_content(&quot;button=cancel&quot;) == &quot;cancel&quot;</code></pre></div>
-<p>关键是<strong>对同一份实际读入的字节计算摘要并处理</strong>。如果先算摘要、之后再次打开一个会变化的文件，仍可能发生摘要与处理内容错位。</p>
+<p>计算摘要和处理内容要用同一份读入的字节。如果先算摘要，再重新打开文件，而文件恰好在中途变了，就会把新内容的结果存到旧内容的键下面。</p>
 <h2 id="section-58">两道自检题</h2>
 <ol><li>内容相同，文件名不同，哪一种缓存更容易复用？</li><li>输入字节没变，但模型版本或预处理配置改变，能直接复用旧结果吗？</li></ol>
-<p>第一题：按内容保存结果的缓存可以复用；按路径保存的实现会把新名字当成新输入。第二题：不能仅凭字节相同判断。影响计算结果的模型版本、预处理、精度等条件，也可能需要进入缓存身份。</p>
+<p>第一题，按内容缓存可以复用结果；按路径缓存会把新名字当成新输入。第二题，不能仅凭字节相同就复用。模型版本、预处理和精度等条件也可能改变结果，需要一并考虑是否放入缓存键。</p>
 <h2 id="section-65">回到真实系统</h2>
-<p>这个演示验证的是缓存键的语义，没有给出任何模型提速或准确率结论。真实系统还要检查数值容差、并发下的请求绑定、缓存容量与失效策略。</p>
-<p>接着阅读<a href="/blog/image-cache-identity/">截图缓存对照实验</a>，看看“分类正确”为什么还不等于“数值检查通过”。</p>
-<p>本文与交互示例使用 AI 编程工具辅助编写，并按页面所示步骤验证。</p><div class="article-end"><p>本文含 AI 辅助整理；实验条件与验证范围见正文。</p><a href="mailto:aden1350@outlook.com">讨论这个问题 ↗</a></div></article><aside class="article-aside"><p class="eyebrow">ON THIS PAGE / 目录</p><ol class="toc"><li><a href="#section-5">先运行，再猜一次</a></li><li><a href="#section-15">错误是怎样产生的</a></li><li><a href="#section-36">用实际内容确定身份</a></li><li><a href="#section-58">两道自检题</a></li><li><a href="#section-65">回到真实系统</a></li></ol><p class="aside-note">交互教程<br>把问题、方法和证据放在一起。</p></aside></div></div></main><footer class="site-footer"><div class="shell"><div class="footer-top"><a href="/" class="footer-signature">Built with curiosity.</a><div class="footer-links"><a href="mailto:aden1350@outlook.com">工作联系 ↗</a><a href="https://github.com/adenzhou1350">GitHub ↗</a><a href="/feed.xml">RSS ↗</a><a href="/about/">关于本站</a></div></div><div class="footer-bottom"><span>© 2026 周栩丞 · ADEN ZHOU</span><span>AI INFRA / EMBODIED AGENTS / OPEN SOURCE</span></div></div></footer></body></html>
+<p>这个演示只说明缓存键怎样影响结果，无法给出模型提速或准确率的结论。在真实系统里，还要检查数值容差、并发时结果有没有绑定到正确请求，以及缓存容量和失效策略。</p>
+<p>接下来的<a href="/blog/image-cache-identity/">截图缓存对照实验</a>记录了另一个问题：分类结果正确时，数值检查仍可能不通过。</p>
+<p>本文和交互示例使用 AI 编程工具辅助编写，已按页面里的步骤验证。</p><div class="article-end"><p>本文使用 AI 工具辅助整理。实验设置和测试结果见正文。</p><a href="mailto:aden1350@outlook.com">讨论这个问题 ↗</a></div></article><aside class="article-aside"><p class="eyebrow">ON THIS PAGE / 目录</p><ol class="toc"><li><a href="#section-5">改内容，再改文件名</a></li><li><a href="#section-15">错误是怎样产生的</a></li><li><a href="#section-36">把内容放进缓存键</a></li><li><a href="#section-58">两道自检题</a></li><li><a href="#section-65">回到真实系统</a></li></ol><p class="aside-note">交互教程</p></aside></div></div></main><footer class="site-footer"><div class="shell"><div class="footer-top"><a href="/" class="footer-signature">Aden / 周栩丞</a><div class="footer-links"><a href="mailto:aden1350@outlook.com">工作联系 ↗</a><a href="https://github.com/adenzhou1350">GitHub ↗</a><a href="/feed.xml">RSS ↗</a><a href="/about/">关于本站</a></div></div><div class="footer-bottom"><span>© 2026 周栩丞 · ADEN ZHOU</span><span>AI INFRA / EMBODIED AGENTS / OPEN SOURCE</span></div></div></footer></body></html>
