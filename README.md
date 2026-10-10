@@ -97,8 +97,8 @@ assets/images/                已公开项目的开发演示图片
 
 ## 内容来源与范围
 
-- 项目依据对应公开仓库。Nest 标注个人预览版，Bonsai 标注公开教学与持续实验，minimind-diffusion 标注学习实验，kernel_opt_agent 标注 fork 扩展。
-- Bonsai 导读依据公开仓库 `7248f7f` 的 README、METHOD、REPRODUCING 与实验索引。35B 全专家 QAT 与 122B 低秩补偿分开介绍，保留 MoE、资源、权重和质量边界。
+- 项目依据对应公开仓库。Nest 标注个人预览版，Bonsai 标注公开教学与实验记录，minimind-diffusion 标注学习实验，kernel_opt_agent 标注 fork 扩展。
+- Bonsai 导读的实验状态核对至公开仓库 `ce2e903` 的 2026-10-10 收尾记录，并同步文档整理后的结果入口。35B 全专家 QAT 与 122B 低秩补偿分开介绍，区分 HTTP 合计吞吐、CLI 速度、模型存储与 NVML 占用，保留 MoE、资源、权重、质量与研究暂停状态。
 - Bonsai 的网页编码小实验只使用 Python 标准功能。仓库 CPU 检查点测试使用 POSIX 目录同步，教程按 Linux CPU 路线说明；没有宣称 Windows 原生支持或完整 122B 一键复刻。
 - 精选贡献链接与合并日期已于 2026-10-09 核对。最新活动通过 GitHub 搜索查看，限定作者为 `adenzhou1350`、公开 PR、排除本人名下仓库，按最近更新排序；已合并与进行中分别用 `is:merged` 和 `is:open`。网站不缓存完整数量，个人项目及其他公开活动另链 GitHub 主页；原来的 `oss-stats.json` 仅保留为历史数据。
 - Jev 导读依据公开仓库 `a04dfb4` 的三节课、安装说明与实验记录。推箱子为独立 CNN；页面按钮使用冻结的 Qwen3.5-0.8B 与共享打分头，保留模型快照、合成数据和评测范围。演示截图取自该仓库 `docs/assets/demo-sokoban.jpg`，按项目 MIT 许可使用；不是本站在线模型服务。

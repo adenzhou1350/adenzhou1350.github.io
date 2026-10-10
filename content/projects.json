@@ -44,7 +44,7 @@
       "MoE",
       "PyTorch"
     ],
-    "status": "公开教学 · 持续实验",
+    "status": "公开教学 · 实验记录",
     "boundary": "35B 完整训练按 Linux、2×B300 环境编写。122B MoE 用低秩补偿，是另一项实验，目前质量未达标。推理需要指定的 packed 权重，仓库不含权重。",
     "url": "https://github.com/adenzhou1350/bonsai-qat-teaching",
     "guide": "/learn/bonsai-low-bit/",
