@@ -16,6 +16,7 @@ class Document(HTMLParser):
     def __init__(self):
         super().__init__()
         self.links, self.ids, self.errors = [], set(), []
+        self.anchors = []
         self.h1 = 0
         self.title = False
         self.description = False
@@ -32,6 +33,7 @@ class Document(HTMLParser):
         if tag == 'link' and attrs.get('rel') == 'canonical': self.canonical = attrs.get('href', '').startswith(BASE)
         if tag == 'img' and 'alt' not in attrs: self.errors.append('Image missing alt')
         if tag == 'a' and attrs.get('target') == '_blank' and 'noopener' not in attrs.get('rel', ''): self.errors.append('External new-tab link lacks noopener')
+        if tag == 'a' and attrs.get('href'): self.anchors.append(attrs['href'])
         for field in ('href', 'src'):
             if attrs.get(field): self.links.append(attrs[field])
 
@@ -76,8 +78,9 @@ def main():
     html_pages = '\n'.join(path.read_text(encoding='utf-8') for path in docs)
     if 'llm-inference-step-by-step' in html_pages or '25 章' in html_pages:
         failures.append('Private course may have been advertised as public')
+    linked_paths = {urlparse(link).path for doc in docs.values() for link in doc.anchors}
     for item in read_json('catalog.json'):
-        if item.get('draft') and article_url(item) in html_pages:
+        if item.get('draft') and article_url(item) in linked_paths:
             failures.append('Draft linked from published page: ' + item['slug'])
     if failures:
         raise SystemExit('\n'.join(failures))

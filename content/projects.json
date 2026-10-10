@@ -1,22 +1,5 @@
 [
   {
-    "name": "栖伴 Nest",
-    "repo": "nest-agent-public",
-    "category": "个人项目",
-    "description": "一个可以连接自己模型的本地工作台，用来管理待办、查看日历、查询资料和写邮件草稿。工具执行记录可以随时查看。",
-    "tags": [
-      "Python 3.10+",
-      "原生 Web",
-      "Agent",
-      "MIT"
-    ],
-    "status": "个人预览版",
-    "boundary": "目前是 alpha 版本。邮件只保存为本地草稿；远端办公连接器和长期多人使用还需要继续测试。",
-    "url": "https://github.com/adenzhou1350/nest-agent-public",
-    "guide": "/learn/nest-first-workflow/",
-    "guide_label": "跟着教程上手"
-  },
-  {
     "name": "Jev 决策模型实战",
     "repo": "jev-decision-teaching",
     "category": "教学与研究",

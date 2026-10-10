@@ -4,9 +4,9 @@ AI Infra 与具身 Agent 的作品集、博客和教学空间。
 
 线上入口：https://adenzhou1350.github.io/
 
-- `/projects/`：Nest、Jev 决策模型实战、Bonsai 低比特教学、模型实验、Agent 工具与 fork 扩展。
+- `/projects/`：Jev 决策模型实战、Bonsai 低比特教学、模型实验、Agent 工具与 fork 扩展。
 - `/blog/`：技术复盘，支持分类和关键词筛选。
-- `/learn/`：Jev 决策模型、Bonsai 低比特专题、Nest 入门和浏览器交互实验。
+- `/learn/`：Jev 决策模型、Bonsai 低比特专题和浏览器交互实验。
 - `/learn/jev-decision-model/`：从随附的 CPU 推箱子策略进入候选打分、训练和页面按钮选择。
 - `/learn/bonsai-low-bit/`：从纯 Python 三值打包，进入 Linux CPU 测试、35B QAT 与 122B MoE 单卡推理的专题导读。
 - `/contributions/`：GitHub 最新 PR、已合并与进行中入口，以及精选修复案例。首页贡献区直接链接 GitHub 搜索。
@@ -38,7 +38,7 @@ python -X utf8 scripts/new_content.py blog my-first-note "文章标题" --descri
 2. 编辑 `content/catalog.json` 中该条目的分类、标签、日期和预估阅读时间；检查内容后将 `draft` 改为 `false`。
 3. 运行构建与检查，浏览本地效果后一起提交 Markdown、目录及生成的 HTML。
 
-教学内容把命令中的 `blog` 换成 `learn`。同名内容不会被覆盖。已发布文章撤回时，除了改为草稿，还需从 Git 删除对应的生成目录，避免旧地址继续访问。
+教学内容把命令中的 `blog` 换成 `learn`。同名内容不会被覆盖。已发布文章撤回时，设置 `draft: true`、`withdrawn: true` 和 `withdrawal_reason`。构建会用标记为 `noindex` 的撤回说明替换旧正文，并从目录、RSS 和站点地图中移除入口；原始 Markdown 仍然保留。只设置 `draft` 不会自动清理旧生成页。
 
 当前内容目录：
 
@@ -49,7 +49,8 @@ python -X utf8 scripts/new_content.py blog my-first-note "文章标题" --descri
 | 教学专题 | Jev 决策模型：从推箱子学候选打分 | `content/learn/jev-decision-model.md` |
 | 教学专题 | Bonsai 量化入门：三值编码、QAT 和单卡推理 | `content/learn/bonsai-low-bit.md` |
 | 交互教程 | 文件名没变，缓存为什么会返回旧结果？ | `content/learn/cache-identity.md` |
-| 上手教程 | Nest 上手：添加待办、修改记录和写邮件草稿 | `content/learn/nest-first-workflow.md` |
+
+Nest 于 2026-10-10 暂停更新：网站推荐和教学入口已撤下，旧教程地址仅显示暂停说明。`content/learn/nest-first-workflow.md`、演示图片和公开仓库保留，不作为当前项目推广。
 
 Bonsai 在目录中设置 `featured: true`，由教学页的专题组件呈现；实验状态以公开仓库为准。项目页计数按 `content/projects.json` 的实际条目生成。
 
@@ -97,12 +98,12 @@ assets/images/                已公开项目的开发演示图片
 
 ## 内容来源与范围
 
-- 项目依据对应公开仓库。Nest 标注个人预览版，Bonsai 标注公开教学与实验记录，minimind-diffusion 标注学习实验，kernel_opt_agent 标注 fork 扩展。
+- 项目依据对应公开仓库。Bonsai 标注公开教学与实验记录，minimind-diffusion 标注学习实验，kernel_opt_agent 标注 fork 扩展。
 - Bonsai 导读的实验状态核对至公开仓库 `ce2e903` 的 2026-10-10 收尾记录，并同步文档整理后的结果入口。35B 全专家 QAT 与 122B 低秩补偿分开介绍，区分 HTTP 合计吞吐、CLI 速度、模型存储与 NVML 占用，保留 MoE、资源、权重、质量与研究暂停状态。
 - Bonsai 的网页编码小实验只使用 Python 标准功能。仓库 CPU 检查点测试使用 POSIX 目录同步，教程按 Linux CPU 路线说明；没有宣称 Windows 原生支持或完整 122B 一键复刻。
 - 精选贡献链接与合并日期已于 2026-10-09 核对。最新活动通过 GitHub 搜索查看，限定作者为 `adenzhou1350`、公开 PR、排除本人名下仓库，按最近更新排序；已合并与进行中分别用 `is:merged` 和 `is:open`。网站不缓存完整数量，个人项目及其他公开活动另链 GitHub 主页；原来的 `oss-stats.json` 仅保留为历史数据。
 - Jev 导读依据公开仓库 `a04dfb4` 的三节课、安装说明与实验记录。推箱子为独立 CNN；页面按钮使用冻结的 Qwen3.5-0.8B 与共享打分头，保留模型快照、合成数据和评测范围。演示截图取自该仓库 `docs/assets/demo-sokoban.jpg`，按项目 MIT 许可使用；不是本站在线模型服务。
-- Nest 图片取自其公开仓库 `docs/assets/overview.jpg`，使用合成示例，标注开发演示。
+- 保留的 Nest 历史图片取自其公开仓库 `docs/assets/overview.jpg`，使用合成示例；目前不在公开页面展示。
 - 博客保留实验条件与失败边界；浏览器缓存演示仅解析字符串，不调用模型，也不提供性能数字。
 - 原有私人试学课程未复制到这个公开网站。
 - 关于页和简历沿用原站已公开资料；这次没有新增电话或外部追踪服务。

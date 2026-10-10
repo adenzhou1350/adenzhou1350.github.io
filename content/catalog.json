@@ -106,6 +106,9 @@
     "source": "content/learn/nest-first-workflow.md",
     "kind": "上手教程",
     "source_url": "https://github.com/adenzhou1350/nest-agent-public",
-    "updated": "2026-10-10"
+    "updated": "2026-10-10",
+    "draft": true,
+    "withdrawn": true,
+    "withdrawal_reason": "Nest 已暂停更新，本站的上手教程与推荐入口已撤下。仓库和历史代码仍然保留。"
   }
 ]

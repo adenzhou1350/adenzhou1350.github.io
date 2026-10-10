@@ -170,15 +170,16 @@ def footer():
     return f'''<footer class="site-footer"><div class="shell"><div class="footer-top"><a href="/" class="footer-signature">Aden / 周栩丞</a><div class="footer-links"><a href="mailto:{EMAIL}">工作联系 ↗</a><a href="https://github.com/adenzhou1350">GitHub ↗</a><a href="/feed.xml">RSS ↗</a><a href="/about/">关于本站</a></div></div><div class="footer-bottom"><span>© 2026 周栩丞 · ADEN ZHOU</span><span>AI INFRA / EMBODIED AGENTS / OPEN SOURCE</span></div></div></footer>'''
 
 
-def page(title, description, body, path="/", active="", article=None):
+def page(title, description, body, path="/", active="", article=None, noindex=False):
     style_version = hashlib.sha256((ROOT / 'assets/site.css').read_text(encoding='utf-8').encode('utf-8')).hexdigest()[:12]
     canonical = BASE + path
+    robots_meta = '<meta name="robots" content="noindex, follow">' if noindex else ''
     data = {"@context": "https://schema.org", "@type": "WebSite", "name": NAME, "url": BASE}
     if article:
         data = {"@context": "https://schema.org", "@type": "TechArticle", "headline": article["title"], "description": article["description"], "datePublished": article["date"], "dateModified": article.get("updated", article["date"]), "author": {"@type": "Person", "name": "周栩丞", "url": BASE + "/about/"}, "mainEntityOfPage": canonical}
     encoded_data = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
     return f'''<!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{esc(title)} · {esc(NAME)}</title><meta name="description" content="{esc(description)}"><meta name="theme-color" content="#f5f4ef"><link rel="canonical" href="{canonical}"><meta property="og:type" content="{'article' if article else 'website'}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(description)}"><meta property="og:url" content="{canonical}"><meta property="og:locale" content="zh_CN"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css?v={style_version}"><link rel="alternate" type="application/rss+xml" title="Aden 的博客" href="/feed.xml"><script type="application/ld+json">{encoded_data}</script><script defer src="/assets/site.js"></script></head><body>{header(active)}<main id="main">{body}</main>{footer()}</body></html>'''
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{esc(title)} · {esc(NAME)}</title><meta name="description" content="{esc(description)}">{robots_meta}<meta name="theme-color" content="#f5f4ef"><link rel="canonical" href="{canonical}"><meta property="og:type" content="{'article' if article else 'website'}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(description)}"><meta property="og:url" content="{canonical}"><meta property="og:locale" content="zh_CN"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css?v={style_version}"><link rel="alternate" type="application/rss+xml" title="Aden 的博客" href="/feed.xml"><script type="application/ld+json">{encoded_data}</script><script defer src="/assets/site.js"></script></head><body>{header(active)}<main id="main">{body}</main>{footer()}</body></html>'''
 
 
 def page_hero(kicker, title, description, number=""):
@@ -214,12 +215,13 @@ def bonsai_feature(item):
 def home(catalog, projects, contributions):
     posts = sorted([p for p in catalog if p['section'] == 'blog'], key=lambda p: p['date'], reverse=True)[:3]
     lessons = [p for p in catalog if p['section'] == 'learn']
+    jev = next(item for item in projects if item['repo'] == 'jev-decision-teaching')
     body = f'''<div class="shell"><section class="hero"><div class="hero-copy"><p class="eyebrow"><span class="status-dot" aria-hidden="true"></span>ENGINEERING &amp; NOTES</p><h1>Aden <span class="hero-name-cn">周栩丞</span></h1><p class="hero-role">AI Infra <span aria-hidden="true">/</span> 具身 Agent</p><p class="hero-desc">日常做具身 Agent 的工具调用与任务执行，也做模型部署和量化实验。这里整理了个人项目、工程笔记和动手教程。</p><div class="hero-actions"><a class="button" href="/projects/">浏览项目 <span aria-hidden="true">↗</span></a><a class="text-link" href="/blog/">阅读技术笔记<span class="arrow" aria-hidden="true">→</span></a></div><div class="hero-note"><span>深圳 · AI Agent 研发工程师</span></div></div>{system_art()}</section><div class="discipline-bar"><span>WORKING ACROSS</span><div class="discipline-items"><span>Agent Engineering</span><span>LLM Inference</span><span>Systems Reliability</span></div></div>
-<section class="section">{section_head('01 / SELECTED PROJECTS','最近在做的项目','/projects/','全部项目')}<article class="featured-project"><div class="project-copy"><div class="project-kicker">FEATURED PROJECT <span class="badge">个人预览版</span></div><h3>栖伴 Nest</h3><p class="project-tagline">待办、日历和邮件草稿，<br>放在一个本地工作台里。</p><p>接上支持工具调用的模型后，可以用对话添加待办、查资料、起草邮件，也能查看工具执行记录。邮件目前只保存为本地草稿。</p><ul class="tag-list"><li>Python 3.10+</li><li>Agent</li><li>原生 Web</li><li>MIT</li></ul><div class="project-links">{external(projects[0]['url'],'查看项目')}<a class="text-link" href="/learn/nest-first-workflow/">上手教程<span class="arrow">→</span></a></div></div><div class="project-visual"><div class="window-bar"><i></i><i></i><i></i><span>NEST / PERSONAL WORKSPACE</span></div><img class="project-screen" src="/assets/images/nest-overview.jpg" alt="栖伴 Nest 工作台开发演示，包含待办、日程和本地草稿入口" width="1264" height="1054" loading="lazy"><p class="image-caption"><span>真实开发界面 · 合成示例</span><span>本地记录 / 自选模型</span></p></div></article><div class="project-secondary"><a class="project-tile project-tile-featured" href="/learn/bonsai-low-bit/"><span class="tile-number">02 / LOW-BIT LEARNING</span><h3>Bonsai 量化教学</h3><p>用代码学习三值量化：先做 CPU 小实验，再看 35B QAT 和 122B MoE 单卡推理的实验记录。</p><div class="tile-bottom"><span>PyTorch · 教学与研究</span><span aria-hidden="true">→</span></div></a><a class="project-tile" href="/learn/jev-decision-model/"><span class="tile-number">03 / DECISION MODELS</span><h3>Jev 决策模型实战</h3><p>从候选动作打分学起，训练推箱子策略，再试试页面按钮选择。先用 CPU 试玩，观察训练前后的变化。</p><div class="tile-bottom"><span>CPU 起步 · 训练与评测</span><span aria-hidden="true">→</span></div></a></div></section>
+<section class="section">{section_head('01 / SELECTED PROJECTS','项目与实验','/projects/','全部项目')}<article class="featured-project"><div class="project-copy"><div class="project-kicker">FEATURED PROJECT <span class="badge">CPU 可试玩</span></div><h3>Jev 决策模型实战</h3><p class="project-tagline">先让小模型玩推箱子，<br>再看它怎么选下一步。</p><p>给候选动作打分，执行一步，再读取新的状态。仓库带了 CPU 策略、演示页面和三节中文课程，可以比较训练前后，也能自己改一次训练。</p><p>独立 Jev-style 教学实现，未复现 TypeSafe Jev 的专有训练方法。</p><ul class="tag-list"><li>候选打分</li><li>PyTorch</li><li>CPU 起步</li><li>MIT</li></ul><div class="project-links"><a class="text-link" href="/learn/jev-decision-model/">从试玩开始<span class="arrow">→</span></a>{external(jev['url'],'查看代码')}</div></div><div class="project-visual"><div class="window-bar"><i></i><i></i><i></i><span>JEV / DECISION LAB</span></div><img class="project-screen project-screen-full" src="/assets/images/jev-sokoban.jpg" alt="Jev 推箱子本地演示，展示棋盘、候选动作与训练前后对照" width="1264" height="1206" loading="lazy"><p class="image-caption"><span>仓库随附演示 · CPU 可运行</span><span>固定教学实验</span></p></div></article><div class="project-secondary"><a class="project-tile project-tile-featured" href="/learn/bonsai-low-bit/"><span class="tile-number">02 / LOW-BIT LEARNING</span><h3>Bonsai 量化教学</h3><p>用代码学习三值量化：先做 CPU 小实验，再看 35B QAT 和 122B MoE 单卡推理的实验记录。</p><div class="tile-bottom"><span>PyTorch · 教学与研究</span><span aria-hidden="true">→</span></div></a><a class="project-tile" href="/learn/cache-identity/"><span class="tile-number">03 / INTERACTIVE LAB</span><h3>文件改了，缓存呢？</h3><p>换了图片，模型却还在用旧结果。在浏览器里改一段内容，看看缓存按路径和按内容识别有什么区别。</p><div class="tile-bottom"><span>零安装 · 浏览器交互实验</span><span aria-hidden="true">→</span></div></a></div></section>
 <section class="section notes-section">{section_head('02 / FIELD NOTES','技术笔记','/blog/','所有文章')}<div>{''.join(note_row(p) for p in posts)}</div></section></div>
-<section class="learning-band"><div class="shell learning-grid"><div class="learning-intro"><p class="eyebrow">03 / LEARN BY BUILDING</p><h2>动手试试。</h2><p>可以先在浏览器里做缓存实验，或用 CPU 试玩推箱子。也有 Nest 上手和 Bonsai 量化教程，按自己的兴趣和机器来选。</p><a class="text-link" href="/learn/">进入教学专区<span class="arrow">↗</span></a></div><ol class="learning-list">{''.join(f'<li><a href="{article_url(item)}"><span class="num">0{i+1}</span><div><h3>{esc(item["title"])}</h3><p>{esc(item["category"])} · 约 {item["minutes"]} 分钟</p></div><span aria-hidden="true">↗</span></a></li>' for i,item in enumerate(lessons))}</ol></div></section>
+<section class="learning-band"><div class="shell learning-grid"><div class="learning-intro"><p class="eyebrow">03 / LEARN BY BUILDING</p><h2>动手试试。</h2><p>可以先在浏览器里做缓存实验，或用 CPU 试玩推箱子。Bonsai 量化教程从三值编码开始，按自己的兴趣和机器来选。</p><a class="text-link" href="/learn/">进入教学专区<span class="arrow">↗</span></a></div><ol class="learning-list">{''.join(f'<li><a href="{article_url(item)}"><span class="num">0{i+1}</span><div><h3>{esc(item["title"])}</h3><p>{esc(item["category"])} · 约 {item["minutes"]} 分钟</p></div><span aria-hidden="true">↗</span></a></li>' for i,item in enumerate(lessons))}</ol></div></section>
 <div class="shell"><section class="section">{section_head('04 / SELECTED CONTRIBUTIONS','我提交过的开源修复',github_pr_search(),'GitHub PR 记录')}<div class="contribution-grid">{''.join(f'<article class="contribution"><span class="repo">{esc(item["repo"])} / {item["number"]}</span><h3>{esc(item["title"])}</h3><p>{esc(item["description"])}</p>{external(item["url"],"查看已合并 PR")}</article>' for item in contributions[:3])}</div><div class="contribution-context"><p class="section-footnote">这里选了几项已合并的修复。更多 PR 在 GitHub，已排除我自己名下的仓库。</p><a class="text-link" href="/contributions/">阅读精选案例<span class="arrow" aria-hidden="true">→</span></a></div></section><section class="contact-strip"><div><h2>联系我</h2><p>如果你也在做 Agent 或模型推理，欢迎发邮件聊具体问题。</p></div><a class="button button-outline" href="mailto:{EMAIL}">工作联系<span aria-hidden="true">↗</span></a></section></div>'''
-    return page("Agent、推理系统和我的项目", "周栩丞 Aden Zhou 的技术作品集：具身 Agent、LLM 推理、Nest 工作台、Bonsai 低比特教学与工程复盘。", body)
+    return page("Agent、推理系统和我的项目", "周栩丞 Aden Zhou 的技术作品集：具身 Agent、LLM 推理、Jev 决策模型、Bonsai 低比特教学与工程复盘。", body)
 
 
 def project_page(projects):
@@ -228,7 +230,7 @@ def project_page(projects):
         guide = external(item['guide'], item['guide_label']) if item['guide'].startswith('http') else f'<a class="text-link" href="{item["guide"]}">{item["guide_label"]}<span class="arrow">→</span></a>'
         cards.append(f'''<article class="project-page-card"><p class="eyebrow">{esc(item['category'])}</p><h2>{esc(item['name'])}</h2><span class="badge">{esc(item['status'])}</span><p style="margin-top:20px">{esc(item['description'])}</p><ul class="tag-list">{''.join(f'<li>{esc(tag)}</li>' for tag in item['tags'])}</ul><p class="project-boundary">{esc(item['boundary'])}</p><div class="project-links">{external(item['url'],'GitHub 仓库')}{guide}</div></article>''')
     body = page_hero("PROJECTS / BUILD & EXPLORE", "项目", "我做的工具和模型实验，也包括在其他开源项目上做的扩展。使用方法和当前进度都在各自的仓库里。", f'{len(projects):02d} PROJECTS') + '<div class="shell page-content"><div class="project-page-grid">' + ''.join(cards) + '</div></div>'
-    return page("项目", "Nest、Jev 决策模型实战、Bonsai 低比特教学、minimind-diffusion 与 Agent 工具：项目介绍、使用方法和当前进度。", body, "/projects/", "projects")
+    return page("项目", "Jev 决策模型实战、Bonsai 低比特教学、minimind-diffusion 与 Agent 工具：项目介绍、使用方法和当前进度。", body, "/projects/", "projects")
 
 
 def blog_page(catalog):
@@ -252,7 +254,7 @@ def learning_page(catalog):
         cards.append(f'<article id="{esc(item["slug"])}" class="learn-card{ " learn-card-preview" if preview else "" }"><div><p class="eyebrow orange">0{i+1} / {esc(item["category"])}</p><h2>{esc(item["title"])}</h2><p>{esc(item["description"])}</p><ul class="tag-list">{"".join(f"<li>{esc(tag)}</li>" for tag in item["tags"])}</ul><a class="text-link" href="{article_url(item)}">开始学习 · 约 {item["minutes"]} 分钟<span class="arrow">→</span></a></div>{media}</article>')
     cards = ''.join(cards)
     body += '<div class="shell page-content">' + (bonsai_feature(featured) if featured else '') + '<div class="learn-cards">' + cards + '</div><div class="learning-note">想继续读模型代码？可以从 <a class="text-link" href="https://github.com/adenzhou1350/minimind-diffusion/blob/master/tests/test_model.py">minimind-diffusion 的模型测试 ↗</a> 开始。测试能帮助理解张量形状和计算过程；生成效果还要另行评估。</div></div>'
-    return page("教学", "Jev 决策模型实战、Bonsai 量化教程、浏览器缓存实验和 Nest 上手指南，附环境要求与操作步骤。", body, "/learn/", "learn")
+    return page("教学", "Jev 决策模型实战、Bonsai 量化教程与浏览器缓存实验，附环境要求与操作步骤。", body, "/learn/", "learn")
 
 
 def article_page(item):
@@ -275,8 +277,16 @@ def contributions_page(items, path="/contributions/"):
 
 def about_page():
     body = page_hero("ABOUT / ADEN ZHOU", "关于我", "我是周栩丞，也叫 Aden，现在在深圳做 AI Agent 研发。")
-    body += f'''<div class="shell page-content"><div class="about-layout"><section><h2>我平时做什么</h2><p>目前主要做具身 Agent，处理语音交互、意图理解、工具调用和动作执行。任务超时后怎么恢复、消息和执行状态怎么同步，也是工作中要解决的问题。</p><p>我也做过模型部署、权重量化、批处理调度和 KV Cache 调优。多模态输入与推理服务的资源管理，是我一直在关注的方向。</p><p>Nest、Bonsai 和 minimind-diffusion 是我的个人项目与实验。这里会记录遇到的故障、修复办法和测试结果；还没解决的问题也会写出来。</p><ul class="tag-list"><li>AI Infra</li><li>具身 Agent</li><li>推理服务</li><li>系统可靠性</li></ul><div class="project-links"><a class="button" href="mailto:{EMAIL}">工作联系 ↗</a><a class="text-link" href="/assets/files/aden-zhou-xucheng-cv.pdf">查看中文简历 ↗</a></div></section><section><h2>工作与教育</h2><ol class="timeline"><li><span class="date">2026.03 至今</span><h3>自变量机器人</h3><p>AI Agent 研发工程师 · 具身任务链、工具调用、超时与消息同步。</p></li><li><span class="date">2025.03 至 2026.03</span><h3>华为 OD · 大模型平台</h3><p>软件开发工程师 · 模型部署流水线、Q4 权重量化、批处理调度与 KV Cache 调优。</p></li><li><span class="date">2023.02 至 2025.01</span><h3>悉尼大学</h3><p>硕士 · 网络与分布式系统</p></li><li><span class="date">2018.08 至 2022.12</span><h3>宾夕法尼亚州立大学</h3><p>学士 · 计算机工程</p></li></ol></section></div></div>'''
+    body += f'''<div class="shell page-content"><div class="about-layout"><section><h2>我平时做什么</h2><p>目前主要做具身 Agent，处理语音交互、意图理解、工具调用和动作执行。任务超时后怎么恢复、消息和执行状态怎么同步，也是工作中要解决的问题。</p><p>我也做过模型部署、权重量化、批处理调度和 KV Cache 调优。多模态输入与推理服务的资源管理，是我一直在关注的方向。</p><p>Jev、Bonsai 和 minimind-diffusion 是我的个人项目与实验。这里会记录遇到的故障、修复办法和测试结果；还没解决的问题也会写出来。</p><ul class="tag-list"><li>AI Infra</li><li>具身 Agent</li><li>推理服务</li><li>系统可靠性</li></ul><div class="project-links"><a class="button" href="mailto:{EMAIL}">工作联系 ↗</a><a class="text-link" href="/assets/files/aden-zhou-xucheng-cv.pdf">查看中文简历 ↗</a></div></section><section><h2>工作与教育</h2><ol class="timeline"><li><span class="date">2026.03 至今</span><h3>自变量机器人</h3><p>AI Agent 研发工程师 · 具身任务链、工具调用、超时与消息同步。</p></li><li><span class="date">2025.03 至 2026.03</span><h3>华为 OD · 大模型平台</h3><p>软件开发工程师 · 模型部署流水线、Q4 权重量化、批处理调度与 KV Cache 调优。</p></li><li><span class="date">2023.02 至 2025.01</span><h3>悉尼大学</h3><p>硕士 · 网络与分布式系统</p></li><li><span class="date">2018.08 至 2022.12</span><h3>宾夕法尼亚州立大学</h3><p>学士 · 计算机工程</p></li></ol></section></div></div>'''
     return page("关于", "周栩丞 Aden Zhou：AI Agent 研发工程师，关注具身 Agent、LLM 推理和系统可靠性。", body, "/about/", "about")
+
+
+def withdrawn_page(item):
+    title = "教程已撤下"
+    reason = item.get('withdrawal_reason', '这篇内容已撤回，暂不提供阅读。')
+    body = page_hero("PAUSED / ARCHIVE", title, reason)
+    body += '<div class="shell page-content"><a class="button" href="/learn/">浏览其他教程 →</a></div>'
+    return page(title, reason, body, article_url(item), noindex=True)
 
 
 def validate_catalog(catalog):
@@ -284,6 +294,8 @@ def validate_catalog(catalog):
     for item in catalog:
         if item['section'] not in ('blog', 'learn') or not re.fullmatch('[a-z0-9]+(?:-[a-z0-9]+)*', item['slug']):
             raise ValueError('Invalid section or slug')
+        if item.get('withdrawn') and not item.get('draft'):
+            raise ValueError('Withdrawn content must remain a draft')
         key = article_url(item)
         if key in seen:
             raise ValueError(f'Duplicate content path: {key}')
@@ -302,6 +314,9 @@ def outputs():
     out = {'index.html': home(catalog, projects, contributions), 'projects/index.html': project_page(projects), 'blog/index.html': blog_page(catalog), 'learn/index.html': learning_page(catalog), 'about/index.html': about_page(), 'contributions/index.html': contributions_page(contributions), 'details.html': contributions_page(contributions)}
     for item in catalog:
         out[article_url(item).strip('/') + '/index.html'] = article_page(item)
+    for item in all_content:
+        if item.get('withdrawn'):
+            out[article_url(item).strip('/') + '/index.html'] = withdrawn_page(item)
     out['404.html'] = page('页面未找到', '回到首页，继续阅读项目、博客与教学内容。', '<section class="shell not-found"><h1>404</h1><p>这个地址还没有内容。</p><a class="button" href="/">回到首页 →</a></section>', '/404.html')
     rss = []
     from datetime import datetime, timezone

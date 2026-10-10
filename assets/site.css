@@ -24,3 +24,6 @@
 
 .learn-card-preview{grid-column:1/-1;display:grid;grid-template-columns:1fr .9fr;gap:44px;align-items:center}.learn-card-preview h2{max-width:440px}.learn-card-preview p:not(.eyebrow){max-width:440px}.learn-card-media{margin:0;padding:14px;background:var(--paper);border:1px solid var(--line)}.learn-card-media img{width:100%;border:1px solid var(--line)}.learn-card-media figcaption{font-size:10px;color:var(--muted);margin-top:10px}.learn-card-preview .text-link{margin-top:8px}
 @media(max-width:780px){.learn-card-preview{grid-template-columns:1fr;gap:24px}.learn-card-preview h2{font-size:24px}.learn-card-media{padding:10px}}
+
+/* Preserve the complete experiment screenshot, including its evaluation context. */
+.project-screen-full{aspect-ratio:auto;object-fit:contain}
