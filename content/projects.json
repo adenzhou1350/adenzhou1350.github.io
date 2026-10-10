@@ -17,6 +17,23 @@
     "guide_label": "跟着教程上手"
   },
   {
+    "name": "Jev 决策模型实战",
+    "repo": "jev-decision-teaching",
+    "category": "教学与研究",
+    "description": "从候选动作打分学起，训练一个会玩推箱子的小模型，再给本地页面选择按钮。包含三节中文课程、可交互演示、训练代码和逐条评测记录。",
+    "tags": [
+      "候选打分",
+      "CPU 起步",
+      "PyTorch",
+      "MIT"
+    ],
+    "status": "公开教学 · 可本地试玩",
+    "boundary": "独立 Jev-style 教学实现。推箱子随附 CPU 策略；页面按钮需要匹配的 Qwen3.5-0.8B 快照，只测合成本地页面的文字决策。未复现 TypeSafe Jev 的专有训练方法。",
+    "url": "https://github.com/adenzhou1350/jev-decision-teaching",
+    "guide": "/learn/jev-decision-model/",
+    "guide_label": "从 CPU 试玩开始"
+  },
+  {
     "name": "Bonsai 量化教程",
     "repo": "bonsai-qat-teaching",
     "category": "教学与研究",

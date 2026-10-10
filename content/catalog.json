@@ -36,6 +36,24 @@
     "updated": "2026-10-10"
   },
   {
+    "slug": "jev-decision-model",
+    "section": "learn",
+    "title": "Jev 决策模型：从推箱子学候选打分",
+    "description": "先用 CPU 试玩随附策略，再看模型怎样给候选动作打分。接着可以自己训练推箱子策略，或试试本地页面按钮选择。",
+    "category": "决策模型",
+    "date": "2026-10-10",
+    "minutes": 6,
+    "tags": [
+      "CPU 起步",
+      "PyTorch",
+      "候选打分",
+      "训练与评测"
+    ],
+    "source": "content/learn/jev-decision-model.md",
+    "kind": "专题导读",
+    "source_url": "https://github.com/adenzhou1350/jev-decision-teaching"
+  },
+  {
     "slug": "bonsai-low-bit",
     "section": "learn",
     "title": "Bonsai 量化入门：三值编码、QAT 和单卡推理",
