@@ -68,3 +68,5 @@
 本轮研究已暂停，代码、检查点和实验记录保留。除了上面的质量门槛，后续 HTTP 实验也还有严格输出一致性问题，具体状态见[结果说明](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/01c01ff8a913bf03cf8af7c659984af445f79f93/docs/RESULTS.md)。
 
 如果你想先理解三值权重怎么存，可以打开[浏览器编码小实验](/learn/bonsai-low-bit/#ternary-demo)，改 5 个数，看看打包和还原的结果，也能复制当前输入的 Python 代码。仓库公开了实现和测量记录。122B 推理则需要另外取得指定 packed 权重；仓库没有发布模型权重，完整训练与评分复现流程也还没齐。
+
+想核对本文所用公开材料，可以按[公开证据说明](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/PUBLIC_EVIDENCE.md)运行标准库检查脚本。它检查文件身份与摘要算术，也列出没有随仓库公开的原始日志和产物；不需要显卡，但不能代替模型复现。

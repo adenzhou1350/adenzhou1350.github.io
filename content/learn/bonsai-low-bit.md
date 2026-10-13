@@ -45,6 +45,14 @@ Bonsai 风格量化教学有三值编码、量化感知训练（QAT）和压缩�
 
 想先看这次实验做到了什么，可以读[单张 5090 跑 122B MoE 的案例](/blog/bonsai-5090-experiment/)。里面放在一起比较了模型存储、运行占用与配对评测，也记录了一次最终没有采用的解包优化。
 
+如果想核对这些数字，克隆仓库后可以先运行下面的标准库脚本，Windows 和 Linux 都不需要安装模型依赖：
+
+```bash
+python scripts/check_public_evidence.py
+```
+
+它核对已公开文件的哈希，并从摘要重算 HTTP 吞吐、请求差异数与显存单位。`PASS` 表示文件和摘要算术相符，不代表重跑了模型或验证了未发布的原始日志。[公开证据说明](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/PUBLIC_EVIDENCE.md)逐项列出仓库里能拿到什么，以及继续复现还缺哪些文件。
+
 [122B 运行说明](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/experimental122/README.md)记录了新旧两版固定产物。新版已完成训练、独立数值检查和单张 RTX 5090 推理，也做了四组公开开发评测。四组结果都低于对应原生 BF16 基线，质量未达标。
 
 仓库没有提供模型权重。要运行这个案例，需要另行取得与所选 manifest 对应的 packed 权重，不能直接传入原始 BF16 模型。仅克隆仓库，也还无法从头重建记录中的 122B 产物。完整可移植训练链路和质量复刻还缺哪些部分，见 [122B 实验记录](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/experiments/122B.md)。

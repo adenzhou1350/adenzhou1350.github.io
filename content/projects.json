@@ -37,17 +37,17 @@
     "name": "minimind-diffusion",
     "repo": "minimind-diffusion",
     "category": "学习实验",
-    "description": "一个学习掩码扩散的小模型项目，包含训练、采样和图文实验。参考了 MiniMind、MiniMind-V 和 LLaDA，仓库里也有模型测试和实验记录。",
+    "description": "一个学习掩码扩散的小模型项目，包含训练、采样和图文实验。参考 MiniMind、MiniMind-V 和 LLaDA，按历史提交整理了实验出处，也提供小模型计算检查。",
     "tags": [
       "PyTorch",
       "Masked diffusion",
       "多模态"
     ],
     "status": "研究实验",
-    "boundary": "文本对话还不稳定，图文理解也尚未做到可靠地根据图片回答。模型测试通过，只能说明对应计算检查通过，生成效果要另看。",
+    "boundary": "文本对话和图文理解仍不稳定。历史准确率来自不同模型与训练阶段，未附完整原始输出，不能当作同一受控对照；计算检查也不等于生成效果达标。",
     "url": "https://github.com/adenzhou1350/minimind-diffusion",
-    "guide": "https://github.com/adenzhou1350/minimind-diffusion/blob/master/tests/test_model.py",
-    "guide_label": "从模型测试读起"
+    "guide": "https://github.com/adenzhou1350/minimind-diffusion/blob/master/docs/experiment-evidence.md",
+    "guide_label": "查看实验出处与复现范围"
   },
   {
     "name": "soul-generator",
@@ -69,16 +69,16 @@
     "name": "kernel_opt_agent",
     "repo": "kernel_opt_agent",
     "category": "Fork 扩展与贡献",
-    "description": "在 kernel 优化工具的基础上，补实验编排、环境复用、实验记录管理和验证检查。",
+    "description": "从不用 GPU 的 worklog 和实验知识检索开始，再读环境复用、资源编排的扩展代码。公开入口列出了固定版本、命令和对应测试。",
     "tags": [
       "CUDA",
       "研究自动化",
       "验证流程"
     ],
-    "status": "持续研究",
-    "boundary": "这是 dasikuzi2/kernel_opt_agent 的 fork。在个人 fork 中合并的改动，仍需通过上游 PR 才能进入原项目。",
+    "status": "Fork 扩展 · CPU 入门",
+    "boundary": "这是 dasikuzi2/kernel_opt_agent 的 fork。轻量入口与集成研究分支分别说明；CPU 检查不代表整套 GPU 优化系统已验证，个人 fork 的改动也不等于上游已合入。",
     "url": "https://github.com/adenzhou1350/kernel_opt_agent",
-    "guide": "https://github.com/dasikuzi2/kernel_opt_agent",
-    "guide_label": "查看上游项目"
+    "guide": "https://github.com/adenzhou1350/kernel_opt_agent/blob/main/PUBLIC_ENTRY.md",
+    "guide_label": "从 CPU 试跑开始"
   }
 ]
