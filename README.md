@@ -10,7 +10,7 @@ AI Infra 与具身 Agent 的作品集、博客和教学空间。
 - `/blog/`：技术复盘，支持分类和关键词筛选。
 - `/learn/`：Jev 决策模型、Bonsai 低比特专题和浏览器交互实验。
 - `/learn/jev-decision-model/`：从随附的 CPU 推箱子策略进入候选打分、训练和页面按钮选择。
-- `/learn/bonsai-low-bit/`：从纯 Python 三值打包，进入 Linux CPU 测试、35B QAT 与 122B MoE 单卡推理的专题导读。
+- `/learn/bonsai-low-bit/`：先在浏览器里操作三值打包并复制当前 Python 示例，再进入 Linux CPU 测试、35B QAT 与 122B MoE 单卡推理的专题导读。`#ternary-demo` 可直接打开编码实验。
 - `/contributions/`：参与贡献的开源项目。首页展示 6 个重点项目，完整页列出已核对的 15 个项目；点击卡片，直接查看本人在对应仓库已合并的 PR。
 - `/about/`：公开职业经历、教育和工作联系。
 
@@ -79,6 +79,7 @@ git diff --check
 - 带语言名的三反引号代码块、引用块和简单 Markdown 表格。
 - 独占一行的图片：`![图片说明](/assets/images/example.jpg)`。先把图片放入 `assets/images/`；说明同时用作替代文本和图注。暂不支持外链图片。
 - `{{CACHE_DEMO}}` 是本站缓存教学实验的专用组件标记。
+- `{{TERNARY_DEMO}}` 是 Bonsai 导读的三值编码组件：五个原生选项、当前展开式、打包整数、8 位二进制、解包结果和往返反馈。Python 示例随当前输入更新，可复制；关闭 JavaScript 时保留默认示例，修改选项禁用。
 
 HTML 源码会被转义，正文不运行任意 HTML 或 JavaScript。复制代码需要浏览器允许剪贴板写入；失败时仍可手动选择代码。
 
@@ -105,7 +106,8 @@ assets/images/                已公开项目的开发演示图片
 
 - 项目依据对应公开仓库。Bonsai 标注公开教学与实验记录，minimind-diffusion 标注学习实验，kernel_opt_agent 标注 fork 扩展。
 - Bonsai 导读的实验状态核对至公开仓库 `ce2e903` 的 2026-10-10 收尾记录，并同步文档整理后的结果入口。35B 全专家 QAT 与 122B 低秩补偿分开介绍，区分 HTTP 合计吞吐、CLI 速度、模型存储与 NVML 占用，保留 MoE、资源、权重、质量与研究暂停状态。
-- Bonsai 的网页编码小实验只使用 Python 标准功能。仓库 CPU 检查点测试使用 POSIX 目录同步，教程按 Linux CPU 路线说明；没有宣称 Windows 原生支持或完整 122B 一键复刻。
+- Bonsai 编码小实验的随附 Python 示例只使用标准功能。仓库 CPU 检查点测试使用 POSIX 目录同步，教程按 Linux CPU 路线说明；没有宣称 Windows 原生支持或完整 122B 一键复刻。
+- 三值编码交互只在浏览器本地计算，不调用模型或估算显存。反馈链接打开现有公开邮箱，预填文章链接与当前输入，由读者自行检查发送；没有自动收集、上传或新增后台。
 - 贡献项目名单于 2026-10-13 按 GitHub 四页公开搜索结果核对，共 15 个仓库、36 条已合并 PR；各条原始链接保存在 `content/contributor-projects.json`。Contributor 表示有公开合并贡献，不表示维护者或核心成员身份。项目卡片限定 `author:adenzhou1350`、`is:pr`、`is:public`、`is:merged` 和对应的 `repo:`，打开实时结果；全量入口排除本人名下仓库。页面展示的项目数是核对日快照，不显示静态 PR 总数。新增项目时核对合并证据、更新日期并重建；已有项目后续合并的 PR 会自动出现在 GitHub 查询中。`contributions.json` 和 `oss-stats.json` 仅保留为历史数据。
 - Jev 导读依据公开仓库 `a04dfb4` 的三节课、安装说明与实验记录。推箱子为独立 CNN；页面按钮使用冻结的 Qwen3.5-0.8B 与共享打分头，保留模型快照、合成数据和评测范围。演示截图取自该仓库 `docs/assets/demo-sokoban.jpg`，按项目 MIT 许可使用；不是本站在线模型服务。
 - 保留的 Nest 历史图片取自其公开仓库 `docs/assets/overview.jpg`，使用合成示例；目前不在公开页面展示。
@@ -121,6 +123,9 @@ python -X utf8 scripts/build_site.py --check
 python -X utf8 scripts/check_site.py
 python -X utf8 -m unittest discover -s tests -v
 node --check assets/site.js
+node tests/test_ternary_demo.cjs
 ```
 
-浏览器还需检查桌面和手机、菜单、博客筛选与空结果、复制代码、缓存实验的更新/改名/重置。页面源码检查不替代浏览器验证。
+`test_ternary_demo.cjs` 直接加载页面所用函数，穷举 243 种合法输入，检查编码唯一性、往返还原、默认值与两端值，并用 Python 实际执行全部 243 份当前输入代码。测试不另写一份编码器来代替页面实现。
+
+浏览器还需检查桌面和手机、菜单、博客筛选与空结果、复制代码、缓存实验的更新/改名/重置，以及三值实验的键盘选择、重置、代码更新和邮件预填。页面源码检查不替代浏览器验证。

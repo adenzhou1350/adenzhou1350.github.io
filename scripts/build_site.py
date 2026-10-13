@@ -73,6 +73,42 @@ CACHE_DEMO = '''<section class="cache-demo" data-cache-demo aria-label="输入�
 <p class="demo-hint">只模拟字符串解析与 Map 缓存。没有模型调用、图像处理或性能测量。</p></section>'''
 
 
+def ternary_demo():
+    trits = [-1, 0, 1, -1, 1]
+    fields = ''.join(
+        f'<label for="ternary-value-{index}"><span>位置 {index}</span><select id="ternary-value-{index}" data-trit>'
+        + ''.join(f'<option value="{value}"{" selected" if value == initial else ""}>{"+1" if value == 1 else value}</option>' for value in (-1, 0, 1))
+        + '</select></label>'
+        for index, initial in enumerate(trits)
+    )
+    example = '''trits = [-1, 0, 1, -1, 1]
+packed = sum((value + 1) * 3 ** i for i, value in enumerate(trits))
+restored = [(packed // 3 ** i) % 3 - 1 for i in range(5)]
+
+assert 0 <= packed < 256
+assert restored == trits
+print("packed byte:", packed)
+print("binary:", format(packed, "08b"))
+print("restored:", restored)'''
+    article = BASE + '/learn/bonsai-low-bit/#ternary-demo'
+    feedback = 'mailto:' + EMAIL + '?' + urlencode({
+        'subject': 'Bonsai 三值编码小实验反馈',
+        'body': f'文章：{article}\n当前输入：{trits}\n打包整数：183\n\n我卡在这里：\n',
+    })
+    return f'''<section class="ternary-demo" id="ternary-demo" data-ternary-demo aria-labelledby="ternary-demo-title">
+<div class="ternary-demo-heading"><div><h3 id="ternary-demo-title">5 个三值，1 个字节</h3><p>改几个数，看看打包后能否原样拆回来。</p></div><button type="button" data-ternary-reset disabled>重置</button></div>
+<noscript><p>开启 JavaScript 后可以修改选项；当前结果与 Python 示例仍可阅读和复制到本地运行。</p></noscript>
+<fieldset class="ternary-inputs" data-ternary-inputs disabled><legend>选择输入（从位置 0 开始打包）</legend><div>{fields}</div></fieldset>
+<p class="ternary-mapping">先将 −1、0、+1 映射成 0、1、2，再依次乘以 1、3、9、27、81 后相加。</p>
+<p class="ternary-equation-live">当前计算：<span data-ternary-equation>0 × 1 + 1 × 3 + 2 × 9 + 0 × 27 + 2 × 81 = 183</span></p>
+<dl class="ternary-results"><div><dt>打包整数</dt><dd data-ternary-packed>183</dd></div><div><dt>8 位二进制</dt><dd data-ternary-binary>10110111</dd></div><div class="ternary-restored"><dt>解包结果</dt><dd data-ternary-restored>[-1, 0, 1, -1, 1]</dd></div></dl>
+<p class="ternary-verdict" data-ternary-verdict role="status" aria-live="polite" aria-atomic="true">往返一致：解包结果与这 5 个输入完全相同。</p>
+<details class="ternary-code"><summary>查看并复制当前输入的 Python 示例</summary><div class="code-wrap"><div class="code-label">Python / 跟随当前输入更新</div><button class="copy-code" type="button" aria-label="复制当前输入的 Python 示例" disabled>复制</button><pre><code data-ternary-code>{esc(example)}</code></pre></div></details>
+<p class="ternary-scope">这里只验证三值编码的打包与还原，不运行模型、不估算显存，也不测试量化后的回答质量。</p>
+<div class="ternary-feedback"><a href="{esc(feedback)}" data-ternary-feedback data-email="{esc(EMAIL)}" data-article="{esc(article)}">这一步卡住了？写封邮件</a><span>会附上当前输入，供你修改后发送。</span></div>
+</section>'''
+
+
 def markdown(source):
     """Headings, paragraphs, flat lists, fences, tables, blockquotes and links."""
     lines = source.lstrip("\ufeff").splitlines()
@@ -85,6 +121,10 @@ def markdown(source):
             continue
         if line == "{{CACHE_DEMO}}":
             output.append(CACHE_DEMO)
+            i += 1
+            continue
+        if line == "{{TERNARY_DEMO}}":
+            output.append(ternary_demo())
             i += 1
             continue
         if line.startswith("!["):
@@ -173,6 +213,7 @@ def footer():
 
 def page(title, description, body, path="/", active="", article=None, noindex=False):
     style_version = hashlib.sha256((ROOT / 'assets/site.css').read_text(encoding='utf-8').encode('utf-8')).hexdigest()[:12]
+    script_version = hashlib.sha256((ROOT / 'assets/site.js').read_text(encoding='utf-8').encode('utf-8')).hexdigest()[:12]
     canonical = BASE + path
     robots_meta = '<meta name="robots" content="noindex, follow">' if noindex else ''
     data = {"@context": "https://schema.org", "@type": "WebSite", "name": NAME, "url": BASE}
@@ -180,7 +221,7 @@ def page(title, description, body, path="/", active="", article=None, noindex=Fa
         data = {"@context": "https://schema.org", "@type": "TechArticle", "headline": article["title"], "description": article["description"], "datePublished": article["date"], "dateModified": article.get("updated", article["date"]), "author": {"@type": "Person", "name": "周栩丞", "url": BASE + "/about/"}, "mainEntityOfPage": canonical}
     encoded_data = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
     return f'''<!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{esc(title)} · {esc(NAME)}</title><meta name="description" content="{esc(description)}">{robots_meta}<meta name="theme-color" content="#f5f4ef"><link rel="canonical" href="{canonical}"><meta property="og:type" content="{'article' if article else 'website'}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(description)}"><meta property="og:url" content="{canonical}"><meta property="og:locale" content="zh_CN"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css?v={style_version}"><link rel="alternate" type="application/rss+xml" title="Aden 的博客" href="/feed.xml"><script type="application/ld+json">{encoded_data}</script><script defer src="/assets/site.js"></script></head><body>{header(active)}<main id="main">{body}</main>{footer()}</body></html>'''
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{esc(title)} · {esc(NAME)}</title><meta name="description" content="{esc(description)}">{robots_meta}<meta name="theme-color" content="#f5f4ef"><link rel="canonical" href="{canonical}"><meta property="og:type" content="{'article' if article else 'website'}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(description)}"><meta property="og:url" content="{canonical}"><meta property="og:locale" content="zh_CN"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css?v={style_version}"><link rel="alternate" type="application/rss+xml" title="Aden 的博客" href="/feed.xml"><script type="application/ld+json">{encoded_data}</script><script defer src="/assets/site.js?v={script_version}"></script></head><body>{header(active)}<main id="main">{body}</main>{footer()}</body></html>'''
 
 
 def page_hero(kicker, title, description, number=""):

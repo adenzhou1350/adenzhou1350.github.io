@@ -2,26 +2,17 @@
 
 Bonsai 风格量化教学有三值编码、量化感知训练（QAT）和压缩推理的代码，也保留了实验记录。训练损失下降、检查点能恢复，回答质量仍可能不过关。读实验结果时，解码速度和回答质量要分开看。
 
-可以先用普通 Python 跑下面的小实验，再按手头的机器选择[公开仓库](https://github.com/adenzhou1350/bonsai-qat-teaching)中的练习。读原理和实验记录不需要大显卡。
+可以先在浏览器里改几个数，试试下面的编码小实验，也可以复制 Python 示例到本地运行。之后再按手头的机器选择[公开仓库](https://github.com/adenzhou1350/bonsai-qat-teaching)中的练习。读原理和实验记录不需要大显卡。
 
 ## 先用五个数字理解 1.6bit
 
 三值权重的编码只有 `-1`、`0`、`1`。把它们映射成三进制的 `0`、`1`、`2`，五个编码一共有 `3^5 = 243` 种组合，可以放进一个有 256 种取值的字节。只看这部分编码，每个权重占 `8 / 5 = 1.6bit`。
 
-把下面代码保存为 `ternary_demo.py`，运行 `python ternary_demo.py`。只用 Python 标准功能，不需要模型、PyTorch 或 GPU。
+{{TERNARY_DEMO}}
 
-```python
-trits = [-1, 0, 1, -1, 1]
-packed = sum((value + 1) * 3 ** i for i, value in enumerate(trits))
-restored = [(packed // 3 ** i) % 3 - 1 for i in range(5)]
+想自己运行，把当前示例保存为 `ternary_demo.py`，再运行 `python ternary_demo.py`。只用 Python 标准功能，不需要模型、PyTorch 或 GPU。
 
-assert 0 <= packed < 256
-assert restored == trits
-print("packed byte:", packed)
-print("restored:", restored)
-```
-
-运行后会打印 `packed byte: 183`，下一行是还原出的五个三值编码。可以改掉其中一个数字，看看字节值怎样变化、解包后是否还能得到原来的输入。输入仍须来自 `-1`、`0`、`1`。
+默认输入打包后是 `183`，二进制为 `10110111`，解包后仍是原来的五个数。改掉其中一个选项，看看字节值怎样变化，再把全部选项设为 `-1` 或 `+1`，试试两端的取值。
 
 这里的 1.6bit 只算了三值编码。实际部署还要存分组尺度、padding、保留的非专家权重和运行缓存，不能把它当成整个模型的平均位宽。这个程序也没有做权重拟合、训练或推理；分组三值网格、STE 和张量打包的实现放在 [quantization.py](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/quantization.py)。
 

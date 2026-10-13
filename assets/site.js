@@ -1,5 +1,35 @@
 (() => {
   'use strict';
+  function packTernary(trits) {
+    if (!Array.isArray(trits) || trits.length !== 5 || trits.some(value => !Number.isInteger(value) || value < -1 || value > 1)) {
+      throw new RangeError('Choose exactly five values from -1, 0, and 1.');
+    }
+    return trits.reduce((packed, value, index) => packed + (value + 1) * (3 ** index), 0);
+  }
+  function unpackTernary(packed) {
+    if (!Number.isInteger(packed) || packed < 0 || packed > 242) {
+      throw new RangeError('A valid five-trit encoding is an integer from 0 to 242.');
+    }
+    return Array.from({ length: 5 }, (_, index) => Math.floor(packed / (3 ** index)) % 3 - 1);
+  }
+  function ternaryPython(trits) {
+    packTernary(trits);
+    return `trits = [${trits.join(', ')}]
+packed = sum((value + 1) * 3 ** i for i, value in enumerate(trits))
+restored = [(packed // 3 ** i) % 3 - 1 for i in range(5)]
+
+assert 0 <= packed < 256
+assert restored == trits
+print("packed byte:", packed)
+print("binary:", format(packed, "08b"))
+print("restored:", restored)`;
+  }
+  // Node tests exercise the functions used by the page, without a second implementation.
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { packTernary, unpackTernary, ternaryPython };
+  }
+  if (typeof document === 'undefined') return;
+
   const toggle = document.querySelector('.menu-toggle');
   const nav = document.querySelector('.site-nav');
   if (toggle && nav) {
@@ -42,6 +72,38 @@
       window.setTimeout(() => { button.textContent = '复制'; }, 2000);
     });
   });
+  const ternaryDemo = document.querySelector('[data-ternary-demo]');
+  if (ternaryDemo) {
+    const $ = selector => ternaryDemo.querySelector(selector);
+    const inputs = [...ternaryDemo.querySelectorAll('[data-trit]')];
+    const initialValues = inputs.map(input => input.value);
+    const feedback = $('[data-ternary-feedback]');
+    const update = () => {
+      const trits = inputs.map(input => Number(input.value));
+      const packed = packTernary(trits);
+      const restored = unpackTernary(packed);
+      const matches = restored.every((value, index) => value === trits[index]);
+      $('[data-ternary-packed]').textContent = String(packed);
+      $('[data-ternary-binary]').textContent = packed.toString(2).padStart(8, '0');
+      $('[data-ternary-restored]').textContent = `[${restored.join(', ')}]`;
+      $('[data-ternary-equation]').textContent = trits.map((value, index) => `${value + 1} × ${3 ** index}`).join(' + ') + ` = ${packed}`;
+      $('[data-ternary-verdict]').textContent = matches
+        ? `往返一致：打包为 ${packed}，解包结果 [${restored.join(', ')}] 与输入完全相同。`
+        : '往返不一致：解包结果与输入不同。';
+      $('[data-ternary-code]').textContent = ternaryPython(trits);
+      const body = `文章：${feedback.dataset.article}\n当前输入：[${trits.join(', ')}]\n打包整数：${packed}\n\n我卡在这里：\n`;
+      feedback.href = `mailto:${feedback.dataset.email}?subject=${encodeURIComponent('Bonsai 三值编码小实验反馈')}&body=${encodeURIComponent(body)}`;
+    };
+    inputs.forEach(input => input.addEventListener('change', update));
+    $('[data-ternary-reset]').addEventListener('click', () => {
+      inputs.forEach((input, index) => { input.value = initialValues[index]; });
+      update();
+    });
+    update();
+    $('[data-ternary-inputs]').disabled = false;
+    $('[data-ternary-reset]').disabled = false;
+    $('.copy-code').disabled = false;
+  }
   const demo = document.querySelector('[data-cache-demo]');
   if (demo) {
     const states = ['save', 'cancel', 'confirm'];

@@ -83,7 +83,7 @@
     "slug": "bonsai-low-bit",
     "section": "learn",
     "title": "Bonsai 量化入门：三值编码、QAT 和单卡推理",
-    "description": "先用几行 Python 打包三值权重，再按自己的硬件条件选择 CPU 测试、35B 训练或 122B MoE 推理实验。",
+    "description": "在浏览器里改 5 个数，看三值编码怎样装进 1 个字节，再按硬件条件选择 CPU 测试、35B 训练或 122B MoE 推理实验。",
     "category": "低比特大模型",
     "date": "2026-10-09",
     "minutes": 9,
