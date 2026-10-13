@@ -52,6 +52,8 @@ print("restored:", restored)
 
 ## 怎样阅读 122B 单卡案例
 
+想先看这次实验做到了什么，可以读[单张 5090 跑 122B MoE 的案例](/blog/bonsai-5090-experiment/)。里面放在一起比较了模型存储、运行占用与配对评测，也记录了一次最终没有采用的解包优化。
+
 [122B 运行说明](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/experimental122/README.md)记录了新旧两版固定产物。新版已完成训练、独立数值检查和单张 RTX 5090 推理，也做了四组公开开发评测。四组结果都低于对应原生 BF16 基线，质量未达标。
 
 仓库没有提供模型权重。要运行这个案例，需要另行取得与所选 manifest 对应的 packed 权重，不能直接传入原始 BF16 模型。仅克隆仓库，也还无法从头重建记录中的 122B 产物。完整可移植训练链路和质量复刻还缺哪些部分，见 [122B 实验记录](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/experiments/122B.md)。

@@ -1,5 +1,31 @@
 [
   {
+    "slug": "bonsai-5090-experiment",
+    "section": "blog",
+    "title": "单张 5090 跑 122B MoE：显存、分数和没用上的优化",
+    "description": "文本权重放进了 32GB 显卡，质量评测仍没过线。记录三值压缩、30.64 GiB 实测占用，以及一次局部提速没有带来整体收益的尝试。",
+    "category": "量化实验",
+    "date": "2026-10-13",
+    "minutes": 8,
+    "tags": ["Bonsai", "RTX 5090", "122B MoE", "35B", "显存", "量化"],
+    "source": "content/posts/bonsai-5090-experiment.md",
+    "kind": "实验记录",
+    "source_url": "https://github.com/adenzhou1350/bonsai-qat-teaching/blob/01c01ff8a913bf03cf8af7c659984af445f79f93/docs/RESULTS.md"
+  },
+  {
+    "slug": "tilelang-grid-barrier",
+    "section": "blog",
+    "title": "TileLang 同步修复：一个 block 报到了两次",
+    "description": "二维线程块里，tid.x == 0 会选出多个线程。用两个 block、两个整数，复现一次同步提前放行的问题，再把修复和回归测试送到上游。",
+    "category": "开源笔记",
+    "date": "2026-10-13",
+    "minutes": 6,
+    "tags": ["TileLang", "CUDA", "同步", "开源贡献"],
+    "source": "content/posts/tilelang-grid-barrier.md",
+    "kind": "PR 复盘",
+    "source_url": "https://github.com/tile-ai/tilelang/pull/3400"
+  },
+  {
     "slug": "image-cache-identity",
     "section": "blog",
     "title": "截图更新了，为什么评分还是旧的？",
@@ -71,7 +97,7 @@
     "kind": "专题导读",
     "source_url": "https://github.com/adenzhou1350/bonsai-qat-teaching",
     "featured": true,
-    "updated": "2026-10-10"
+    "updated": "2026-10-13"
   },
   {
     "slug": "cache-identity",

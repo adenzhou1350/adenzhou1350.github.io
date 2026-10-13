@@ -46,6 +46,8 @@ python -X utf8 scripts/new_content.py blog my-first-note "文章标题" --descri
 
 | 栏目 | 文章 / 专题 | 源文件 |
 |---|---|---|
+| 博客 | 单张 5090 跑 122B MoE：显存、分数和没用上的优化 | `content/posts/bonsai-5090-experiment.md` |
+| 博客 | TileLang 同步修复：一个 block 报到了两次 | `content/posts/tilelang-grid-barrier.md` |
 | 博客 | 截图更新了，为什么评分还是旧的？ | `content/posts/image-cache-identity.md` |
 | 博客 | ptxas 解析器混读了两份 kernel 报告 | `content/posts/kernel-report-boundaries.md` |
 | 教学专题 | Jev 决策模型：从推箱子学候选打分 | `content/learn/jev-decision-model.md` |
@@ -108,6 +110,7 @@ assets/images/                已公开项目的开发演示图片
 - Jev 导读依据公开仓库 `a04dfb4` 的三节课、安装说明与实验记录。推箱子为独立 CNN；页面按钮使用冻结的 Qwen3.5-0.8B 与共享打分头，保留模型快照、合成数据和评测范围。演示截图取自该仓库 `docs/assets/demo-sokoban.jpg`，按项目 MIT 许可使用；不是本站在线模型服务。
 - 保留的 Nest 历史图片取自其公开仓库 `docs/assets/overview.jpg`，使用合成示例；目前不在公开页面展示。
 - 博客保留实验条件与失败边界；浏览器缓存演示仅解析字符串，不调用模型，也不提供性能数字。
+- 2026-10-13 发布的 TileLang 案例依据已合并 PR #3400 的历史测试；Bonsai 案例依据公开提交 `01c01ff8a913bf03cf8af7c659984af445f79f93`，区分 122B 文本路径与 35B R35-8192 的显存口径，保留质量门槛与复现范围。写作时未重跑 GPU 实验。首页自动展示最新两篇，Bonsai 导读与实测案例互链。
 - 原有私人试学课程未复制到这个公开网站。
 - 关于页和简历沿用原站已公开资料；这次没有新增电话或外部追踪服务。
 
