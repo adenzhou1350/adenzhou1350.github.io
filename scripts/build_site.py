@@ -16,13 +16,14 @@ from xml.sax.saxutils import escape as xml_escape
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "https://adenzhou1350.github.io"
-SITE_DATE = "2026-10-10"
+SITE_DATE = "2026-10-13"
 NAME = "周栩丞 · Aden Zhou"
 EMAIL = "aden1350@outlook.com"
 
 
-def github_pr_search(state=""):
-    query = "is:pr is:public author:adenzhou1350 -user:adenzhou1350 sort:updated-desc"
+def github_pr_search(state="", repository=""):
+    scope = f"repo:{repository}" if repository else "-user:adenzhou1350"
+    query = f"is:pr is:public author:adenzhou1350 {scope} sort:updated-desc"
     if state:
         query += f" is:{state}"
     return "https://github.com/search?" + urlencode({"q": query, "type": "pullrequests"})
@@ -212,6 +213,10 @@ def bonsai_feature(item):
     return f'''<section class="course-feature" aria-labelledby="bonsai-feature-title"><div class="course-feature-copy"><p class="eyebrow orange">FEATURED SERIES / BONSAI</p><h2 id="bonsai-feature-title">Bonsai 量化教程</h2><p class="course-feature-deck">三值编码、QAT 和推理实验。</p><p>先用几行 Python 试试三值编码，再看训练、检查点恢复和推理。需要大显卡的实验会单独写明硬件要求。</p><div class="project-links"><a class="button" href="{article_url(item)}">阅读导读<span aria-hidden="true">→</span></a>{external(item['source_url'],'公开教学仓库')}</div></div><ol class="course-route"><li><span class="route-index">01</span><div><span class="route-resource">CPU / START SMALL</span><h3>三值编码与 CPU 测试</h3><p>用 Python 打包五个三值，再在 Linux CPU 上运行量化、梯度和恢复测试。</p></div></li><li><span class="route-index">02</span><div><span class="route-resource">35B MoE / 2×B300</span><h3>35B 全专家 QAT</h3><p>准备教师模型，训练专家主权重，再检查权重导出和检查点恢复。</p></div></li><li><span class="route-index">03</span><div><span class="route-resource">122B MoE / RTX 5090</span><h3>122B 单卡推理实验</h3><p>三值专家加低秩补偿。需要指定 packed 权重，公开评测尚未达标。</p></div></li></ol></section>'''
 
 
+def contributor_card(item, heading="h3"):
+    return f'''<a class="contributor-card" href="{esc(github_pr_search('merged', item['repository']))}" target="_blank" rel="noopener noreferrer"><div class="contributor-meta"><span>{esc(item['area'])}</span><span class="contributor-arrow" aria-hidden="true">↗</span></div><{heading}>{esc(item['name'])}</{heading}><span class="contributor-repository">{esc(item['repository'])}</span><p>{esc(item['description'])}</p><div class="contributor-bottom"><span class="contributor-role">Contributor</span><span>查看我的已合并 PR <span aria-hidden="true">→</span></span></div><span class="sr-only">（新窗口）</span></a>'''
+
+
 def home(catalog, projects, contributions):
     posts = sorted([p for p in catalog if p['section'] == 'blog'], key=lambda p: p['date'], reverse=True)[:3]
     lessons = [p for p in catalog if p['section'] == 'learn']
@@ -220,7 +225,7 @@ def home(catalog, projects, contributions):
 <section class="section">{section_head('01 / SELECTED PROJECTS','项目与实验','/projects/','全部项目')}<article class="featured-project"><div class="project-copy"><div class="project-kicker">FEATURED PROJECT <span class="badge">CPU 可试玩</span></div><h3>Jev 决策模型实战</h3><p class="project-tagline">先让小模型玩推箱子，<br>再看它怎么选下一步。</p><p>给候选动作打分，执行一步，再读取新的状态。仓库带了 CPU 策略、演示页面和三节中文课程，可以比较训练前后，也能自己改一次训练。</p><p>独立 Jev-style 教学实现，未复现 TypeSafe Jev 的专有训练方法。</p><ul class="tag-list"><li>候选打分</li><li>PyTorch</li><li>CPU 起步</li><li>MIT</li></ul><div class="project-links"><a class="text-link" href="/learn/jev-decision-model/">从试玩开始<span class="arrow">→</span></a>{external(jev['url'],'查看代码')}</div></div><div class="project-visual"><div class="window-bar"><i></i><i></i><i></i><span>JEV / DECISION LAB</span></div><img class="project-screen project-screen-full" src="/assets/images/jev-sokoban.jpg" alt="Jev 推箱子本地演示，展示棋盘、候选动作与训练前后对照" width="1264" height="1206" loading="lazy"><p class="image-caption"><span>仓库随附演示 · CPU 可运行</span><span>固定教学实验</span></p></div></article><div class="project-secondary"><a class="project-tile project-tile-featured" href="/learn/bonsai-low-bit/"><span class="tile-number">02 / LOW-BIT LEARNING</span><h3>Bonsai 量化教学</h3><p>用代码学习三值量化：先做 CPU 小实验，再看 35B QAT 和 122B MoE 单卡推理的实验记录。</p><div class="tile-bottom"><span>PyTorch · 教学与研究</span><span aria-hidden="true">→</span></div></a><a class="project-tile" href="/learn/cache-identity/"><span class="tile-number">03 / INTERACTIVE LAB</span><h3>文件改了，缓存呢？</h3><p>换了图片，模型却还在用旧结果。在浏览器里改一段内容，看看缓存按路径和按内容识别有什么区别。</p><div class="tile-bottom"><span>零安装 · 浏览器交互实验</span><span aria-hidden="true">→</span></div></a></div></section>
 <section class="section notes-section">{section_head('02 / FIELD NOTES','技术笔记','/blog/','所有文章')}<div>{''.join(note_row(p) for p in posts)}</div></section></div>
 <section class="learning-band"><div class="shell learning-grid"><div class="learning-intro"><p class="eyebrow">03 / LEARN BY BUILDING</p><h2>动手试试。</h2><p>可以先在浏览器里做缓存实验，或用 CPU 试玩推箱子。Bonsai 量化教程从三值编码开始，按自己的兴趣和机器来选。</p><a class="text-link" href="/learn/">进入教学专区<span class="arrow">↗</span></a></div><ol class="learning-list">{''.join(f'<li><a href="{article_url(item)}"><span class="num">0{i+1}</span><div><h3>{esc(item["title"])}</h3><p>{esc(item["category"])} · 约 {item["minutes"]} 分钟</p></div><span aria-hidden="true">↗</span></a></li>' for i,item in enumerate(lessons))}</ol></div></section>
-<div class="shell"><section class="section">{section_head('04 / SELECTED CONTRIBUTIONS','我提交过的开源修复',github_pr_search(),'GitHub PR 记录')}<div class="contribution-grid">{''.join(f'<article class="contribution"><span class="repo">{esc(item["repo"])} / {item["number"]}</span><h3>{esc(item["title"])}</h3><p>{esc(item["description"])}</p>{external(item["url"],"查看已合并 PR")}</article>' for item in contributions[:3])}</div><div class="contribution-context"><p class="section-footnote">这里选了几项已合并的修复。更多 PR 在 GitHub，已排除我自己名下的仓库。</p><a class="text-link" href="/contributions/">阅读精选案例<span class="arrow" aria-hidden="true">→</span></a></div></section><section class="contact-strip"><div><h2>联系我</h2><p>如果你也在做 Agent 或模型推理，欢迎发邮件聊具体问题。</p></div><a class="button button-outline" href="mailto:{EMAIL}">工作联系<span aria-hidden="true">↗</span></a></section></div>'''
+<div class="shell"><section class="section" id="open-source">{section_head('04 / CONTRIBUTOR TO','参与贡献的开源项目','/contributions/','全部 '+str(len(contributions['projects']))+' 个项目','点击项目，查看我在该仓库已合并的 PR。')}<div class="contributor-grid">{''.join(contributor_card(item) for item in contributions['projects'] if item.get('featured'))}</div><div class="contribution-context"><p class="section-footnote">项目名单核对于 {esc(contributions['checked_date'])}，PR 记录直接在 GitHub 查看。</p>{external(github_pr_search('merged'),'查看全部已合并 PR')}</div></section><section class="contact-strip"><div><h2>联系我</h2><p>如果你也在做 Agent 或模型推理，欢迎发邮件聊具体问题。</p></div><a class="button button-outline" href="mailto:{EMAIL}">工作联系<span aria-hidden="true">↗</span></a></section></div>'''
     return page("Agent、推理系统和我的项目", "周栩丞 Aden Zhou 的技术作品集：具身 Agent、LLM 推理、Jev 决策模型、Bonsai 低比特教学与工程复盘。", body)
 
 
@@ -265,14 +270,11 @@ def article_page(item):
     return page(item['title'], item['description'], body, article_url(item), item['section'], item)
 
 
-def contributions_page(items, path="/contributions/"):
-    body = page_hero("OPEN SOURCE / CONTRIBUTIONS", "开源贡献", "最近的 PR 和讨论可以直接在 GitHub 查看。下面选了几项已合并的修复，简单说说当时解决的问题。")
-    body += f'''<div class="shell page-content"><section class="contribution-hub" aria-labelledby="github-activity-title"><div><p class="eyebrow orange">GITHUB / LATEST ACTIVITY</p><h2 id="github-activity-title">最新 PR 与合并状态</h2><p>公开 PR，排除本人名下仓库，按最近更新排序。</p></div><div class="contribution-actions">{external(github_pr_search(), '全部 PR', 'button')}{external(github_pr_search('merged'), '已合并', 'button button-outline')}{external(github_pr_search('open'), '进行中', 'button button-outline')}</div><p class="contribution-hub-note">个人项目、其他公开活动与贡献日历见 {external('https://github.com/adenzhou1350', 'GitHub 主页')}。</p></section><div class="section-heading"><div class="section-title"><p class="eyebrow">SELECTED CHANGES</p><h2>几项具体的修复</h2><p>每一项都附了原始 PR，可以查看代码和测试记录。</p></div></div>'''
-    cards = []
-    for item in items:
-        cards.append(f'<article class="evidence-card"><p class="eyebrow orange">{esc(item["repo"])} / {item["number"]}</p><h2>{esc(item["title"])}</h2><p>{esc(item["description"])}</p><p class="meta">{esc(item["area"])} · 已合并 {item["merged"]}</p>{external(item["url"],"查看原始改动与验证")}</article>')
-    body += '<div class="evidence-list">' + ''.join(cards) + '</div><p class="section-footnote">精选案例核对日期：2026-10-09；合并日期来自公开 PR 记录。后续进展请通过上方 GitHub 入口查看。</p><div class="learning-note"><strong>kernel_opt_agent：我在 fork 里做的改动</strong><br>给 kernel 优化流程补实验编排、环境复用和结果检查。<a href="https://github.com/adenzhou1350/kernel_opt_agent">查看个人 fork ↗</a> · <a href="https://github.com/dasikuzi2/kernel_opt_agent">查看上游项目 ↗</a>。这些改动是否进入上游，需要看对应 PR 的合并状态。</div></div>'
-    return page("开源贡献", "在 GitHub 查看最新公开 PR、已合并改动和进行中的讨论，并阅读 vLLM、Mooncake 等项目的精选修复案例。", body, path, "contributions")
+def contributions_page(contributions, path="/contributions/"):
+    items = contributions['projects']
+    body = page_hero("OPEN SOURCE / CONTRIBUTOR TO", "参与贡献的开源项目", "从推理服务、GPU 算子到存储与 Python 工具。点击项目，查看我在该仓库已合并的 PR。", f'{len(items):02d} PROJECTS')
+    body += f'''<div class="shell page-content"><div class="contributor-intro"><p>这里列出已有公开合并记录的项目。每张卡片下方写的是我参与的具体改动。</p>{external(github_pr_search('merged'), '全部已合并 PR')}</div><div class="contributor-grid">{''.join(contributor_card(item, 'h2') for item in items)}</div><p class="section-footnote">项目名单核对于 {esc(contributions['checked_date'])}。卡片链接打开 GitHub 实时搜索，只显示我在对应仓库已合并的 PR。</p><div class="contributor-more"><span>更多公开记录</span>{external(github_pr_search('open'), '进行中的 PR')}{external('https://github.com/adenzhou1350', 'GitHub 主页')}</div></div>'''
+    return page("开源贡献", "周栩丞 Aden Zhou 参与贡献的开源项目：vLLM、SGLang、TensorRT-LLM、Triton、TileLang 等，附各仓库已合并 PR。", body, path, "contributions")
 
 
 def about_page():
@@ -308,7 +310,7 @@ def validate_catalog(catalog):
 
 
 def outputs():
-    all_content, projects, contributions = read_json('catalog.json'), read_json('projects.json'), read_json('contributions.json')
+    all_content, projects, contributions = read_json('catalog.json'), read_json('projects.json'), read_json('contributor-projects.json')
     validate_catalog(all_content)
     catalog = [item for item in all_content if not item.get('draft', False)]
     out = {'index.html': home(catalog, projects, contributions), 'projects/index.html': project_page(projects), 'blog/index.html': blog_page(catalog), 'learn/index.html': learning_page(catalog), 'about/index.html': about_page(), 'contributions/index.html': contributions_page(contributions), 'details.html': contributions_page(contributions)}

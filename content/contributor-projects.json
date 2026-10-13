@@ -1,0 +1,320 @@
+{
+  "checked_date": "2026-10-13",
+  "projects": [
+    {
+      "repository": "vllm-project/vllm",
+      "name": "vLLM",
+      "area": "推理服务",
+      "description": "修复 DeepSeek V4 多模态输入中图像块的间隔处理。",
+      "featured": true,
+      "pull_requests": [
+        {
+          "number": 56882,
+          "title": "[Bugfix][Multimodal] Preserve DeepSeek V4 image block spacing",
+          "url": "https://github.com/vllm-project/vllm/pull/56882"
+        }
+      ]
+    },
+    {
+      "repository": "sgl-project/sglang",
+      "name": "SGLang",
+      "area": "推理服务",
+      "description": "修复集成式 MUSA 设备的可用内存计算与多模态进程清理。",
+      "featured": true,
+      "pull_requests": [
+        {
+          "number": 43398,
+          "title": "[Bugfix] Preserve available host memory for integrated MUSA devices",
+          "url": "https://github.com/sgl-project/sglang/pull/43398"
+        },
+        {
+          "number": 40765,
+          "title": "fix: wait for multimodal process teardown",
+          "url": "https://github.com/sgl-project/sglang/pull/40765"
+        }
+      ]
+    },
+    {
+      "repository": "NVIDIA/TensorRT-LLM",
+      "name": "TensorRT-LLM",
+      "area": "推理引擎",
+      "description": "修复 LTX-2 缩放因子与张量轴的对应关系。",
+      "featured": true,
+      "pull_requests": [
+        {
+          "number": 19500,
+          "title": "[#19495][fix] Align LTX-2 scale factors with tensor axes",
+          "url": "https://github.com/NVIDIA/TensorRT-LLM/pull/19500"
+        }
+      ]
+    },
+    {
+      "repository": "triton-lang/triton",
+      "name": "Triton",
+      "area": "GPU 编译器",
+      "description": "修复解释器中元组输入的全轴归约。",
+      "featured": true,
+      "pull_requests": [
+        {
+          "number": 12207,
+          "title": "[INTERPRETER] Fix tuple reductions over all axes",
+          "url": "https://github.com/triton-lang/triton/pull/12207"
+        }
+      ]
+    },
+    {
+      "repository": "tile-ai/tilelang",
+      "name": "TileLang",
+      "area": "GPU 编译器",
+      "description": "修复参数映射、网格同步、嵌套加载谓词与标量视图的位数处理。",
+      "featured": true,
+      "pull_requests": [
+        {
+          "number": 3414,
+          "title": "[BugFix] Preserve parameter identity in NVRTC and CuTeDSL wrappers",
+          "url": "https://github.com/tile-ai/tilelang/pull/3414"
+        },
+        {
+          "number": 3400,
+          "title": "[BugFix][CuTeDSL] Elect one grid-barrier leader per block",
+          "url": "https://github.com/tile-ai/tilelang/pull/3400"
+        },
+        {
+          "number": 3390,
+          "title": "[BugFix][CUDA] Preserve enclosing predicates on nested LDG",
+          "url": "https://github.com/tile-ai/tilelang/pull/3390"
+        },
+        {
+          "number": 3382,
+          "title": "[BugFix] Preserve scalar bit counts in T.view",
+          "url": "https://github.com/tile-ai/tilelang/pull/3382"
+        }
+      ]
+    },
+    {
+      "repository": "fla-org/flash-linear-attention",
+      "name": "Flash Linear Attention",
+      "area": "线性注意力",
+      "description": "修复激活步长、损失张量、变长输入、训练模式与低精度初始化问题。",
+      "featured": true,
+      "pull_requests": [
+        {
+          "number": 1369,
+          "title": "[Fix] Honor strides in vector activations",
+          "url": "https://github.com/fla-org/flash-linear-attention/pull/1369"
+        },
+        {
+          "number": 1362,
+          "title": "[Fix] Accept local loss tensors in LinearLossParallel",
+          "url": "https://github.com/fla-org/flash-linear-attention/pull/1362"
+        },
+        {
+          "number": 1334,
+          "title": "[LightNet] Handle padded inputs with varlen normalization",
+          "url": "https://github.com/fla-org/flash-linear-attention/pull/1334"
+        },
+        {
+          "number": 1333,
+          "title": "[Fix] Keep MoM shared memory in chunk mode during training",
+          "url": "https://github.com/fla-org/flash-linear-attention/pull/1333"
+        },
+        {
+          "number": 1320,
+          "title": "[Fix] Preserve RWKV7 orthogonal initialization for low-precision weights",
+          "url": "https://github.com/fla-org/flash-linear-attention/pull/1320"
+        }
+      ]
+    },
+    {
+      "repository": "kvcache-ai/Mooncake",
+      "name": "Mooncake",
+      "area": "分布式传输",
+      "description": "为池化 TCP 传输按排队字节数限制请求准入。",
+      "featured": false,
+      "pull_requests": [
+        {
+          "number": 4063,
+          "title": "[TE] Bound pooled TCP admission by queued bytes",
+          "url": "https://github.com/kvcache-ai/Mooncake/pull/4063"
+        }
+      ]
+    },
+    {
+      "repository": "InternLM/lmdeploy",
+      "name": "LMDeploy",
+      "area": "推理部署",
+      "description": "修复环境配置解析失败后 getenv 未恢复的问题。",
+      "featured": false,
+      "pull_requests": [
+        {
+          "number": 5000,
+          "title": "fix: restore getenv after environment parsing errors",
+          "url": "https://github.com/InternLM/lmdeploy/pull/5000"
+        }
+      ]
+    },
+    {
+      "repository": "ROCm/aiter",
+      "name": "AITER",
+      "area": "GPU 算子",
+      "description": "修复 HSTU 参考辅助函数未使用指定填充值的问题。",
+      "featured": false,
+      "pull_requests": [
+        {
+          "number": 6041,
+          "title": "[Triton/Gluon] [Bugfix] Honor padding_value in HSTU reference helper",
+          "url": "https://github.com/ROCm/aiter/pull/6041"
+        }
+      ]
+    },
+    {
+      "repository": "facebookresearch/xformers",
+      "name": "xFormers",
+      "area": "训练算子",
+      "description": "修复 reduce-scatter 预分配输出缓冲区的校验。",
+      "featured": false,
+      "pull_requests": [
+        {
+          "number": 1412,
+          "title": "Fix reduce-scatter out validation",
+          "url": "https://github.com/facebookresearch/xformers/pull/1412"
+        }
+      ]
+    },
+    {
+      "repository": "mlc-ai/TIRx-harness",
+      "name": "TIRx-harness",
+      "area": "CUDA 检查工具",
+      "description": "修复 CUDA 检查工具超时的错误返回与多内核资源统计混用。",
+      "featured": false,
+      "pull_requests": [
+        {
+          "number": 14,
+          "title": "Report CUDA inspection tool timeouts through DumpResult",
+          "url": "https://github.com/mlc-ai/TIRx-harness/pull/14"
+        },
+        {
+          "number": 12,
+          "title": "Keep ptxas resource counts scoped to the first kernel report",
+          "url": "https://github.com/mlc-ai/TIRx-harness/pull/12"
+        }
+      ]
+    },
+    {
+      "repository": "juicedata/juicefs",
+      "name": "JuiceFS",
+      "area": "分布式存储",
+      "description": "修复对象存储读写、资源清理、备份隔离及 Python 和 Java SDK 问题。",
+      "featured": false,
+      "pull_requests": [
+        {
+          "number": 7648,
+          "title": "sdk/python: avoid double-deserializing FFRecord example",
+          "url": "https://github.com/juicedata/juicefs/pull/7648"
+        },
+        {
+          "number": 7639,
+          "title": "vfs/backup: isolate temporary metadata backups per invocation",
+          "url": "https://github.com/juicedata/juicefs/pull/7639"
+        },
+        {
+          "number": 7633,
+          "title": "sdk/java: expand captures in first Kerberos rule substitution",
+          "url": "https://github.com/juicedata/juicefs/pull/7633"
+        },
+        {
+          "number": 7631,
+          "title": "sdk/java: continue token cleanup across volumes",
+          "url": "https://github.com/juicedata/juicefs/pull/7631"
+        },
+        {
+          "number": 7629,
+          "title": "sdk/python: preserve line boundaries in reads and iteration",
+          "url": "https://github.com/juicedata/juicefs/pull/7629"
+        },
+        {
+          "number": 7624,
+          "title": "pkg/usage: close HTTP response bodies after reporting",
+          "url": "https://github.com/juicedata/juicefs/pull/7624"
+        },
+        {
+          "number": 7619,
+          "title": "object: close rejected download response bodies",
+          "url": "https://github.com/juicedata/juicefs/pull/7619"
+        },
+        {
+          "number": 7617,
+          "title": "object/gcs: cancel writer on failed uploads",
+          "url": "https://github.com/juicedata/juicefs/pull/7617"
+        },
+        {
+          "number": 7615,
+          "title": "object/sql: propagate context to database requests",
+          "url": "https://github.com/juicedata/juicefs/pull/7615"
+        },
+        {
+          "number": 7614,
+          "title": "object: fix listing prefix and marker boundaries",
+          "url": "https://github.com/juicedata/juicefs/pull/7614"
+        },
+        {
+          "number": 7612,
+          "title": "object/sql: overwrite blobs with empty contents",
+          "url": "https://github.com/juicedata/juicefs/pull/7612"
+        },
+        {
+          "number": 7606,
+          "title": "fix(sync): isolate files-from worker listing errors",
+          "url": "https://github.com/juicedata/juicefs/pull/7606"
+        }
+      ]
+    },
+    {
+      "repository": "agronholm/anyio",
+      "name": "AnyIO",
+      "area": "异步运行时",
+      "description": "修复临时目录创建后的取消处理与 UDP 初始化失败时的资源清理。",
+      "featured": false,
+      "pull_requests": [
+        {
+          "number": 1403,
+          "title": "Avoid cancellation checkpoint after temporary directory creation",
+          "url": "https://github.com/agronholm/anyio/pull/1403"
+        },
+        {
+          "number": 1400,
+          "title": "Fix Trio UDP socket cleanup on initialization failure",
+          "url": "https://github.com/agronholm/anyio/pull/1400"
+        }
+      ]
+    },
+    {
+      "repository": "tox-dev/filelock",
+      "name": "filelock",
+      "area": "Python 工具",
+      "description": "让文件锁错误测试的结果更稳定。",
+      "featured": false,
+      "pull_requests": [
+        {
+          "number": 817,
+          "title": "test: make lock error checks deterministic",
+          "url": "https://github.com/tox-dev/filelock/pull/817"
+        }
+      ]
+    },
+    {
+      "repository": "VoltAgent/awesome-openclaw-skills",
+      "name": "Awesome OpenClaw Skills",
+      "area": "Agent 技能目录",
+      "description": "向技能目录添加 soul-generator。",
+      "featured": false,
+      "pull_requests": [
+        {
+          "number": 280,
+          "title": "Add skill soul-generator",
+          "url": "https://github.com/VoltAgent/awesome-openclaw-skills/pull/280"
+        }
+      ]
+    }
+  ]
+}

@@ -9,7 +9,7 @@ AI Infra 与具身 Agent 的作品集、博客和教学空间。
 - `/learn/`：Jev 决策模型、Bonsai 低比特专题和浏览器交互实验。
 - `/learn/jev-decision-model/`：从随附的 CPU 推箱子策略进入候选打分、训练和页面按钮选择。
 - `/learn/bonsai-low-bit/`：从纯 Python 三值打包，进入 Linux CPU 测试、35B QAT 与 122B MoE 单卡推理的专题导读。
-- `/contributions/`：GitHub 最新 PR、已合并与进行中入口，以及精选修复案例。首页贡献区直接链接 GitHub 搜索。
+- `/contributions/`：参与贡献的开源项目。首页展示 6 个重点项目，完整页列出已核对的 15 个项目；点击卡片，直接查看本人在对应仓库已合并的 PR。
 - `/about/`：公开职业经历、教育和工作联系。
 
 纯静态 HTML/CSS/JavaScript；Python 标准库生成内容页。访问网站不需要 Python、账号或后台。保留旧 `details.html` 地址，以便已有分享链接继续可用。
@@ -85,7 +85,8 @@ content/catalog.json          文章和教程目录
 content/posts/*.md            博客正文
 content/learn/*.md            教学正文
 content/projects.json         项目事实、边界与链接
-content/contributions.json    精选贡献与合并日期
+content/contributor-projects.json  贡献项目、核对日期与原始 PR 证据
+content/contributions.json    旧精选案例存档（不参与页面生成）
 scripts/build_site.py         模板与静态内容生成
 scripts/new_content.py        新建草稿
 scripts/check_site.py         链接、锚点、元数据和内容边界检查
@@ -101,7 +102,7 @@ assets/images/                已公开项目的开发演示图片
 - 项目依据对应公开仓库。Bonsai 标注公开教学与实验记录，minimind-diffusion 标注学习实验，kernel_opt_agent 标注 fork 扩展。
 - Bonsai 导读的实验状态核对至公开仓库 `ce2e903` 的 2026-10-10 收尾记录，并同步文档整理后的结果入口。35B 全专家 QAT 与 122B 低秩补偿分开介绍，区分 HTTP 合计吞吐、CLI 速度、模型存储与 NVML 占用，保留 MoE、资源、权重、质量与研究暂停状态。
 - Bonsai 的网页编码小实验只使用 Python 标准功能。仓库 CPU 检查点测试使用 POSIX 目录同步，教程按 Linux CPU 路线说明；没有宣称 Windows 原生支持或完整 122B 一键复刻。
-- 精选贡献链接与合并日期已于 2026-10-09 核对。最新活动通过 GitHub 搜索查看，限定作者为 `adenzhou1350`、公开 PR、排除本人名下仓库，按最近更新排序；已合并与进行中分别用 `is:merged` 和 `is:open`。网站不缓存完整数量，个人项目及其他公开活动另链 GitHub 主页；原来的 `oss-stats.json` 仅保留为历史数据。
+- 贡献项目名单于 2026-10-13 按 GitHub 四页公开搜索结果核对，共 15 个仓库、36 条已合并 PR；各条原始链接保存在 `content/contributor-projects.json`。Contributor 表示有公开合并贡献，不表示维护者或核心成员身份。项目卡片限定 `author:adenzhou1350`、`is:pr`、`is:public`、`is:merged` 和对应的 `repo:`，打开实时结果；全量入口排除本人名下仓库。页面展示的项目数是核对日快照，不显示静态 PR 总数。新增项目时核对合并证据、更新日期并重建；已有项目后续合并的 PR 会自动出现在 GitHub 查询中。`contributions.json` 和 `oss-stats.json` 仅保留为历史数据。
 - Jev 导读依据公开仓库 `a04dfb4` 的三节课、安装说明与实验记录。推箱子为独立 CNN；页面按钮使用冻结的 Qwen3.5-0.8B 与共享打分头，保留模型快照、合成数据和评测范围。演示截图取自该仓库 `docs/assets/demo-sokoban.jpg`，按项目 MIT 许可使用；不是本站在线模型服务。
 - 保留的 Nest 历史图片取自其公开仓库 `docs/assets/overview.jpg`，使用合成示例；目前不在公开页面展示。
 - 博客保留实验条件与失败边界；浏览器缓存演示仅解析字符串，不调用模型，也不提供性能数字。
