@@ -218,15 +218,59 @@ def contributor_card(item, heading="h3"):
 
 
 def home(catalog, projects, contributions):
-    posts = sorted([p for p in catalog if p['section'] == 'blog'], key=lambda p: p['date'], reverse=True)[:3]
-    lessons = [p for p in catalog if p['section'] == 'learn']
-    jev = next(item for item in projects if item['repo'] == 'jev-decision-teaching')
-    body = f'''<div class="shell"><section class="hero"><div class="hero-copy"><p class="eyebrow"><span class="status-dot" aria-hidden="true"></span>ENGINEERING &amp; NOTES</p><h1>Aden <span class="hero-name-cn">周栩丞</span></h1><p class="hero-role">AI Infra <span aria-hidden="true">/</span> 具身 Agent</p><p class="hero-desc">日常做具身 Agent 的工具调用与任务执行，也做模型部署和量化实验。这里整理了个人项目、工程笔记和动手教程。</p><div class="hero-actions"><a class="button" href="/projects/">浏览项目 <span aria-hidden="true">↗</span></a><a class="text-link" href="/blog/">阅读技术笔记<span class="arrow" aria-hidden="true">→</span></a></div><div class="hero-note"><span>深圳 · AI Agent 研发工程师</span></div></div>{system_art()}</section><div class="discipline-bar"><span>WORKING ACROSS</span><div class="discipline-items"><span>Agent Engineering</span><span>LLM Inference</span><span>Systems Reliability</span></div></div>
-<section class="section">{section_head('01 / SELECTED PROJECTS','项目与实验','/projects/','全部项目')}<article class="featured-project"><div class="project-copy"><div class="project-kicker">FEATURED PROJECT <span class="badge">CPU 可试玩</span></div><h3>Jev 决策模型实战</h3><p class="project-tagline">先让小模型玩推箱子，<br>再看它怎么选下一步。</p><p>给候选动作打分，执行一步，再读取新的状态。仓库带了 CPU 策略、演示页面和三节中文课程，可以比较训练前后，也能自己改一次训练。</p><p>独立 Jev-style 教学实现，未复现 TypeSafe Jev 的专有训练方法。</p><ul class="tag-list"><li>候选打分</li><li>PyTorch</li><li>CPU 起步</li><li>MIT</li></ul><div class="project-links"><a class="text-link" href="/learn/jev-decision-model/">从试玩开始<span class="arrow">→</span></a>{external(jev['url'],'查看代码')}</div></div><div class="project-visual"><div class="window-bar"><i></i><i></i><i></i><span>JEV / DECISION LAB</span></div><img class="project-screen project-screen-full" src="/assets/images/jev-sokoban.jpg" alt="Jev 推箱子本地演示，展示棋盘、候选动作与训练前后对照" width="1264" height="1206" loading="lazy"><p class="image-caption"><span>仓库随附演示 · CPU 可运行</span><span>固定教学实验</span></p></div></article><div class="project-secondary"><a class="project-tile project-tile-featured" href="/learn/bonsai-low-bit/"><span class="tile-number">02 / LOW-BIT LEARNING</span><h3>Bonsai 量化教学</h3><p>用代码学习三值量化：先做 CPU 小实验，再看 35B QAT 和 122B MoE 单卡推理的实验记录。</p><div class="tile-bottom"><span>PyTorch · 教学与研究</span><span aria-hidden="true">→</span></div></a><a class="project-tile" href="/learn/cache-identity/"><span class="tile-number">03 / INTERACTIVE LAB</span><h3>文件改了，缓存呢？</h3><p>换了图片，模型却还在用旧结果。在浏览器里改一段内容，看看缓存按路径和按内容识别有什么区别。</p><div class="tile-bottom"><span>零安装 · 浏览器交互实验</span><span aria-hidden="true">→</span></div></a></div></section>
-<section class="section notes-section">{section_head('02 / FIELD NOTES','技术笔记','/blog/','所有文章')}<div>{''.join(note_row(p) for p in posts)}</div></section></div>
-<section class="learning-band"><div class="shell learning-grid"><div class="learning-intro"><p class="eyebrow">03 / LEARN BY BUILDING</p><h2>动手试试。</h2><p>可以先在浏览器里做缓存实验，或用 CPU 试玩推箱子。Bonsai 量化教程从三值编码开始，按自己的兴趣和机器来选。</p><a class="text-link" href="/learn/">进入教学专区<span class="arrow">↗</span></a></div><ol class="learning-list">{''.join(f'<li><a href="{article_url(item)}"><span class="num">0{i+1}</span><div><h3>{esc(item["title"])}</h3><p>{esc(item["category"])} · 约 {item["minutes"]} 分钟</p></div><span aria-hidden="true">↗</span></a></li>' for i,item in enumerate(lessons))}</ol></div></section>
-<div class="shell"><section class="section" id="open-source">{section_head('04 / CONTRIBUTOR TO','参与贡献的开源项目','/contributions/','全部 '+str(len(contributions['projects']))+' 个项目','点击项目，查看我在该仓库已合并的 PR。')}<div class="contributor-grid">{''.join(contributor_card(item) for item in contributions['projects'] if item.get('featured'))}</div><div class="contribution-context"><p class="section-footnote">项目名单核对于 {esc(contributions['checked_date'])}，PR 记录直接在 GitHub 查看。</p>{external(github_pr_search('merged'),'查看全部已合并 PR')}</div></section><section class="contact-strip"><div><h2>联系我</h2><p>如果你也在做 Agent 或模型推理，欢迎发邮件聊具体问题。</p></div><a class="button button-outline" href="mailto:{EMAIL}">工作联系<span aria-hidden="true">↗</span></a></section></div>'''
-    return page("Agent、推理系统和我的项目", "周栩丞 Aden Zhou 的技术作品集：具身 Agent、LLM 推理、Jev 决策模型、Bonsai 低比特教学与工程复盘。", body)
+    posts = sorted([p for p in catalog if p['section'] == 'blog'], key=lambda p: p['date'], reverse=True)[:2]
+    project_by_repo = {item['repo']: item for item in projects}
+    featured_contributors = [item for item in contributions['projects'] if item.get('featured')]
+    contributor_links = ''.join(
+        f'<a href="{esc(github_pr_search("merged", item["repository"]))}" target="_blank" rel="noopener noreferrer" aria-label="{esc(item["name"])}：查看我已合并的 PR（新窗口）"><span>{esc(item["name"])}</span><span aria-hidden="true">↗</span></a>'
+        for item in featured_contributors
+    )
+    body = f'''<div class="portfolio-home shell">
+<section class="hero portfolio-hero">
+  <div class="hero-copy">
+    <p class="eyebrow">ENGINEERING / OPEN SOURCE / NOTES</p>
+    <h1>Aden <span class="hero-name-cn">周栩丞</span></h1>
+    <p class="hero-role">AI Infra <span aria-hidden="true">/</span> 具身 Agent</p>
+    <p class="hero-desc">在深圳做具身 Agent 研发，也做模型量化和推理实验。这里放公开代码、实验记录，以及参与过的开源改动。</p>
+    <div class="hero-actions"><a class="button" href="#selected-work">看项目与实验 <span aria-hidden="true">↓</span></a><a class="text-link" href="/about/">关于我<span class="arrow" aria-hidden="true">→</span></a></div>
+  </div>
+  <nav class="work-index" aria-label="首页内容索引">
+    <div class="work-index-heading"><span class="eyebrow">EXPLORE THE WORK</span><span>代码 / 实验 / 笔记</span></div>
+    <a href="/learn/bonsai-low-bit/"><span class="work-index-number">01</span><div><strong>Bonsai · 低比特量化</strong><span>35B QAT / 122B MoE 推理实验</span></div><span aria-hidden="true">↗</span></a>
+    <a href="/learn/jev-decision-model/"><span class="work-index-number">02</span><div><strong>Jev · 决策模型</strong><span>从 CPU 推箱子学候选动作打分</span></div><span aria-hidden="true">↗</span></a>
+    <a href="/blog/"><span class="work-index-number">03</span><div><strong>工程笔记</strong><span>CUDA 工具链与缓存问题复盘</span></div><span aria-hidden="true">↗</span></a>
+  </nav>
+</section>
+<section class="contributor-strip" id="open-source" aria-labelledby="home-contributor-title">
+  <div class="contributor-strip-heading"><div><p class="eyebrow">CONTRIBUTOR TO</p><h2 id="home-contributor-title">参与贡献的开源项目</h2></div><a class="text-link" href="/contributions/">全部 {len(contributions['projects'])} 个项目<span class="arrow" aria-hidden="true">→</span></a></div>
+  <div class="contributor-strip-links">{contributor_links}</div>
+  <p class="section-footnote">点击项目查看我的已合并 PR · 项目名单核对于 {esc(contributions['checked_date'])}</p>
+</section>
+<section class="section home-work" id="selected-work">
+  {section_head('01 / CODE &amp; EXPERIMENTS','代码与实验','/projects/','全部项目')}
+  <div class="home-work-grid">
+    <article class="work-card">
+      <div class="work-media ternary-visual" role="img" aria-label="三值编码示意：五个三值编码可以打包进一个字节。这里只表示编码，不代表整个模型的位宽。">
+        <span class="work-media-label">BONSAI / TERNARY ENCODING</span>
+        <div class="ternary-values" aria-hidden="true"><span>−1</span><span>0</span><span>+1</span></div>
+        <div class="ternary-equation" aria-hidden="true"><span>5 个三值编码</span><span>→</span><strong>1 byte</strong></div>
+        <span class="work-media-caption">编码原理示意 · 实际模型还需尺度与其他权重</span>
+      </div>
+      <div class="work-card-copy"><p class="eyebrow orange">LOW-BIT MODELS / 教学与实验</p><h3>Bonsai 低比特量化</h3><p class="work-card-description">从几行 Python 的三值打包，到 35B QAT 和 122B MoE 单卡推理，代码、测试和实验记录都在仓库里。</p><p class="work-card-boundary">35B 训练尚未完成；122B 质量评测未达标，推理需指定权重。</p><div class="work-card-actions"><a class="text-link" href="/learn/bonsai-low-bit/">读实验与教程<span class="arrow" aria-hidden="true">→</span></a>{external(project_by_repo['bonsai-qat-teaching']['url'],'GitHub')}</div></div>
+    </article>
+    <article class="work-card">
+      <div class="work-media jev-visual"><div class="work-media-topline"><span class="work-media-label">JEV / DECISION LAB</span><span>CPU 可试玩</span></div><img src="/assets/images/jev-sokoban.jpg" width="1264" height="1206" loading="lazy" alt="仓库随附的 Jev 推箱子教学演示，完整保留棋盘、候选动作和训练前后评测说明"><a class="work-media-caption" href="/assets/images/jev-sokoban.jpg" target="_blank" rel="noopener noreferrer">固定教学实验 · 查看完整截图 ↗<span class="sr-only">（新窗口）</span></a></div>
+      <div class="work-card-copy"><p class="eyebrow orange">DECISION MODELS / 动手课程</p><h3>Jev 决策模型</h3><p class="work-card-description">训练一个给候选动作打分的小模型，从 CPU 推箱子开始。附中文课程、可交互演示和训练评测代码。</p><p class="work-card-boundary">独立 Jev-style 教学实现，未复现 TypeSafe Jev 的专有训练方法。</p><div class="work-card-actions"><a class="text-link" href="/learn/jev-decision-model/">从 CPU 试玩开始<span class="arrow" aria-hidden="true">→</span></a>{external(project_by_repo['jev-decision-teaching']['url'],'GitHub')}</div></div>
+    </article>
+  </div>
+</section>
+<section class="section home-notes" id="field-notes">
+  {section_head('02 / FIELD NOTES','工程笔记','/blog/','所有文章')}
+  <div class="home-reading-layout"><div class="home-note-list">{''.join(note_row(p) for p in posts)}</div><aside class="home-learning" aria-labelledby="home-learning-title"><p class="eyebrow">LEARN BY TRYING</p><h3 id="home-learning-title">先在浏览器里试试</h3><p>文件内容改了，缓存还会返回旧结果吗？点几下就能看到，不需要模型或 GPU。</p><a class="button button-outline" href="/learn/cache-identity/">打开缓存小实验<span aria-hidden="true">→</span></a><a class="text-link" href="/learn/">浏览全部教程<span class="arrow" aria-hidden="true">↗</span></a></aside></div>
+</section>
+<section class="contact-strip home-contact"><div><p class="eyebrow">GET IN TOUCH</p><h2>聊聊具体的工程问题。</h2><p>具身 Agent、模型推理或开源协作，都可以发邮件联系。</p></div><a class="button" href="mailto:{EMAIL}">发邮件<span aria-hidden="true">↗</span></a></section>
+</div>'''
+    return page("AI Infra 与具身 Agent", "周栩丞 Aden Zhou 的公开代码与工程记录：Bonsai 低比特量化、Jev 决策模型教学、开源贡献和技术笔记。", body)
 
 
 def project_page(projects):

@@ -4,6 +4,8 @@ AI Infra 与具身 Agent 的作品集、博客和教学空间。
 
 线上入口：https://adenzhou1350.github.io/
 
+首页按「个人介绍 → 开源贡献 → Bonsai / Jev 两个主要项目 → 工程笔记与浏览器练习 → 联系」组织。贡献区是紧凑的项目入口，完整改动说明留在贡献页；教学入口保留在导航、项目导读和练习区，避免首页重复列出同一批内容。Bonsai 配图是三值编码示意，Jev 使用完整实验截图，不裁掉评测说明。
+
 - `/projects/`：Jev 决策模型实战、Bonsai 低比特教学、模型实验、Agent 工具与 fork 扩展。
 - `/blog/`：技术复盘，支持分类和关键词筛选。
 - `/learn/`：Jev 决策模型、Bonsai 低比特专题和浏览器交互实验。
@@ -50,7 +52,7 @@ python -X utf8 scripts/new_content.py blog my-first-note "文章标题" --descri
 | 教学专题 | Bonsai 量化入门：三值编码、QAT 和单卡推理 | `content/learn/bonsai-low-bit.md` |
 | 交互教程 | 文件名没变，缓存为什么会返回旧结果？ | `content/learn/cache-identity.md` |
 
-Nest 于 2026-10-10 暂停更新：网站推荐和教学入口已撤下，旧教程地址仅显示暂停说明。`content/learn/nest-first-workflow.md`、演示图片和公开仓库保留，不作为当前项目推广。
+Nest 于 2026-10-10 暂停更新：网站推荐和教学入口已撤下，旧教程地址仅显示暂停说明。`content/learn/nest-first-workflow.md`、演示图片、仓库和历史代码保留，不作为当前项目推广。
 
 Bonsai 在目录中设置 `featured: true`，由教学页的专题组件呈现；实验状态以公开仓库为准。项目页计数按 `content/projects.json` 的实际条目生成。
 
