@@ -1,5 +1,5 @@
 {
-  "checked_date": "2026-10-13",
+  "checked_date": "2026-10-19",
   "projects": [
     {
       "repository": "vllm-project/vllm",
@@ -11,7 +11,8 @@
         {
           "number": 56882,
           "title": "[Bugfix][Multimodal] Preserve DeepSeek V4 image block spacing",
-          "url": "https://github.com/vllm-project/vllm/pull/56882"
+          "url": "https://github.com/vllm-project/vllm/pull/56882",
+          "merged_at": "2026-09-18T10:44:40Z"
         }
       ]
     },
@@ -25,12 +26,14 @@
         {
           "number": 43398,
           "title": "[Bugfix] Preserve available host memory for integrated MUSA devices",
-          "url": "https://github.com/sgl-project/sglang/pull/43398"
+          "url": "https://github.com/sgl-project/sglang/pull/43398",
+          "merged_at": "2026-10-12T03:34:59Z"
         },
         {
           "number": 40765,
           "title": "fix: wait for multimodal process teardown",
-          "url": "https://github.com/sgl-project/sglang/pull/40765"
+          "url": "https://github.com/sgl-project/sglang/pull/40765",
+          "merged_at": "2026-10-08T06:36:17Z"
         }
       ]
     },
@@ -44,7 +47,8 @@
         {
           "number": 19500,
           "title": "[#19495][fix] Align LTX-2 scale factors with tensor axes",
-          "url": "https://github.com/NVIDIA/TensorRT-LLM/pull/19500"
+          "url": "https://github.com/NVIDIA/TensorRT-LLM/pull/19500",
+          "merged_at": "2026-10-06T21:28:06Z"
         }
       ]
     },
@@ -58,7 +62,8 @@
         {
           "number": 12207,
           "title": "[INTERPRETER] Fix tuple reductions over all axes",
-          "url": "https://github.com/triton-lang/triton/pull/12207"
+          "url": "https://github.com/triton-lang/triton/pull/12207",
+          "merged_at": "2026-10-12T19:30:06Z"
         }
       ]
     },
@@ -72,22 +77,26 @@
         {
           "number": 3414,
           "title": "[BugFix] Preserve parameter identity in NVRTC and CuTeDSL wrappers",
-          "url": "https://github.com/tile-ai/tilelang/pull/3414"
+          "url": "https://github.com/tile-ai/tilelang/pull/3414",
+          "merged_at": "2026-10-10T05:58:12Z"
         },
         {
           "number": 3400,
           "title": "[BugFix][CuTeDSL] Elect one grid-barrier leader per block",
-          "url": "https://github.com/tile-ai/tilelang/pull/3400"
-        },
-        {
-          "number": 3390,
-          "title": "[BugFix][CUDA] Preserve enclosing predicates on nested LDG",
-          "url": "https://github.com/tile-ai/tilelang/pull/3390"
+          "url": "https://github.com/tile-ai/tilelang/pull/3400",
+          "merged_at": "2026-10-10T02:47:59Z"
         },
         {
           "number": 3382,
           "title": "[BugFix] Preserve scalar bit counts in T.view",
-          "url": "https://github.com/tile-ai/tilelang/pull/3382"
+          "url": "https://github.com/tile-ai/tilelang/pull/3382",
+          "merged_at": "2026-10-09T09:38:41Z"
+        },
+        {
+          "number": 3390,
+          "title": "[BugFix][CUDA] Preserve enclosing predicates on nested LDG",
+          "url": "https://github.com/tile-ai/tilelang/pull/3390",
+          "merged_at": "2026-10-08T16:05:14Z"
         }
       ]
     },
@@ -95,33 +104,44 @@
       "repository": "fla-org/flash-linear-attention",
       "name": "Flash Linear Attention",
       "area": "线性注意力",
-      "description": "修复激活步长、损失张量、变长输入、训练模式与低精度初始化问题。",
+      "description": "修复变长序列状态分配、激活步长、损失张量、训练模式与低精度初始化问题。",
       "featured": true,
       "pull_requests": [
         {
+          "number": 1419,
+          "title": "[Fix] Allocate IPLR varlen final states per sequence",
+          "url": "https://github.com/fla-org/flash-linear-attention/pull/1419",
+          "merged_at": "2026-10-17T10:20:46Z"
+        },
+        {
           "number": 1369,
           "title": "[Fix] Honor strides in vector activations",
-          "url": "https://github.com/fla-org/flash-linear-attention/pull/1369"
+          "url": "https://github.com/fla-org/flash-linear-attention/pull/1369",
+          "merged_at": "2026-10-11T10:51:26Z"
         },
         {
           "number": 1362,
           "title": "[Fix] Accept local loss tensors in LinearLossParallel",
-          "url": "https://github.com/fla-org/flash-linear-attention/pull/1362"
+          "url": "https://github.com/fla-org/flash-linear-attention/pull/1362",
+          "merged_at": "2026-10-10T09:12:32Z"
         },
         {
           "number": 1334,
           "title": "[LightNet] Handle padded inputs with varlen normalization",
-          "url": "https://github.com/fla-org/flash-linear-attention/pull/1334"
+          "url": "https://github.com/fla-org/flash-linear-attention/pull/1334",
+          "merged_at": "2026-10-08T16:28:06Z"
         },
         {
           "number": 1333,
           "title": "[Fix] Keep MoM shared memory in chunk mode during training",
-          "url": "https://github.com/fla-org/flash-linear-attention/pull/1333"
+          "url": "https://github.com/fla-org/flash-linear-attention/pull/1333",
+          "merged_at": "2026-10-07T12:56:20Z"
         },
         {
           "number": 1320,
           "title": "[Fix] Preserve RWKV7 orthogonal initialization for low-precision weights",
-          "url": "https://github.com/fla-org/flash-linear-attention/pull/1320"
+          "url": "https://github.com/fla-org/flash-linear-attention/pull/1320",
+          "merged_at": "2026-10-03T16:03:59Z"
         }
       ]
     },
@@ -135,7 +155,8 @@
         {
           "number": 4063,
           "title": "[TE] Bound pooled TCP admission by queued bytes",
-          "url": "https://github.com/kvcache-ai/Mooncake/pull/4063"
+          "url": "https://github.com/kvcache-ai/Mooncake/pull/4063",
+          "merged_at": "2026-09-24T04:01:17Z"
         }
       ]
     },
@@ -149,7 +170,8 @@
         {
           "number": 5000,
           "title": "fix: restore getenv after environment parsing errors",
-          "url": "https://github.com/InternLM/lmdeploy/pull/5000"
+          "url": "https://github.com/InternLM/lmdeploy/pull/5000",
+          "merged_at": "2026-09-23T07:22:18Z"
         }
       ]
     },
@@ -157,13 +179,26 @@
       "repository": "ROCm/aiter",
       "name": "AITER",
       "area": "GPU 算子",
-      "description": "修复 HSTU 参考辅助函数未使用指定填充值的问题。",
+      "description": "修复 OPUS 缓存策略注册、MXFP4 MoE 旧生成文件残留与 HSTU 参考函数填充值。",
       "featured": false,
       "pull_requests": [
         {
+          "number": 5936,
+          "title": "[HIP] fix: remove stale MXFP4 MoE aux generated sources",
+          "url": "https://github.com/ROCm/aiter/pull/5936",
+          "merged_at": "2026-10-15T03:40:07Z"
+        },
+        {
+          "number": 5972,
+          "title": "[OPUS] [Bugfix] Restore shadowed OPUS A16W16 cache-policy registrations",
+          "url": "https://github.com/ROCm/aiter/pull/5972",
+          "merged_at": "2026-10-13T06:29:38Z"
+        },
+        {
           "number": 6041,
           "title": "[Triton/Gluon] [Bugfix] Honor padding_value in HSTU reference helper",
-          "url": "https://github.com/ROCm/aiter/pull/6041"
+          "url": "https://github.com/ROCm/aiter/pull/6041",
+          "merged_at": "2026-10-07T15:41:52Z"
         }
       ]
     },
@@ -177,7 +212,8 @@
         {
           "number": 1412,
           "title": "Fix reduce-scatter out validation",
-          "url": "https://github.com/facebookresearch/xformers/pull/1412"
+          "url": "https://github.com/facebookresearch/xformers/pull/1412",
+          "merged_at": "2026-10-09T16:40:22Z"
         }
       ]
     },
@@ -191,12 +227,14 @@
         {
           "number": 14,
           "title": "Report CUDA inspection tool timeouts through DumpResult",
-          "url": "https://github.com/mlc-ai/TIRx-harness/pull/14"
+          "url": "https://github.com/mlc-ai/TIRx-harness/pull/14",
+          "merged_at": "2026-10-05T01:33:45Z"
         },
         {
           "number": 12,
           "title": "Keep ptxas resource counts scoped to the first kernel report",
-          "url": "https://github.com/mlc-ai/TIRx-harness/pull/12"
+          "url": "https://github.com/mlc-ai/TIRx-harness/pull/12",
+          "merged_at": "2026-09-30T18:47:07Z"
         }
       ]
     },
@@ -208,64 +246,163 @@
       "featured": false,
       "pull_requests": [
         {
+          "number": 7693,
+          "title": "vfs: rate-limit flush timeout stack dumps",
+          "url": "https://github.com/juicedata/juicefs/pull/7693",
+          "merged_at": "2026-10-16T01:53:45Z"
+        },
+        {
+          "number": 7642,
+          "title": "fix(etcd): enable TLS for standalone insecure-skip-verify",
+          "url": "https://github.com/juicedata/juicefs/pull/7642",
+          "merged_at": "2026-10-15T03:14:53Z"
+        },
+        {
+          "number": 7656,
+          "title": "sdk/python: honor writable buffers in readinto",
+          "url": "https://github.com/juicedata/juicefs/pull/7656",
+          "merged_at": "2026-10-13T08:40:59Z"
+        },
+        {
           "number": 7648,
           "title": "sdk/python: avoid double-deserializing FFRecord example",
-          "url": "https://github.com/juicedata/juicefs/pull/7648"
+          "url": "https://github.com/juicedata/juicefs/pull/7648",
+          "merged_at": "2026-10-10T08:04:10Z"
         },
         {
           "number": 7639,
           "title": "vfs/backup: isolate temporary metadata backups per invocation",
-          "url": "https://github.com/juicedata/juicefs/pull/7639"
-        },
-        {
-          "number": 7633,
-          "title": "sdk/java: expand captures in first Kerberos rule substitution",
-          "url": "https://github.com/juicedata/juicefs/pull/7633"
-        },
-        {
-          "number": 7631,
-          "title": "sdk/java: continue token cleanup across volumes",
-          "url": "https://github.com/juicedata/juicefs/pull/7631"
-        },
-        {
-          "number": 7629,
-          "title": "sdk/python: preserve line boundaries in reads and iteration",
-          "url": "https://github.com/juicedata/juicefs/pull/7629"
-        },
-        {
-          "number": 7624,
-          "title": "pkg/usage: close HTTP response bodies after reporting",
-          "url": "https://github.com/juicedata/juicefs/pull/7624"
-        },
-        {
-          "number": 7619,
-          "title": "object: close rejected download response bodies",
-          "url": "https://github.com/juicedata/juicefs/pull/7619"
-        },
-        {
-          "number": 7617,
-          "title": "object/gcs: cancel writer on failed uploads",
-          "url": "https://github.com/juicedata/juicefs/pull/7617"
-        },
-        {
-          "number": 7615,
-          "title": "object/sql: propagate context to database requests",
-          "url": "https://github.com/juicedata/juicefs/pull/7615"
+          "url": "https://github.com/juicedata/juicefs/pull/7639",
+          "merged_at": "2026-10-09T07:37:10Z"
         },
         {
           "number": 7614,
           "title": "object: fix listing prefix and marker boundaries",
-          "url": "https://github.com/juicedata/juicefs/pull/7614"
-        },
-        {
-          "number": 7612,
-          "title": "object/sql: overwrite blobs with empty contents",
-          "url": "https://github.com/juicedata/juicefs/pull/7612"
+          "url": "https://github.com/juicedata/juicefs/pull/7614",
+          "merged_at": "2026-10-09T06:12:58Z"
         },
         {
           "number": 7606,
           "title": "fix(sync): isolate files-from worker listing errors",
-          "url": "https://github.com/juicedata/juicefs/pull/7606"
+          "url": "https://github.com/juicedata/juicefs/pull/7606",
+          "merged_at": "2026-10-09T06:05:54Z"
+        },
+        {
+          "number": 7633,
+          "title": "sdk/java: expand captures in first Kerberos rule substitution",
+          "url": "https://github.com/juicedata/juicefs/pull/7633",
+          "merged_at": "2026-10-09T03:16:08Z"
+        },
+        {
+          "number": 7615,
+          "title": "object/sql: propagate context to database requests",
+          "url": "https://github.com/juicedata/juicefs/pull/7615",
+          "merged_at": "2026-10-09T03:04:52Z"
+        },
+        {
+          "number": 7631,
+          "title": "sdk/java: continue token cleanup across volumes",
+          "url": "https://github.com/juicedata/juicefs/pull/7631",
+          "merged_at": "2026-10-09T02:42:12Z"
+        },
+        {
+          "number": 7629,
+          "title": "sdk/python: preserve line boundaries in reads and iteration",
+          "url": "https://github.com/juicedata/juicefs/pull/7629",
+          "merged_at": "2026-10-09T02:36:48Z"
+        },
+        {
+          "number": 7619,
+          "title": "object: close rejected download response bodies",
+          "url": "https://github.com/juicedata/juicefs/pull/7619",
+          "merged_at": "2026-10-09T02:31:39Z"
+        },
+        {
+          "number": 7624,
+          "title": "pkg/usage: close HTTP response bodies after reporting",
+          "url": "https://github.com/juicedata/juicefs/pull/7624",
+          "merged_at": "2026-10-08T08:28:27Z"
+        },
+        {
+          "number": 7617,
+          "title": "object/gcs: cancel writer on failed uploads",
+          "url": "https://github.com/juicedata/juicefs/pull/7617",
+          "merged_at": "2026-10-08T06:53:01Z"
+        },
+        {
+          "number": 7612,
+          "title": "object/sql: overwrite blobs with empty contents",
+          "url": "https://github.com/juicedata/juicefs/pull/7612",
+          "merged_at": "2026-10-08T06:19:51Z"
+        }
+      ]
+    },
+    {
+      "repository": "fsspec/filesystem_spec",
+      "name": "fsspec",
+      "area": "文件系统接口",
+      "description": "修复批量复制的后端混用、HTTP 读写选项、文件块缓存和读写边界。",
+      "featured": false,
+      "pull_requests": [
+        {
+          "number": 2302,
+          "title": "Reject mixed backends in generic copy batches",
+          "url": "https://github.com/fsspec/filesystem_spec/pull/2302",
+          "merged_at": "2026-10-16T19:07:59Z"
+        },
+        {
+          "number": 2306,
+          "title": "fix: return position from no-op HTTP stream seeks",
+          "url": "https://github.com/fsspec/filesystem_spec/pull/2306",
+          "merged_at": "2026-10-16T16:15:34Z"
+        },
+        {
+          "number": 2294,
+          "title": "fix: reject unsupported HTTP pipe_file modes before writing",
+          "url": "https://github.com/fsspec/filesystem_spec/pull/2294",
+          "merged_at": "2026-10-15T18:32:44Z"
+        },
+        {
+          "number": 2262,
+          "title": "Support read_block with no delimiter and length=None",
+          "url": "https://github.com/fsspec/filesystem_spec/pull/2262",
+          "merged_at": "2026-10-14T16:17:37Z"
+        },
+        {
+          "number": 2279,
+          "title": "Preserve caller-owned protocol options when merging overrides",
+          "url": "https://github.com/fsspec/filesystem_spec/pull/2279",
+          "merged_at": "2026-10-14T14:52:01Z"
+        },
+        {
+          "number": 2261,
+          "title": "Return an empty read_block when the offset is past EOF",
+          "url": "https://github.com/fsspec/filesystem_spec/pull/2261",
+          "merged_at": "2026-10-14T14:40:19Z"
+        },
+        {
+          "number": 2258,
+          "title": "Preserve per-call options in HTTP listings",
+          "url": "https://github.com/fsspec/filesystem_spec/pull/2258",
+          "merged_at": "2026-10-14T14:31:59Z"
+        },
+        {
+          "number": 2257,
+          "title": "Refetch mmap blocks when recreating a missing backing file",
+          "url": "https://github.com/fsspec/filesystem_spec/pull/2257",
+          "merged_at": "2026-10-14T14:20:17Z"
+        },
+        {
+          "number": 2270,
+          "title": "Fix POST method in Pyodide HTTP session shim",
+          "url": "https://github.com/fsspec/filesystem_spec/pull/2270",
+          "merged_at": "2026-10-13T20:46:38Z"
+        },
+        {
+          "number": 2278,
+          "title": "Accept PathLike local destinations in synchronous get",
+          "url": "https://github.com/fsspec/filesystem_spec/pull/2278",
+          "merged_at": "2026-10-13T19:43:21Z"
         }
       ]
     },
@@ -273,18 +410,47 @@
       "repository": "agronholm/anyio",
       "name": "AnyIO",
       "area": "异步运行时",
-      "description": "修复临时目录创建后的取消处理与 UDP 初始化失败时的资源清理。",
+      "description": "修复任务完成与取消的竞态，以及临时文件、目录和 UDP 初始化中的取消与清理问题。",
       "featured": false,
       "pull_requests": [
         {
-          "number": 1403,
-          "title": "Avoid cancellation checkpoint after temporary directory creation",
-          "url": "https://github.com/agronholm/anyio/pull/1403"
+          "number": 1410,
+          "title": "Fix BlockingPortal completion racing with Future cancellation",
+          "url": "https://github.com/agronholm/anyio/pull/1410",
+          "merged_at": "2026-10-17T23:09:36Z"
+        },
+        {
+          "number": 1404,
+          "title": "Shield spooled temporary file rollover from cancellation",
+          "url": "https://github.com/agronholm/anyio/pull/1404",
+          "merged_at": "2026-10-14T22:54:31Z"
         },
         {
           "number": 1400,
           "title": "Fix Trio UDP socket cleanup on initialization failure",
-          "url": "https://github.com/agronholm/anyio/pull/1400"
+          "url": "https://github.com/agronholm/anyio/pull/1400",
+          "merged_at": "2026-10-11T09:11:41Z"
+        },
+        {
+          "number": 1403,
+          "title": "Avoid cancellation checkpoint after temporary directory creation",
+          "url": "https://github.com/agronholm/anyio/pull/1403",
+          "merged_at": "2026-10-10T11:52:53Z"
+        }
+      ]
+    },
+    {
+      "repository": "jfhbrook/pyee",
+      "name": "pyee",
+      "area": "异步事件",
+      "description": "修复 Trio 事件处理器对同步返回值的错误等待，保留一次性监听器的行为。",
+      "featured": false,
+      "pull_requests": [
+        {
+          "number": 217,
+          "title": "Only await awaitable Trio event handler results",
+          "url": "https://github.com/jfhbrook/pyee/pull/217",
+          "merged_at": "2026-10-18T00:00:01Z"
         }
       ]
     },
@@ -298,7 +464,23 @@
         {
           "number": 817,
           "title": "test: make lock error checks deterministic",
-          "url": "https://github.com/tox-dev/filelock/pull/817"
+          "url": "https://github.com/tox-dev/filelock/pull/817",
+          "merged_at": "2026-10-10T17:33:33Z"
+        }
+      ]
+    },
+    {
+      "repository": "openclaw/openclaw",
+      "name": "OpenClaw",
+      "area": "Agent 运行时",
+      "description": "修复 Gateway 停止后更新发现请求仍继续执行的问题。",
+      "featured": false,
+      "pull_requests": [
+        {
+          "number": 161067,
+          "title": "fix(update): cancel Gateway extended-stable lookup",
+          "url": "https://github.com/openclaw/openclaw/pull/161067",
+          "merged_at": "2026-10-16T19:32:38Z"
         }
       ]
     },
@@ -312,9 +494,36 @@
         {
           "number": 280,
           "title": "Add skill soul-generator",
-          "url": "https://github.com/VoltAgent/awesome-openclaw-skills/pull/280"
+          "url": "https://github.com/VoltAgent/awesome-openclaw-skills/pull/280",
+          "merged_at": "2026-03-24T18:13:00Z"
         }
       ]
+    }
+  ],
+  "recent": [
+    {
+      "repository": "fla-org/flash-linear-attention",
+      "number": 1419,
+      "title": "修复变长序列的状态分配",
+      "description": "打包输入包含多条序列时，修复 IPLR 最终状态缓冲区只按批次分配的问题。",
+      "url": "https://github.com/fla-org/flash-linear-attention/pull/1419",
+      "merged_at": "2026-10-17T10:20:46Z"
+    },
+    {
+      "repository": "agronholm/anyio",
+      "number": 1410,
+      "title": "修复任务完成与取消之间的竞态",
+      "description": "修复 Future 取消与结果写入的竞态，避免异常连带取消 Portal 中的任务组。",
+      "url": "https://github.com/agronholm/anyio/pull/1410",
+      "merged_at": "2026-10-17T23:09:36Z"
+    },
+    {
+      "repository": "openclaw/openclaw",
+      "number": 161067,
+      "title": "Gateway 退出时取消更新请求",
+      "description": "让 Gateway 关闭时取消进行中的更新发现请求，避免随后继续查询精确版本。",
+      "url": "https://github.com/openclaw/openclaw/pull/161067",
+      "merged_at": "2026-10-16T19:32:38Z"
     }
   ]
 }

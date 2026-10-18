@@ -10,13 +10,14 @@ import hashlib
 import html
 import json
 import re
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import urlencode, urlparse
 from xml.sax.saxutils import escape as xml_escape
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "https://adenzhou1350.github.io"
-SITE_DATE = "2026-10-13"
+SITE_DATE = "2026-10-19"
 NAME = "周栩丞 · Aden Zhou"
 EMAIL = "aden1350@outlook.com"
 
@@ -258,6 +259,19 @@ def contributor_card(item, heading="h3"):
     return f'''<a class="contributor-card" href="{esc(github_pr_search('merged', item['repository']))}" target="_blank" rel="noopener noreferrer"><div class="contributor-meta"><span>{esc(item['area'])}</span><span class="contributor-arrow" aria-hidden="true">↗</span></div><{heading}>{esc(item['name'])}</{heading}><span class="contributor-repository">{esc(item['repository'])}</span><p>{esc(item['description'])}</p><div class="contributor-bottom"><span class="contributor-role">Contributor</span><span>查看我的已合并 PR <span aria-hidden="true">→</span></span></div><span class="sr-only">（新窗口）</span></a>'''
 
 
+def recent_contributions(contributions, compact=False):
+    names = {item['repository']: item['name'] for item in contributions['projects']}
+    links = []
+    for item in contributions.get('recent', []):
+        date = datetime.fromisoformat(item['merged_at']).astimezone(timezone(timedelta(hours=8))).date()
+        description = '' if compact else f'<p>{esc(item["description"])}</p>'
+        links.append(f'''<li><a href="{esc(item['url'])}" target="_blank" rel="noopener noreferrer"><div class="recent-pr-meta"><span>{esc(names[item['repository']])}</span><time datetime="{date}">{date:%m.%d} 合并</time></div><strong>{esc(item['title'])}<span aria-hidden="true"> ↗</span></strong>{description}<span class="sr-only">PR #{item['number']}，新窗口</span></a></li>''')
+    if not links:
+        return ''
+    heading = '<p class="recent-pr-label">近期改动</p>' if compact else '<h2 class="recent-pr-label">近期改动</h2>'
+    return f'<div class="recent-contributions{ " recent-contributions-compact" if compact else "" }">{heading}<ul class="recent-pr-list">{"".join(links)}</ul></div>'
+
+
 def home(catalog, projects, contributions):
     posts = sorted([p for p in catalog if p['section'] == 'blog'], key=lambda p: p['date'], reverse=True)[:2]
     project_by_repo = {item['repo']: item for item in projects}
@@ -285,6 +299,7 @@ def home(catalog, projects, contributions):
 <section class="contributor-strip" id="open-source" aria-labelledby="home-contributor-title">
   <div class="contributor-strip-heading"><div><p class="eyebrow">CONTRIBUTOR TO</p><h2 id="home-contributor-title">参与贡献的开源项目</h2></div><a class="text-link" href="/contributions/">全部 {len(contributions['projects'])} 个项目<span class="arrow" aria-hidden="true">→</span></a></div>
   <div class="contributor-strip-links">{contributor_links}</div>
+  {recent_contributions(contributions, compact=True)}
   <p class="section-footnote">点击项目查看我的已合并 PR · 项目名单核对于 {esc(contributions['checked_date'])}</p>
 </section>
 <section class="section home-work" id="selected-work">
@@ -297,7 +312,7 @@ def home(catalog, projects, contributions):
         <div class="ternary-equation" aria-hidden="true"><span>5 个三值编码</span><span>→</span><strong>1 byte</strong></div>
         <span class="work-media-caption">编码原理示意 · 实际模型还需尺度与其他权重</span>
       </div>
-      <div class="work-card-copy"><p class="eyebrow orange">LOW-BIT MODELS / 教学与实验</p><h3>Bonsai 低比特量化</h3><p class="work-card-description">在浏览器里试三值打包，再看 35B QAT 和 122B MoE 单卡推理。代码、测试和实验记录都在仓库里。</p><p class="work-card-boundary">35B 训练尚未完成；122B 质量评测未达标，推理需指定权重。</p><div class="work-card-actions"><a class="text-link" href="/learn/bonsai-low-bit/">读实验与教程<span class="arrow" aria-hidden="true">→</span></a>{external(project_by_repo['bonsai-qat-teaching']['url'],'GitHub')}</div></div>
+      <div class="work-card-copy"><p class="eyebrow orange">LOW-BIT MODELS / 教学与实验</p><h3>Bonsai 低比特量化</h3><p class="work-card-description">在浏览器里试三值打包，再看 35B QAT 和 122B MoE 单卡推理。不下载模型，也能用随附脚本核对公开数字。</p><p class="work-card-boundary">35B 训练尚未完成；122B 质量评测未达标，推理需指定权重。</p><div class="work-card-actions"><a class="text-link" href="/learn/bonsai-low-bit/#ternary-demo">先试三值编码<span class="arrow" aria-hidden="true">→</span></a>{external(project_by_repo['bonsai-qat-teaching']['url'],'GitHub')}</div></div>
     </article>
     <article class="work-card">
       <div class="work-media jev-visual"><div class="work-media-topline"><span class="work-media-label">JEV / DECISION LAB</span><span>CPU 可试玩</span></div><img src="/assets/images/jev-sokoban.jpg" width="1264" height="1206" loading="lazy" alt="仓库随附的 Jev 推箱子教学演示，完整保留棋盘、候选动作和训练前后评测说明"><a class="work-media-caption" href="/assets/images/jev-sokoban.jpg" target="_blank" rel="noopener noreferrer">固定教学实验 · 查看完整截图 ↗<span class="sr-only">（新窗口）</span></a></div>
@@ -358,7 +373,7 @@ def article_page(item):
 def contributions_page(contributions, path="/contributions/"):
     items = contributions['projects']
     body = page_hero("OPEN SOURCE / CONTRIBUTOR TO", "参与贡献的开源项目", "从推理服务、GPU 算子到存储与 Python 工具。点击项目，查看我在该仓库已合并的 PR。", f'{len(items):02d} PROJECTS')
-    body += f'''<div class="shell page-content"><div class="contributor-intro"><p>这里列出已有公开合并记录的项目。每张卡片下方写的是我参与的具体改动。</p>{external(github_pr_search('merged'), '全部已合并 PR')}</div><div class="contributor-grid">{''.join(contributor_card(item, 'h2') for item in items)}</div><p class="section-footnote">项目名单核对于 {esc(contributions['checked_date'])}。卡片链接打开 GitHub 实时搜索，只显示我在对应仓库已合并的 PR。</p><div class="contributor-more"><span>更多公开记录</span>{external(github_pr_search('open'), '进行中的 PR')}{external('https://github.com/adenzhou1350', 'GitHub 主页')}</div></div>'''
+    body += f'''<div class="shell page-content">{recent_contributions(contributions)}<div class="contributor-intro"><p>按项目查看。下面每张卡片都链接到我在该仓库的公开合并记录。</p>{external(github_pr_search('merged'), '全部已合并 PR')}</div><div class="contributor-grid">{''.join(contributor_card(item, 'h2') for item in items)}</div><p class="section-footnote">项目名单核对于 {esc(contributions['checked_date'])}。卡片链接打开 GitHub 实时搜索，只显示我在对应仓库已合并的 PR；上方近期改动的日期为北京时间。</p><div class="contributor-more"><span>更多公开记录</span>{external(github_pr_search('open'), '进行中的 PR')}{external('https://github.com/adenzhou1350', 'GitHub 主页')}</div></div>'''
     return page("开源贡献", "周栩丞 Aden Zhou 参与贡献的开源项目：vLLM、SGLang、TensorRT-LLM、Triton、TileLang 等，附各仓库已合并 PR。", body, path, "contributions")
 
 

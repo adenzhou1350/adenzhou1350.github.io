@@ -24,7 +24,7 @@ python -m venv .venv
 
 文本和页面按钮课程则冻结 Qwen3.5-0.8B，用它编码状态与候选描述，再训练一个 **1,024 参数的共享线性头**。它输出候选分数，不生成一段回答；底座的前向计算仍然存在，不能把小头的参数量当成整个系统大小。
 
-这两课需要额外安装模型依赖，并下载完整 Qwen 快照。页面课程从训练自己的 head 开始，再导出到个人目录运行。随附页面按钮头只适用于指纹匹配的底座；公开记录没有给出对应的 Hugging Face revision，默认下载不能保证匹配。具体步骤见[安装指南](https://github.com/adenzhou1350/jev-decision-teaching/blob/main/docs/getting-started.md)，CPU 推箱子试玩仍可直接使用仓库随附模型。
+这两课需要额外安装模型依赖，并下载完整 Qwen 快照。页面课程从训练自己的 head 开始，再导出到个人目录运行。随附页面按钮头只适用于指纹匹配的底座；公开记录没有给出对应的 Hugging Face revision，默认下载不能保证匹配。具体步骤见[给自己的快照训练 head](https://github.com/adenzhou1350/jev-decision-teaching/blob/main/docs/getting-started.md#页面按钮给自己的快照训练-head)，CPU 推箱子试玩仍可直接使用仓库随附模型。
 
 ## 结果要和任务一起看
 

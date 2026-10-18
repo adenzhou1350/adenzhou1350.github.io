@@ -76,6 +76,21 @@
 .contributor-strip-links a>span:last-child{font-size:13px;color:#89958c;font-weight:400}
 .contributor-strip-links a:hover,.contributor-strip-links a:hover>span:last-child{color:var(--accent)}
 .contributor-strip .section-footnote{font-size:10px;margin-top:19px}
+.recent-contributions{margin-bottom:38px}
+.recent-pr-label{font-size:13px;font-weight:500;color:var(--muted);margin:0 0 16px}
+.recent-pr-list{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;padding:0;margin:0}
+.recent-pr-list li{min-width:0;border-top:1px solid var(--line)}
+.recent-pr-list a{display:block;padding:15px 0 5px}
+.recent-pr-meta{display:flex;align-items:baseline;justify-content:space-between;gap:12px;font-size:11px;color:var(--muted);margin-bottom:9px}
+.recent-pr-meta time{font:10px var(--mono);white-space:nowrap}
+.recent-pr-list strong{font-size:15px;line-height:1.7;font-weight:500}
+.recent-pr-list strong>span{color:var(--accent);white-space:nowrap}
+.recent-pr-list a:hover strong{color:var(--accent)}
+.recent-pr-list p{font-size:12px;line-height:1.8;color:var(--muted);margin-top:10px}
+.recent-contributions-compact{margin:22px 0 0}
+.recent-contributions-compact .recent-pr-label{font-size:11px;margin-bottom:10px}
+.recent-contributions-compact .recent-pr-list strong{font-size:13px}
+@media(max-width:780px){.recent-pr-list{grid-template-columns:1fr;gap:8px}.recent-pr-list a{padding:12px 0 6px}.recent-pr-meta{margin-bottom:5px}.recent-contributions{margin-bottom:28px}.recent-contributions-compact{margin-bottom:0}}
 .home-work{padding:57px 0 52px}
 .portfolio-home .section-heading{margin-bottom:26px}
 .home-work-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px}

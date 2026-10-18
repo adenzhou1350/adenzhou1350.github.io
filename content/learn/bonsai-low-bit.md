@@ -53,6 +53,8 @@ python scripts/check_public_evidence.py
 
 它核对已公开文件的哈希，并从摘要重算 HTTP 吞吐、请求差异数与显存单位。`PASS` 表示文件和摘要算术相符，不代表重跑了模型或验证了未发布的原始日志。[公开证据说明](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/PUBLIC_EVIDENCE.md)逐项列出仓库里能拿到什么，以及继续复现还缺哪些文件。
 
+这套文件与摘要检查也配置在 [GitHub Actions](https://github.com/adenzhou1350/bonsai-qat-teaching/actions/workflows/public-evidence.yml) 中，分别在 Linux 和 Windows 环境执行。
+
 [122B 运行说明](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/experimental122/README.md)记录了新旧两版固定产物。新版已完成训练、独立数值检查和单张 RTX 5090 推理，也做了四组公开开发评测。四组结果都低于对应原生 BF16 基线，质量未达标。
 
 仓库没有提供模型权重。要运行这个案例，需要另行取得与所选 manifest 对应的 packed 权重，不能直接传入原始 BF16 模型。仅克隆仓库，也还无法从头重建记录中的 122B 产物。完整可移植训练链路和质量复刻还缺哪些部分，见 [122B 实验记录](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/experiments/122B.md)。
@@ -69,4 +71,4 @@ python scripts/check_public_evidence.py
 
 整理结果时，分别回答四个问题：编码能否还原？恢复后下一步是否相同？独立评测是否达标？速度是在什么条件下测得的？
 
-这里的方法与实验状态核对至公开仓库 `ce2e903` 的 2026-10-10 收尾记录；阅读入口随本次文档整理更新。后续进展请看仓库中带日期的实验索引。目前这些工作属于 Bonsai 风格教学与实验，尚未完整复现 Bonsai 训练方案，也没有通过原定质量门槛。
+阅读入口与公开材料已核对至 2026 年 10 月 19 日，仓库版本为 [`c23090f`](https://github.com/adenzhou1350/bonsai-qat-teaching/tree/c23090f9da97aae1e02d3f0915f4af0965411cc0)。实验状态仍以 2026 年 10 月 10 日的收尾记录为准：研究已暂停，尚未完整复现 Bonsai 训练方案，也没有通过原定质量门槛。

@@ -68,7 +68,7 @@
     "description": "先用 CPU 试玩随附策略，再看模型怎样给候选动作打分。接着可以自己训练推箱子策略，或试试本地页面按钮选择。",
     "category": "决策模型",
     "date": "2026-10-10",
-    "updated": "2026-10-13",
+    "updated": "2026-10-19",
     "minutes": 6,
     "tags": [
       "CPU 起步",
@@ -98,7 +98,7 @@
     "kind": "专题导读",
     "source_url": "https://github.com/adenzhou1350/bonsai-qat-teaching",
     "featured": true,
-    "updated": "2026-10-13"
+    "updated": "2026-10-19"
   },
   {
     "slug": "cache-identity",
