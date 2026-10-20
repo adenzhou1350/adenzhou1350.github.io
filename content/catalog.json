@@ -6,6 +6,7 @@
     "description": "文本权重放进了 32GB 显卡，质量评测仍没过线。记录三值压缩、30.64 GiB 实测占用，以及一次局部提速没有带来整体收益的尝试。",
     "category": "量化实验",
     "date": "2026-10-13",
+    "updated": "2026-10-21",
     "minutes": 8,
     "tags": ["Bonsai", "RTX 5090", "122B MoE", "35B", "显存", "量化"],
     "source": "content/posts/bonsai-5090-experiment.md",
@@ -84,7 +85,7 @@
     "slug": "bonsai-low-bit",
     "section": "learn",
     "title": "Bonsai 量化入门：三值编码、QAT 和单卡推理",
-    "description": "在浏览器里改 5 个数，看三值编码怎样装进 1 个字节，再按硬件条件选择 CPU 测试、35B 训练或 122B MoE 推理实验。",
+    "description": "在浏览器里试三值编码，再进入 CPU 测试和 QAT 教学。27B、35B、122B 权重已公开，附单卡部署步骤、速度与验证范围。",
     "category": "低比特大模型",
     "date": "2026-10-09",
     "minutes": 9,
@@ -98,7 +99,7 @@
     "kind": "专题导读",
     "source_url": "https://github.com/adenzhou1350/bonsai-qat-teaching",
     "featured": true,
-    "updated": "2026-10-19"
+    "updated": "2026-10-21"
   },
   {
     "slug": "cache-identity",

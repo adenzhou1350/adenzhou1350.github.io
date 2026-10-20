@@ -20,7 +20,7 @@
     "name": "Bonsai 量化教程",
     "repo": "bonsai-qat-teaching",
     "category": "教学与研究",
-    "description": "先在浏览器里改五个数字，看看三值权重怎样打包；再用 CPU 学梯度和检查点恢复。附 35B QAT 与单卡 122B MoE 实验，也能不下载模型直接核对公开数字。",
+    "description": "先在浏览器里试三值打包，再用 CPU 学梯度和检查点恢复。27B、35B、122B 的部署权重均已公开，附安装、下载、提问步骤与速度记录。",
     "tags": [
       "三值 QAT",
       "蒸馏",
@@ -28,7 +28,7 @@
       "PyTorch"
     ],
     "status": "公开教学 · 实验记录",
-    "boundary": "35B 完整训练按 Linux、2×B300 环境编写。122B MoE 用低秩补偿，是另一项实验，目前质量未达标。推理需要指定的 packed 权重，仓库不含权重。",
+    "boundary": "三款需各自的压缩加载器，速度口径不同，量化质量仍有限制。35B 新便携入口待 GPU 复验；本轮优化已停止。公开 R35-8192 不等同于尚未完成的全专家 QAT。",
     "url": "https://github.com/adenzhou1350/bonsai-qat-teaching",
     "guide": "/learn/bonsai-low-bit/",
     "guide_label": "进入教程与编码实验"

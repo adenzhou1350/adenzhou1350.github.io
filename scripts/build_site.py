@@ -17,7 +17,7 @@ from xml.sax.saxutils import escape as xml_escape
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "https://adenzhou1350.github.io"
-SITE_DATE = "2026-10-19"
+SITE_DATE = "2026-10-21"
 NAME = "周栩丞 · Aden Zhou"
 EMAIL = "aden1350@outlook.com"
 
@@ -252,7 +252,7 @@ def system_art():
 
 
 def bonsai_feature(item):
-    return f'''<section class="course-feature" aria-labelledby="bonsai-feature-title"><div class="course-feature-copy"><p class="eyebrow orange">FEATURED SERIES / BONSAI</p><h2 id="bonsai-feature-title">Bonsai 量化教程</h2><p class="course-feature-deck">三值编码、QAT 和推理实验。</p><p>先在浏览器里改几个数，试试三值打包，再看训练、检查点恢复和推理。需要大显卡的实验会单独写明硬件要求。</p><div class="project-links"><a class="button" href="{article_url(item)}#ternary-demo">直接试三值编码<span aria-hidden="true">→</span></a><a class="text-link" href="{article_url(item)}">阅读导读<span class="arrow" aria-hidden="true">→</span></a>{external(item['source_url'],'公开教学仓库')}</div></div><ol class="course-route"><li><span class="route-index">01</span><div><span class="route-resource">BROWSER &amp; CPU / START SMALL</span><h3>三值编码与 CPU 测试</h3><p>先在浏览器里打包五个三值，再按需复制 Python 示例，或在 Linux CPU 上运行量化、梯度和恢复测试。</p></div></li><li><span class="route-index">02</span><div><span class="route-resource">35B MoE / 2×B300</span><h3>35B 全专家 QAT</h3><p>准备教师模型，训练专家主权重，再检查权重导出和检查点恢复。</p></div></li><li><span class="route-index">03</span><div><span class="route-resource">122B MoE / RTX 5090</span><h3>122B 单卡推理实验</h3><p>三值专家加低秩补偿。需要指定 packed 权重，公开评测尚未达标。</p></div></li></ol></section>'''
+    return f'''<section class="course-feature" aria-labelledby="bonsai-feature-title"><div class="course-feature-copy"><p class="eyebrow orange">FEATURED SERIES / BONSAI</p><h2 id="bonsai-feature-title">Bonsai 量化教程</h2><p class="course-feature-deck">三值编码、QAT 和推理实验。</p><p>先在浏览器里改几个数，试试三值打包，再看训练、检查点恢复和推理。需要大显卡的实验会单独写明硬件要求。</p><div class="project-links"><a class="button" href="{article_url(item)}#ternary-demo">直接试三值编码<span aria-hidden="true">→</span></a><a class="text-link" href="{article_url(item)}">阅读导读<span class="arrow" aria-hidden="true">→</span></a>{external(item['source_url'],'公开教学仓库')}</div></div><ol class="course-route"><li><span class="route-index">01</span><div><span class="route-resource">BROWSER &amp; CPU / START SMALL</span><h3>三值编码与 CPU 测试</h3><p>先在浏览器里打包五个三值，再按需复制 Python 示例，或在 Linux CPU 上运行量化、梯度和恢复测试。</p></div></li><li><span class="route-index">02</span><div><span class="route-resource">35B MoE / 2×B300</span><h3>35B 全专家 QAT</h3><p>从两步控制学习教师、专家主权重和检查点恢复；长程训练已暂停。</p></div></li><li><span class="route-index">03</span><div><span class="route-resource">27B · 35B · 122B / RTX 5090</span><h3>三款模型下载与部署</h3><p>权重已公开，按各自加载器运行；速度口径不同，质量仍有限制。</p></div></li></ol></section>'''
 
 
 def contributor_card(item, heading="h3"):
@@ -312,7 +312,7 @@ def home(catalog, projects, contributions):
         <div class="ternary-equation" aria-hidden="true"><span>5 个三值编码</span><span>→</span><strong>1 byte</strong></div>
         <span class="work-media-caption">编码原理示意 · 实际模型还需尺度与其他权重</span>
       </div>
-      <div class="work-card-copy"><p class="eyebrow orange">LOW-BIT MODELS / 教学与实验</p><h3>Bonsai 低比特量化</h3><p class="work-card-description">在浏览器里试三值打包，再看 35B QAT 和 122B MoE 单卡推理。不下载模型，也能用随附脚本核对公开数字。</p><p class="work-card-boundary">35B 训练尚未完成；122B 质量评测未达标，推理需指定权重。</p><div class="work-card-actions"><a class="text-link" href="/learn/bonsai-low-bit/#ternary-demo">先试三值编码<span class="arrow" aria-hidden="true">→</span></a>{external(project_by_repo['bonsai-qat-teaching']['url'],'GitHub')}</div></div>
+      <div class="work-card-copy"><p class="eyebrow orange">LOW-BIT MODELS / 教学与实验</p><h3>Bonsai 低比特量化</h3><p class="work-card-description">在浏览器里试三值打包，再看 QAT 与单卡推理。27B、35B、122B 权重已公开，附下载和部署步骤。</p><p class="work-card-boundary">三款速度与测试口径不同；量化质量仍有限制，本轮优化已停止。</p><div class="work-card-actions"><a class="text-link" href="/learn/bonsai-low-bit/#ternary-demo">先试三值编码<span class="arrow" aria-hidden="true">→</span></a>{external(project_by_repo['bonsai-qat-teaching']['url'],'GitHub')}</div></div>
     </article>
     <article class="work-card">
       <div class="work-media jev-visual"><div class="work-media-topline"><span class="work-media-label">JEV / DECISION LAB</span><span>CPU 可试玩</span></div><img src="/assets/images/jev-sokoban.jpg" width="1264" height="1206" loading="lazy" alt="仓库随附的 Jev 推箱子教学演示，完整保留棋盘、候选动作和训练前后评测说明"><a class="work-media-caption" href="/assets/images/jev-sokoban.jpg" target="_blank" rel="noopener noreferrer">固定教学实验 · 查看完整截图 ↗<span class="sr-only">（新窗口）</span></a></div>

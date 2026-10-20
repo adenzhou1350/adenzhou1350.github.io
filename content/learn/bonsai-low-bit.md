@@ -4,6 +4,8 @@ Bonsai 风格量化教学有三值编码、量化感知训练（QAT）和压缩�
 
 可以先在浏览器里改几个数，试试下面的编码小实验，也可以复制 Python 示例到本地运行。之后再按手头的机器选择[公开仓库](https://github.com/adenzhou1350/bonsai-qat-teaching)中的练习。读原理和实验记录不需要大显卡。
 
+想直接使用模型，27B、35B 和 122B 权重都已公开；从[安装、下载与提问步骤](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/DEPLOYMENT.md)开始。三款使用不同量化方法，速度也不同。
+
 ## 先用五个数字理解 1.6bit
 
 三值权重的编码只有 `-1`、`0`、`1`。把它们映射成三进制的 `0`、`1`、`2`，五个编码一共有 `3^5 = 243` 种组合，可以放进一个有 256 种取值的字节。只看这部分编码，每个权重占 `8 / 5 = 1.6bit`。
@@ -22,12 +24,13 @@ Bonsai 风格量化教学有三值编码、量化感知训练（QAT）和压缩�
 |---|---|---|---|
 | CPU 原理与测试 | 三值网格、STE 梯度、打包、恢复后下一步是否一致 | Linux CPU 环境，安装仓库所列依赖 | 小规模方程和检查点测试，不加载大模型 |
 | 35B 全专家 QAT | 准备数据与教师、更新专家主权重、保存和恢复 | Linux、2×B300、原模型和本地文本 | 全 40 层两步控制通过；长程训练暂停，未完成质量验收 |
-| 122B MoE 固定产物推理 | 压缩布局、单卡生成、HTTP 服务与计时 | Linux、32GB RTX 5090、指定 packed 权重和匹配环境 | 固定产物 CLI 与 HTTP 实验完成；质量未达标，仓库未提供权重 |
+| 27B 三值 QAT | 旋转、量化、教师蒸馏与检查点恢复 | 按课程准备 Linux、GPU 和主机内存 | 32 步版已公开；96 步候选已保存和恢复，质量仍未通过 |
+| 三款固定产物推理 | 下载校验、自定义提问、显存与计时 | Linux、32GB RTX 5090、指定 packed 权重和匹配环境 | 权重均已公开；部署入口与验证范围见下表 |
 | 122B 校准与 CPU 初始化 | 重建校准数据、拟合低比特权重、组装 seed | 原始 BF16 模型、大内存 Linux CPU | 数据与初始化课程已发布；完整恢复训练链尚未跑通 |
 
-35B 指 Qwen3.5-35B-A3B，122B 指 Qwen3.5-122B-A10B。两者都是 MoE，总参数量和每 token 激活的参数量不同。单卡运行 122B MoE，不等于能运行同规模的稠密模型。
+27B 指稠密模型 Qwen3.8-27B；35B 和 122B 分别是 Qwen3.5-35B-A3B、Qwen3.5-122B-A10B，都是 MoE。MoE 的总参数量和每 token 激活的参数量不同，不能按模型名称里的 B 数直接排序生成速度。
 
-主课程的 35B 全专家权重 QAT 会更新 FP32 主权重，在每次前向时重新投影到三值网格。122B 走的是另一条路线：冻结三值专家和非专家 4bit 权重，只训练 rank-8 补偿。具体方法见 [METHOD.md](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/METHOD.md)。
+主课程的 35B 全专家 QAT 会更新 FP32 主权重，每次前向重新投影到三值网格。公开的 **R35-8192 是 INT2 专家加 rank-16 补偿**，与这条尚未完成的训练路线不同。122B 则冻结三值专家和非专家 4bit 权重，只训练 rank-8 补偿。方法对照见 [METHOD.md](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/METHOD.md)，27B 从[小机制课程](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/courses/qwen38_bonsai2/README.md)开始。
 
 ## 跑完编码实验之后
 
@@ -40,6 +43,22 @@ Bonsai 风格量化教学有三值编码、量化感知训练（QAT）和压缩�
 5. 读[实验索引](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/experiments/README.md)，分开记录训练、数值检查、能力评测和计时结果。
 
 完整的 35B 训练很吃显存，不能按部署时的占用来准备机器。公开记录中的专家训练状态约 480GiB，两步实测峰值每卡约 247.5GiB，完整检查点约 360GiB/份。这也是完整训练路线使用 2×B300 的原因。手头显卡装不下时，可以先做 CPU 练习、读代码。
+
+## 三款模型怎样部署，速度多少
+
+先完成[一次环境安装](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/DEPLOYMENT.md)，再复制对应模型的下载与运行命令。35B 提供常驻终端聊天；122B 和 27B 提供自定义问题入口。它们是自定义压缩格式，不能直接交给标准 `AutoModel`、llama.cpp 或 `vllm serve`。
+
+| 公开产物 | 单卡 5090 速度记录 | 部署入口 |
+|---|---|---|
+| 35B · R35-8192 | 短上下文 **59.33**、4K **49.85 token/s**；历史固定 64 步热解码 | [下载与常驻聊天](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/DEPLOYMENT.md#35b) |
+| 122B · native4095 | 历史短请求 CLI **21.72–24.00 token/s** | [下载与自定义提问](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/DEPLOYMENT.md#122b) |
+| 27B · step32 | 公开 `decode_rotate` 路径短提示热解码 **9.37 token/s** | [下载与自定义提问](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/DEPLOYMENT.md#27b) |
+
+**测试口径不同，这不是统一榜单。** 35B 的历史测试遇 EOS 仍跑满 64 步，新便携入口尚未 GPU 复验；122B 的范围对应原预填充与分组预填充 CLI 历史对照，不是当前 `infer_hf.py` 的新测速。27B 只测八条短开发题的热计算，共用生成代码已测，单独交互 CLI 未直接 GPU 调用。
+
+27B 的私有 GDN Graph 实验测得 **9.40 → 13.02 token/s**，但便携 Graph 入口尚未完成 GPU 验证，本轮不发布；部署仍用上表的 9.37 路径。[收尾记录](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/experiments/2026-10-20-q38-inference-closeout.md)保留结果。本轮已停止继续优化，速度或数值一致都不代表量化质量达标。
+
+下载大小、固定版本和上下文配置见[部署指南](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/DEPLOYMENT.md)；显存与完整计时范围见[参数参考](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/DEPLOYMENT_REFERENCE.md)。35B 可先用 4K 上下文和 256 输出上限；27B 当前入口含模板输入最多 128 token，输出最多 64 token。
 
 ## 怎样阅读 122B 单卡案例
 
@@ -55,15 +74,15 @@ python scripts/check_public_evidence.py
 
 这套文件与摘要检查也配置在 [GitHub Actions](https://github.com/adenzhou1350/bonsai-qat-teaching/actions/workflows/public-evidence.yml) 中，分别在 Linux 和 Windows 环境执行。
 
-[122B 运行说明](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/experimental122/README.md)记录了新旧两版固定产物。新版已完成训练、独立数值检查和单张 RTX 5090 推理，也做了四组公开开发评测。四组结果都低于对应原生 BF16 基线，质量未达标。
+[122B 运行说明](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/experimental122/README.md)记录了新旧两版固定产物。新版已完成训练、独立数值检查和单张 RTX 5090 推理；四组公开开发评测都低于对应原生 BF16 基线，质量未达标。
 
-仓库没有提供模型权重。要运行这个案例，需要另行取得与所选 manifest 对应的 packed 权重，不能直接传入原始 BF16 模型。仅克隆仓库，也还无法从头重建记录中的 122B 产物。完整可移植训练链路和质量复刻还缺哪些部分，见 [122B 实验记录](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/experiments/122B.md)。
+三款权重现在均已在 Hugging Face 公开，下载地址与固定提交见[发布目录](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/model-releases.json)。122B 公开包使用 `infer_hf.py`，旧 `infer.py` 和 HTTP 入口不能直接加载新清单。完整训练与质量复刻的缺项仍见 [122B 实验记录](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/experiments/122B.md)。
 
-最近的 HTTP 实验用了四个闭环客户端，原预填充与可选分组预填充的合计输出吞吐为 21.01 / 23.30 tokens/s。这是 8 条固定提示反复请求的观测结果，不是每个用户都能获得的生成速度。256 条正式请求中有 12 条与旧 CLI 的完整输出 token 序列不同，原版和优化版都出现差异，严格输出一致性验收未通过。
+历史 HTTP 实验的四客户端合计吞吐为 21.01 / 23.30 token/s，不能当作每个用户的生成速度。256 条正式请求中有 12 条与旧 CLI 的完整输出 token 序列不同，严格输出一致性验收未通过；它不是上表公开包的已验证服务。
 
-读速度数字时，要一起看权重版本、输入和输出长度、并发数，以及计时是否包含预填充和 Graph 录制。显存也有不同口径：模型持久存储约 28.10 GiB，HTTP 已采样 NVML used 峰值约 30.64 GiB，驱动另保留约 0.484 GiB。不能只拿权重大小估算显卡要求。分数、显存、CLI 与 HTTP 的完整解释放在[结果说明](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/RESULTS.md)，具体定位过程见[推理适配实验](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/experiments/INFERENCE.md)。
+显存同样要看口径：122B 模型持久存储约 28.10 GiB，历史 HTTP 采样 NVML used 峰值约 30.64 GiB，驱动另保留约 0.484 GiB。分数、显存、CLI 与 HTTP 的完整解释见[结果说明](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/RESULTS.md)。
 
-本轮研究已暂停，已有代码、证据和检查点保留。35B 全专家训练尚未完成；122B 的[CPU 初始化课程](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/courses/122b/seed_cpu/README.md)已经发布，完整教师生成、恢复训练和新产物部署仍未连通。可以按已验证的范围学习，不必把历史记录里的“等待”理解成当前仍在运行。
+已有代码、证据和检查点保留，35B 全专家训练与 122B 研究继续暂停。122B 的[CPU 初始化课程](https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/courses/122b/seed_cpu/README.md)已发布，从原模型重新训练到新部署产物的完整课程仍未连通；历史记录里的“等待”不表示当前仍在运行。
 
 ## 留下你自己的实验记录
 
@@ -71,4 +90,4 @@ python scripts/check_public_evidence.py
 
 整理结果时，分别回答四个问题：编码能否还原？恢复后下一步是否相同？独立评测是否达标？速度是在什么条件下测得的？
 
-阅读入口与公开材料已核对至 2026 年 10 月 19 日，仓库版本为 [`c23090f`](https://github.com/adenzhou1350/bonsai-qat-teaching/tree/c23090f9da97aae1e02d3f0915f4af0965411cc0)。实验状态仍以 2026 年 10 月 10 日的收尾记录为准：研究已暂停，尚未完整复现 Bonsai 训练方案，也没有通过原定质量门槛。
+阅读入口与公开材料核对至 **2026 年 10 月 21 日**，对应教学仓库 [`9a96af3`](https://github.com/adenzhou1350/bonsai-qat-teaching/tree/9a96af3a60fe34c7965f08158e10e9b60e8ebb25)。三款部署权重已公开，本轮优化已停止；尚未完整复现 Bonsai 官方训练方案，也没有通过原定质量门槛。
