@@ -1,5 +1,5 @@
 {
-  "checked_date": "2026-10-19",
+  "checked_date": "2026-10-28",
   "projects": [
     {
       "repository": "vllm-project/vllm",
@@ -71,9 +71,15 @@
       "repository": "tile-ai/tilelang",
       "name": "TileLang",
       "area": "GPU 编译器",
-      "description": "修复参数映射、网格同步、嵌套加载谓词与标量视图的位数处理。",
+      "description": "修复 TMA 描述符识别、参数映射、网格同步与加载谓词等问题。",
       "featured": true,
       "pull_requests": [
+        {
+          "number": 3484,
+          "title": "[BugFix] Only record validated TMA descriptor names",
+          "url": "https://github.com/tile-ai/tilelang/pull/3484",
+          "merged_at": "2026-10-28T09:12:38Z"
+        },
         {
           "number": 3414,
           "title": "[BugFix] Preserve parameter identity in NVRTC and CuTeDSL wrappers",
@@ -149,14 +155,107 @@
       "repository": "kvcache-ai/Mooncake",
       "name": "Mooncake",
       "area": "分布式传输",
-      "description": "为池化 TCP 传输按排队字节数限制请求准入。",
+      "description": "限制池化 TCP 的排队字节数，并修复文件后端重建淘汰顺序时的排序。",
       "featured": false,
       "pull_requests": [
+        {
+          "number": 4688,
+          "title": "[Bugfix] Snapshot file birth times before reconstructing eviction order",
+          "url": "https://github.com/kvcache-ai/Mooncake/pull/4688",
+          "merged_at": "2026-10-19T07:43:52Z"
+        },
         {
           "number": 4063,
           "title": "[TE] Bound pooled TCP admission by queued bytes",
           "url": "https://github.com/kvcache-ai/Mooncake/pull/4063",
           "merged_at": "2026-09-24T04:01:17Z"
+        }
+      ]
+    },
+    {
+      "repository": "lancedb/lancedb",
+      "name": "LanceDB",
+      "area": "向量数据库",
+      "description": "修复远程索引等待、查询流超时，以及 Python、Node 的参数传递与错误处理。",
+      "featured": false,
+      "pull_requests": [
+        {
+          "number": 4538,
+          "title": "fix(python): handle empty batch iterables with a schema",
+          "url": "https://github.com/lancedb/lancedb/pull/4538",
+          "merged_at": "2026-10-22T19:19:07Z"
+        },
+        {
+          "number": 4506,
+          "title": "fix(rust): finish query streams after a zero-duration timeout",
+          "url": "https://github.com/lancedb/lancedb/pull/4506",
+          "merged_at": "2026-10-22T19:14:46Z"
+        },
+        {
+          "number": 4495,
+          "title": "fix(python): propagate invalid index wait_timeout errors",
+          "url": "https://github.com/lancedb/lancedb/pull/4495",
+          "merged_at": "2026-10-22T19:14:31Z"
+        },
+        {
+          "number": 4492,
+          "title": "fix(node): prevent table listing limits from wrapping",
+          "url": "https://github.com/lancedb/lancedb/pull/4492",
+          "merged_at": "2026-10-22T19:14:17Z"
+        },
+        {
+          "number": 4483,
+          "title": "fix(python): honor namespace table storage options",
+          "url": "https://github.com/lancedb/lancedb/pull/4483",
+          "merged_at": "2026-10-22T19:14:03Z"
+        },
+        {
+          "number": 4480,
+          "title": "fix(node): preserve caller-owned storage options",
+          "url": "https://github.com/lancedb/lancedb/pull/4480",
+          "merged_at": "2026-10-22T19:13:47Z"
+        },
+        {
+          "number": 4479,
+          "title": "fix(node): preserve options when namespace is omitted",
+          "url": "https://github.com/lancedb/lancedb/pull/4479",
+          "merged_at": "2026-10-22T19:13:31Z"
+        },
+        {
+          "number": 4457,
+          "title": "fix(node): respect transformers tokenizer option",
+          "url": "https://github.com/lancedb/lancedb/pull/4457",
+          "merged_at": "2026-10-22T18:45:20Z"
+        },
+        {
+          "number": 4456,
+          "title": "fix(remote): preserve request IDs in multipart response errors",
+          "url": "https://github.com/lancedb/lancedb/pull/4456",
+          "merged_at": "2026-10-22T18:45:03Z"
+        },
+        {
+          "number": 4455,
+          "title": "fix: return a Python error when querying a closed table",
+          "url": "https://github.com/lancedb/lancedb/pull/4455",
+          "merged_at": "2026-10-22T18:44:49Z"
+        },
+        {
+          "number": 4454,
+          "title": "fix: validate Python read consistency intervals",
+          "url": "https://github.com/lancedb/lancedb/pull/4454",
+          "merged_at": "2026-10-22T18:44:35Z"
+        },
+        {
+          "number": 4430,
+          "title": "fix: return errors for unsupported remote alteration types",
+          "url": "https://github.com/lancedb/lancedb/pull/4430",
+          "merged_at": "2026-10-22T18:43:08Z"
+        },
+        {
+          "number": 4428,
+          "title": "fix: wait for the submitted remote index job",
+          "url": "https://github.com/lancedb/lancedb/pull/4428",
+          "merged_at": "2026-10-22T18:42:52Z"
         }
       ]
     },
@@ -179,9 +278,15 @@
       "repository": "ROCm/aiter",
       "name": "AITER",
       "area": "GPU 算子",
-      "description": "修复 OPUS 缓存策略注册、MXFP4 MoE 旧生成文件残留与 HSTU 参考函数填充值。",
+      "description": "修复三维广播形状检查、缓存策略注册、旧生成文件残留与参考函数填充值。",
       "featured": false,
       "pull_requests": [
+        {
+          "number": 5948,
+          "title": "[HIP] Fix 3D binary-op broadcast guard for incompatible shapes",
+          "url": "https://github.com/ROCm/aiter/pull/5948",
+          "merged_at": "2026-10-28T03:35:32Z"
+        },
         {
           "number": 5936,
           "title": "[HIP] fix: remove stale MXFP4 MoE aux generated sources",
@@ -218,6 +323,21 @@
       ]
     },
     {
+      "repository": "deepspeedai/DeepSpeed",
+      "name": "DeepSpeed",
+      "area": "分布式训练",
+      "description": "修复标量参数在模型初始化与 ZeRO 广播时的字节视图转换。",
+      "featured": false,
+      "pull_requests": [
+        {
+          "number": 8642,
+          "title": "Fix scalar parameter byte-view broadcasts",
+          "url": "https://github.com/deepspeedai/DeepSpeed/pull/8642",
+          "merged_at": "2026-10-27T00:33:51Z"
+        }
+      ]
+    },
+    {
       "repository": "mlc-ai/TIRx-harness",
       "name": "TIRx-harness",
       "area": "CUDA 检查工具",
@@ -242,9 +362,15 @@
       "repository": "juicedata/juicefs",
       "name": "JuiceFS",
       "area": "分布式存储",
-      "description": "修复对象存储读写、资源清理、备份隔离及 Python 和 Java SDK 问题。",
+      "description": "修复对象存储与 SDK 的读写、资源清理、备份隔离及加密键长度检查。",
       "featured": false,
       "pull_requests": [
+        {
+          "number": 7692,
+          "title": "meta: reject encrypted keys shorter than their nonce",
+          "url": "https://github.com/juicedata/juicefs/pull/7692",
+          "merged_at": "2026-10-22T01:51:22Z"
+        },
         {
           "number": 7693,
           "title": "vfs: rate-limit flush timeout stack dumps",
@@ -341,9 +467,63 @@
       "repository": "fsspec/filesystem_spec",
       "name": "fsspec",
       "area": "文件系统接口",
-      "description": "修复批量复制的后端混用、HTTP 读写选项、文件块缓存和读写边界。",
+      "description": "修复 HTTP 流、文件缓存、异步读写与预取任务清理，保留调用方的读写选项。",
       "featured": false,
       "pull_requests": [
+        {
+          "number": 2376,
+          "title": "Fix async get with relative filename destinations",
+          "url": "https://github.com/fsspec/filesystem_spec/pull/2376",
+          "merged_at": "2026-10-27T13:54:04Z"
+        },
+        {
+          "number": 2340,
+          "title": "Drain adaptive prefetch tasks after reaching EOF",
+          "url": "https://github.com/fsspec/filesystem_spec/pull/2340",
+          "merged_at": "2026-10-26T13:59:25Z"
+        },
+        {
+          "number": 2364,
+          "title": "Reject reads on closed asynchronous HTTP streams",
+          "url": "https://github.com/fsspec/filesystem_spec/pull/2364",
+          "merged_at": "2026-10-22T20:31:46Z"
+        },
+        {
+          "number": 2297,
+          "title": "fix: stream content-encoded responses in sync HTTP",
+          "url": "https://github.com/fsspec/filesystem_spec/pull/2297",
+          "merged_at": "2026-10-21T14:26:32Z"
+        },
+        {
+          "number": 2300,
+          "title": "Preserve relative URL text when mapping rsync paths",
+          "url": "https://github.com/fsspec/filesystem_spec/pull/2300",
+          "merged_at": "2026-10-21T13:19:19Z"
+        },
+        {
+          "number": 2296,
+          "title": "fix: decompress whole-file cache downloads made by cat",
+          "url": "https://github.com/fsspec/filesystem_spec/pull/2296",
+          "merged_at": "2026-10-20T16:14:54Z"
+        },
+        {
+          "number": 2341,
+          "title": "Keep filecache opens valid when entries expire during I/O",
+          "url": "https://github.com/fsspec/filesystem_spec/pull/2341",
+          "merged_at": "2026-10-20T15:42:43Z"
+        },
+        {
+          "number": 2259,
+          "title": "Close owned synchronous HTTP download files",
+          "url": "https://github.com/fsspec/filesystem_spec/pull/2259",
+          "merged_at": "2026-10-20T14:26:12Z"
+        },
+        {
+          "number": 2314,
+          "title": "Return after completing DBFS partial-delete retries",
+          "url": "https://github.com/fsspec/filesystem_spec/pull/2314",
+          "merged_at": "2026-10-19T20:39:18Z"
+        },
         {
           "number": 2302,
           "title": "Reject mixed backends in generic copy batches",
@@ -470,6 +650,21 @@
       ]
     },
     {
+      "repository": "spf13/pflag",
+      "name": "pflag",
+      "area": "Go 命令行工具",
+      "description": "修复复制到 Go FlagSet 时字符串当前值未被保留的问题。",
+      "featured": false,
+      "pull_requests": [
+        {
+          "number": 520,
+          "title": "Preserve current string values in CopyToGoFlagSet",
+          "url": "https://github.com/spf13/pflag/pull/520",
+          "merged_at": "2026-10-19T18:56:41Z"
+        }
+      ]
+    },
+    {
       "repository": "openclaw/openclaw",
       "name": "OpenClaw",
       "area": "Agent 运行时",
@@ -481,6 +676,51 @@
           "title": "fix(update): cancel Gateway extended-stable lookup",
           "url": "https://github.com/openclaw/openclaw/pull/161067",
           "merged_at": "2026-10-16T19:32:38Z"
+        }
+      ]
+    },
+    {
+      "repository": "eyuansu62/agent-retrieval-bench",
+      "name": "Agent Retrieval Bench",
+      "area": "Agent 检索评测",
+      "description": "修复评测读取范围、token 计费与断点恢复，保留失败尝试和索引构建记录。",
+      "featured": false,
+      "pull_requests": [
+        {
+          "number": 16,
+          "title": "Preserve cumulative closed-tool resume checkpoints and accounting",
+          "url": "https://github.com/eyuansu62/agent-retrieval-bench/pull/16",
+          "merged_at": "2026-10-27T10:47:33Z"
+        },
+        {
+          "number": 15,
+          "title": "Fix grep snippet offsets after Unicode lowercasing",
+          "url": "https://github.com/eyuansu62/agent-retrieval-bench/pull/15",
+          "merged_at": "2026-10-24T01:57:48Z"
+        },
+        {
+          "number": 13,
+          "title": "Reject duplicate sample IDs before closed-tool evaluation",
+          "url": "https://github.com/eyuansu62/agent-retrieval-bench/pull/13",
+          "merged_at": "2026-10-23T16:45:52Z"
+        },
+        {
+          "number": 6,
+          "title": "Use the charged tokenizer for closed-tool read prefixes",
+          "url": "https://github.com/eyuansu62/agent-retrieval-bench/pull/6",
+          "merged_at": "2026-10-22T12:53:05Z"
+        },
+        {
+          "number": 4,
+          "title": "Limit scripted read scoring to the observed token prefix",
+          "url": "https://github.com/eyuansu62/agent-retrieval-bench/pull/4",
+          "merged_at": "2026-10-22T06:41:05Z"
+        },
+        {
+          "number": 3,
+          "title": "Make RepoMap symbol graph construction deterministic",
+          "url": "https://github.com/eyuansu62/agent-retrieval-bench/pull/3",
+          "merged_at": "2026-10-22T06:40:18Z"
         }
       ]
     },
@@ -502,28 +742,28 @@
   ],
   "recent": [
     {
-      "repository": "fla-org/flash-linear-attention",
-      "number": 1419,
-      "title": "修复变长序列的状态分配",
-      "description": "打包输入包含多条序列时，修复 IPLR 最终状态缓冲区只按批次分配的问题。",
-      "url": "https://github.com/fla-org/flash-linear-attention/pull/1419",
-      "merged_at": "2026-10-17T10:20:46Z"
+      "repository": "tile-ai/tilelang",
+      "number": 3484,
+      "title": "先验证类型，再记录 TMA 描述符",
+      "description": "避免普通指针因名称相近被误认作 TMA 描述符，修复包装器构建失败。",
+      "url": "https://github.com/tile-ai/tilelang/pull/3484",
+      "merged_at": "2026-10-28T09:12:38Z"
     },
     {
-      "repository": "agronholm/anyio",
-      "number": 1410,
-      "title": "修复任务完成与取消之间的竞态",
-      "description": "修复 Future 取消与结果写入的竞态，避免异常连带取消 Portal 中的任务组。",
-      "url": "https://github.com/agronholm/anyio/pull/1410",
-      "merged_at": "2026-10-17T23:09:36Z"
+      "repository": "eyuansu62/agent-retrieval-bench",
+      "number": 16,
+      "title": "断点续跑保留完整评测记录",
+      "description": "保留子集续跑之前的检查点和失败成本，并校验配置与输入，避免恢复时丢失历史或混用结果。",
+      "url": "https://github.com/eyuansu62/agent-retrieval-bench/pull/16",
+      "merged_at": "2026-10-27T10:47:33Z"
     },
     {
-      "repository": "openclaw/openclaw",
-      "number": 161067,
-      "title": "Gateway 退出时取消更新请求",
-      "description": "让 Gateway 关闭时取消进行中的更新发现请求，避免随后继续查询精确版本。",
-      "url": "https://github.com/openclaw/openclaw/pull/161067",
-      "merged_at": "2026-10-16T19:32:38Z"
+      "repository": "deepspeedai/DeepSpeed",
+      "number": 8642,
+      "title": "让标量参数正常参与 ZeRO 广播",
+      "description": "标量参数转成字节视图前先补一维，修复模型初始化时的维度错误。",
+      "url": "https://github.com/deepspeedai/DeepSpeed/pull/8642",
+      "merged_at": "2026-10-27T00:33:51Z"
     }
   ]
 }

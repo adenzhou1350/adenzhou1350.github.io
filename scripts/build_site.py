@@ -17,7 +17,7 @@ from xml.sax.saxutils import escape as xml_escape
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "https://adenzhou1350.github.io"
-SITE_DATE = "2026-10-21"
+SITE_DATE = "2026-10-28"
 NAME = "周栩丞 · Aden Zhou"
 EMAIL = "aden1350@outlook.com"
 
@@ -312,7 +312,7 @@ def home(catalog, projects, contributions):
         <div class="ternary-equation" aria-hidden="true"><span>5 个三值编码</span><span>→</span><strong>1 byte</strong></div>
         <span class="work-media-caption">编码原理示意 · 实际模型还需尺度与其他权重</span>
       </div>
-      <div class="work-card-copy"><p class="eyebrow orange">LOW-BIT MODELS / 教学与实验</p><h3>Bonsai 低比特量化</h3><p class="work-card-description">在浏览器里试三值打包，再看 QAT 与单卡推理。27B、35B、122B 权重已公开，附下载和部署步骤。</p><p class="work-card-boundary">三款速度与测试口径不同；量化质量仍有限制，本轮优化已停止。</p><div class="work-card-actions"><a class="text-link" href="/learn/bonsai-low-bit/#ternary-demo">先试三值编码<span class="arrow" aria-hidden="true">→</span></a>{external(project_by_repo['bonsai-qat-teaching']['url'],'GitHub')}</div></div>
+      <div class="work-card-copy"><p class="eyebrow orange">LOW-BIT MODELS / 教学与实验</p><h3>Bonsai 低比特量化</h3><p class="work-card-description">在浏览器里试三值打包，再看 QAT 与单卡推理。27B、35B、122B 权重已公开，附下载和部署步骤。</p><p class="work-card-boundary">三款速度与测试口径不同；量化质量仍有限制，本轮优化已停止。</p><div class="work-card-actions">{external(project_by_repo['bonsai-qat-teaching']['deployment'],'下载与部署')}<a class="text-link" href="/learn/bonsai-low-bit/#ternary-demo">先试三值编码<span class="arrow" aria-hidden="true">→</span></a>{external(project_by_repo['bonsai-qat-teaching']['url'],'GitHub')}</div></div>
     </article>
     <article class="work-card">
       <div class="work-media jev-visual"><div class="work-media-topline"><span class="work-media-label">JEV / DECISION LAB</span><span>CPU 可试玩</span></div><img src="/assets/images/jev-sokoban.jpg" width="1264" height="1206" loading="lazy" alt="仓库随附的 Jev 推箱子教学演示，完整保留棋盘、候选动作和训练前后评测说明"><a class="work-media-caption" href="/assets/images/jev-sokoban.jpg" target="_blank" rel="noopener noreferrer">固定教学实验 · 查看完整截图 ↗<span class="sr-only">（新窗口）</span></a></div>
@@ -333,6 +333,8 @@ def project_page(projects):
     cards = []
     for item in projects:
         guide = external(item['guide'], item['guide_label']) if item['guide'].startswith('http') else f'<a class="text-link" href="{item["guide"]}">{item["guide_label"]}<span class="arrow">→</span></a>'
+        if item.get('deployment'):
+            guide = external(item['deployment'], '下载与部署') + guide
         cards.append(f'''<article class="project-page-card"><p class="eyebrow">{esc(item['category'])}</p><h2>{esc(item['name'])}</h2><span class="badge">{esc(item['status'])}</span><p style="margin-top:20px">{esc(item['description'])}</p><ul class="tag-list">{''.join(f'<li>{esc(tag)}</li>' for tag in item['tags'])}</ul><p class="project-boundary">{esc(item['boundary'])}</p><div class="project-links">{external(item['url'],'GitHub 仓库')}{guide}</div></article>''')
     body = page_hero("PROJECTS / BUILD & EXPLORE", "项目", "我做的工具和模型实验，也包括在其他开源项目上做的扩展。使用方法和当前进度都在各自的仓库里。", f'{len(projects):02d} PROJECTS') + '<div class="shell page-content"><div class="project-page-grid">' + ''.join(cards) + '</div></div>'
     return page("项目", "Jev 决策模型实战、Bonsai 低比特教学、minimind-diffusion 与 Agent 工具：项目介绍、使用方法和当前进度。", body, "/projects/", "projects")
@@ -366,7 +368,10 @@ def article_page(item):
     content, toc = markdown((ROOT / item['source']).read_text(encoding='utf-8-sig'))
     label = '博客' if item['section'] == 'blog' else '教学'
     original = f'<a href="{esc(item["source_url"])}">相关原始记录 ↗</a>' if item.get('source_url') else ''
-    body = f'''<div class="shell"><header class="article-top"><div class="breadcrumb"><a href="/">首页</a><span>/</span><a href="/{item['section']}/">{label}</a></div><p class="eyebrow orange">{esc(item['category'])} / {esc(item['kind'])}</p><h1>{esc(item['title'])}</h1><p class="article-deck">{esc(item['description'])}</p><div class="article-meta"><span>周栩丞 · Aden</span><time datetime="{item['date']}">{item['date']}</time><span>约 {item['minutes']} 分钟</span></div></header><div class="article-layout"><article class="article-body">{content}<div class="article-end"><p>本文使用 AI 工具辅助整理。实验设置和测试结果见正文。</p>{original}<a href="mailto:{EMAIL}">讨论这个问题 ↗</a></div></article><aside class="article-aside"><p class="eyebrow">ON THIS PAGE / 目录</p><ol class="toc">{''.join(f'<li><a href="#{anchor}">{esc(title)}</a></li>' for anchor,title in toc)}</ol><p class="aside-note">{esc(item['kind'])}</p></aside></div></div>'''
+    dates = f'<span>发布于 <time datetime="{esc(item["date"])}">{esc(item["date"])}</time></span>'
+    if item.get('updated') and item['updated'] != item['date']:
+        dates += f'<span>更新于 <time datetime="{esc(item["updated"])}">{esc(item["updated"])}</time></span>'
+    body = f'''<div class="shell"><header class="article-top"><div class="breadcrumb"><a href="/">首页</a><span>/</span><a href="/{item['section']}/">{label}</a></div><p class="eyebrow orange">{esc(item['category'])} / {esc(item['kind'])}</p><h1>{esc(item['title'])}</h1><p class="article-deck">{esc(item['description'])}</p><div class="article-meta"><span>周栩丞 · Aden</span>{dates}<span>约 {item['minutes']} 分钟</span></div></header><div class="article-layout"><article class="article-body">{content}<div class="article-end"><p>本文使用 AI 工具辅助整理。实验设置和测试结果见正文。</p>{original}<a href="mailto:{EMAIL}">讨论这个问题 ↗</a></div></article><aside class="article-aside"><p class="eyebrow">ON THIS PAGE / 目录</p><ol class="toc">{''.join(f'<li><a href="#{anchor}">{esc(title)}</a></li>' for anchor,title in toc)}</ol><p class="aside-note">{esc(item['kind'])}</p></aside></div></div>'''
     return page(item['title'], item['description'], body, article_url(item), item['section'], item)
 
 

@@ -1,5 +1,18 @@
 [
   {
+    "slug": "agent-retrieval-read-budget",
+    "section": "blog",
+    "title": "Agent 没读到的内容，不该影响检索结果",
+    "description": "工具只返回预算内的文件开头，脚本评分却看到了未读的尾部。记录两次修复：让评分遵守可见范围，再统一读取内容的计数与截断规则。",
+    "category": "开源笔记",
+    "date": "2026-10-28",
+    "minutes": 5,
+    "tags": ["Agent", "检索评测", "Token 预算", "开源贡献"],
+    "source": "content/posts/agent-retrieval-read-budget.md",
+    "kind": "PR 复盘",
+    "source_url": "https://github.com/eyuansu62/agent-retrieval-bench/pull/6"
+  },
+  {
     "slug": "bonsai-5090-experiment",
     "section": "blog",
     "title": "单张 5090 跑 122B MoE：显存、分数和没用上的优化",

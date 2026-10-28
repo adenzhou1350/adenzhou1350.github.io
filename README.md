@@ -11,7 +11,7 @@ AI Infra 与具身 Agent 的作品集、博客和教学空间。
 - `/learn/`：Jev 决策模型、Bonsai 低比特专题和浏览器交互实验。Bonsai 主按钮直达三值编码实验，旁边保留完整导读与仓库入口。
 - `/learn/jev-decision-model/`：从随附的 CPU 推箱子策略进入候选打分、训练和页面按钮选择。
 - `/learn/bonsai-low-bit/`：先在浏览器里操作三值打包并复制当前 Python 示例，再进入 CPU / QAT 教学与 27B、35B、122B 单卡部署。`#ternary-demo` 可直接打开编码实验。
-- `/contributions/`：参与贡献的开源项目。首页展示 6 个重点项目，完整页列出已核对的 18 个项目；点击卡片，直接查看本人在对应仓库已合并的 PR。近期改动直链 FLA、AnyIO、OpenClaw 的具体修复，日期按北京时间显示。
+- `/contributions/`：参与贡献的开源项目。首页展示 6 个重点项目，完整页列出已核对的 22 个项目；点击卡片，直接查看本人在对应仓库已合并的 PR。近期改动直链 TileLang、Agent Retrieval Bench、DeepSpeed 的具体修复，日期按北京时间显示。
 - `/about/`：公开职业经历、教育、TileLang 修复与 5090 量化案例入口。首页联系区和关于页显示现有公开邮箱，方便没有默认邮件客户端的读者直接复制。
 
 纯静态 HTML/CSS/JavaScript；Python 标准库生成内容页。访问网站不需要 Python、账号或后台。保留旧 `details.html` 地址，以便已有分享链接继续可用。
@@ -46,6 +46,7 @@ python -X utf8 scripts/new_content.py blog my-first-note "文章标题" --descri
 
 | 栏目 | 文章 / 专题 | 源文件 |
 |---|---|---|
+| 博客 | Agent 没读到的内容，不该影响检索结果 | `content/posts/agent-retrieval-read-budget.md` |
 | 博客 | 单张 5090 跑 122B MoE：显存、分数和没用上的优化 | `content/posts/bonsai-5090-experiment.md` |
 | 博客 | TileLang 同步修复：一个 block 报到了两次 | `content/posts/tilelang-grid-barrier.md` |
 | 博客 | 截图更新了，为什么评分还是旧的？ | `content/posts/image-cache-identity.md` |
@@ -108,7 +109,7 @@ assets/images/                已公开项目的开发演示图片
 - Bonsai 导读核对至 2026-10-21：三款权重已公开。35B 历史固定步数热解码 59.33 / 49.85、122B 历史短请求 CLI 21.72–24.00、27B 公开路径 9.37 token/s，测试口径不同；27B 私有 Graph 13.02 仅为实验结论，便携 GPU 未验证，不发布。本轮优化已停止。保留 R35-8192 与未完成全专家 QAT 的区别、便携入口验证范围及质量限制，历史博客只补当前部署入口。
 - Bonsai 编码小实验的随附 Python 示例只使用标准功能。仓库 CPU 检查点测试使用 POSIX 目录同步，教程按 Linux CPU 路线说明；没有宣称 Windows 原生支持或完整 122B 一键复刻。
 - 三值编码交互只在浏览器本地计算，不调用模型或估算显存。反馈链接打开现有公开邮箱，预填文章链接与当前输入，由读者自行检查发送；没有自动收集、上传或新增后台。
-- 贡献项目名单于 2026-10-19 按 GitHub 公开搜索与 PR API 核对，共 18 个仓库、56 条已合并 PR；各条原始链接和合并时间保存在 `content/contributor-projects.json`。Contributor 表示有公开合并贡献，不表示维护者或核心成员身份。项目卡片限定 `author:adenzhou1350`、`is:pr`、`is:public`、`is:merged` 和对应的 `repo:`，打开实时结果；全量入口排除本人名下仓库。页面展示的项目数是核对日快照，不显示静态 PR 总数。`recent` 是人工选择的三条近期改动，并非全量动态；只从已核对的公开合并记录中选择。新增项目或更换近期改动时核对合并证据、更新日期并重建；已有项目后续合并的 PR 会自动出现在 GitHub 查询中。`contributions.json` 和 `oss-stats.json` 仅保留为历史数据。
+- 贡献项目名单于 2026-10-28 按 GitHub 公开搜索与 PR API 核对，共 22 个仓库、90 条已合并 PR；各条原始链接和合并时间保存在 `content/contributor-projects.json`。Contributor 表示有公开合并贡献，不表示维护者或核心成员身份。项目卡片限定 `author:adenzhou1350`、`is:pr`、`is:public`、`is:merged` 和对应的 `repo:`，打开实时结果；全量入口排除本人名下仓库。页面展示的项目数是核对日快照，不显示静态 PR 总数。`recent` 是人工选择的三条近期改动，并非全量动态；只从已核对的公开合并记录中选择。新增项目或更换近期改动时核对合并证据、更新日期并重建；已有项目后续合并的 PR 会自动出现在 GitHub 查询中。`contributions.json` 和 `oss-stats.json` 仅保留为历史数据。
 - Jev 导读依据公开仓库 `3a55d60` 的三节课、安装说明与实验记录。推箱子为独立 CNN；页面按钮使用冻结的 Qwen3.5-0.8B 与共享打分头，保留模型快照、合成数据和评测范围。随附页面 head 的原始底座 revision 未公开，默认下载后按训练个人 head 的路线操作，匹配文件指纹的快照可走随附 head 路线。演示截图取自该仓库 `docs/assets/demo-sokoban.jpg`，按项目 MIT 许可使用；不是本站在线模型服务。
 - 保留的 Nest 历史图片取自其公开仓库 `docs/assets/overview.jpg`，使用合成示例；目前不在公开页面展示。
 - 博客保留实验条件与失败边界；浏览器缓存演示仅解析字符串，不调用模型，也不提供性能数字。
@@ -116,6 +117,8 @@ assets/images/                已公开项目的开发演示图片
 - 2026-10-13 补充三个公开仓库的使用与证据入口：Bonsai 的标准库检查只校验公开文件和摘要算术；kernel_opt_agent 入口区分已试跑的轻量快照与仅核对源码的集成分支；minimind-diffusion 的出处页区分不同规模、不同训练阶段的历史观察。网站没有把这些整理写成新的性能结果。
 - 原有私人试学课程未复制到这个公开网站。
 - 关于页和简历沿用原站已公开资料；这次没有新增电话或外部追踪服务。
+- 2026-10-28 的 Agent 检索案例依据公开已合并 PR #4/#6，补充 #13/#16。PR #6 的前后对照中，101 个公开样本的最终选择和非延迟指标不变；389/545 到 0/545 表示按项目正则计数的正文预算越界次数，不是供应商账单、模型准确率提升或本轮重跑结果。
+- Bonsai 首页与项目卡直链现行部署指南；三款 Hugging Face 固定版本于 2026-10-28 核对可公开访问，未下载或重跑模型。文章元数据显示原发布日和实际内容更新日，入口核对不改写实验日期。
 
 ## 发布检查
 

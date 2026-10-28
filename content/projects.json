@@ -30,6 +30,7 @@
     "status": "公开教学 · 实验记录",
     "boundary": "三款需各自的压缩加载器，速度口径不同，量化质量仍有限制。35B 新便携入口待 GPU 复验；本轮优化已停止。公开 R35-8192 不等同于尚未完成的全专家 QAT。",
     "url": "https://github.com/adenzhou1350/bonsai-qat-teaching",
+    "deployment": "https://github.com/adenzhou1350/bonsai-qat-teaching/blob/main/docs/DEPLOYMENT.md",
     "guide": "/learn/bonsai-low-bit/",
     "guide_label": "进入教程与编码实验"
   },
