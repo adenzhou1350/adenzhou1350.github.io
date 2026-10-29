@@ -14,6 +14,17 @@ spec.loader.exec_module(build)
 
 
 class ContentPipelineTests(unittest.TestCase):
+    def test_contribution_stories_only_link_verified_prs_and_skip_drafts(self):
+        snapshot = {'projects': [{'pull_requests': [{'url': 'https://github.com/example/repo/pull/1'}]}]}
+        story = {'slug': 'case', 'date': '2026-10-29', 'contribution_prs': ['https://github.com/example/repo/pull/1']}
+        draft = {'slug': 'private-draft', 'draft': True, 'contribution_prs': ['https://github.com/unknown/repo/pull/2']}
+        stories, by_pr = build.contribution_stories([story, draft], snapshot)
+        self.assertEqual(stories, [story])
+        self.assertEqual(by_pr[story['contribution_prs'][0]], [story])
+        for invalid in ([*story['contribution_prs'], *story['contribution_prs']], ['https://github.com/unknown/repo/pull/2'], 'not-a-list'):
+            with self.subTest(prs=invalid), self.assertRaises(ValueError):
+                build.contribution_stories([{**story, 'contribution_prs': invalid}], snapshot)
+
     def test_new_content_is_a_draft_and_duplicate_preserves_the_author_text(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

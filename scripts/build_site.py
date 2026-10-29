@@ -17,7 +17,7 @@ from xml.sax.saxutils import escape as xml_escape
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "https://adenzhou1350.github.io"
-SITE_DATE = "2026-10-28"
+SITE_DATE = "2026-10-29"
 NAME = "周栩丞 · Aden Zhou"
 EMAIL = "aden1350@outlook.com"
 
@@ -229,6 +229,9 @@ def page(title, description, body, path="/", active="", article=None, noindex=Fa
     if article and article['slug'] == 'fsspec-relative-path':
         versions = {suffix: hashlib.sha256((ROOT / f'assets/path-demo.{suffix}').read_text(encoding='utf-8').encode('utf-8')).hexdigest()[:12] for suffix in ('css', 'js')}
         lesson_assets = f'<link rel="stylesheet" href="/assets/path-demo.css?v={versions["css"]}"><script defer src="/assets/path-demo.js?v={versions["js"]}"></script>'
+    if path == '/contributions/stories/':
+        versions = {suffix: hashlib.sha256((ROOT / f'assets/pr-stories.{suffix}').read_text(encoding='utf-8').encode('utf-8')).hexdigest()[:12] for suffix in ('css', 'js')}
+        lesson_assets += f'<link rel="stylesheet" href="/assets/pr-stories.css?v={versions["css"]}"><script defer src="/assets/pr-stories.js?v={versions["js"]}"></script>'
     return f'''<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{esc(title)} · {esc(NAME)}</title><meta name="description" content="{esc(description)}">{robots_meta}<meta name="theme-color" content="#f5f4ef"><link rel="canonical" href="{canonical}"><meta property="og:type" content="{'article' if article else 'website'}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(description)}"><meta property="og:url" content="{canonical}"><meta property="og:locale" content="zh_CN"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css?v={style_version}"><link rel="alternate" type="application/rss+xml" title="Aden 的博客" href="/feed.xml"><script type="application/ld+json">{encoded_data}</script><script defer src="/assets/site.js?v={script_version}"></script>{lesson_assets}</head><body>{header(active)}<main id="main">{body}</main>{footer()}</body></html>'''
 
@@ -308,6 +311,7 @@ def home(catalog, projects, contributions):
   <div class="contributor-strip-heading"><div><p class="eyebrow">CONTRIBUTOR TO</p><h2 id="home-contributor-title">参与贡献的开源项目</h2></div><a class="text-link" href="/contributions/">全部 {len(contributions['projects'])} 个项目<span class="arrow" aria-hidden="true">→</span></a></div>
   <div class="contributor-strip-links">{contributor_links}</div>
   {recent_contributions(contributions, compact=True)}
+  <div class="contributor-more"><span>代码之外，也记下排查过程</span><a class="text-link" href="/contributions/stories/">读 PR 背后的故事<span class="arrow" aria-hidden="true">→</span></a></div>
   <p class="section-footnote">点击项目查看我的已合并 PR · 项目名单核对于 {esc(contributions['checked_date'])}</p>
 </section>
 <section class="section home-work" id="selected-work">
@@ -376,6 +380,8 @@ def article_page(item):
     content, toc = markdown((ROOT / item['source']).read_text(encoding='utf-8-sig'))
     label = '博客' if item['section'] == 'blog' else '教学'
     original = f'<a href="{esc(item["source_url"])}">相关原始记录 ↗</a>' if item.get('source_url') else ''
+    if item.get('contribution_prs'):
+        original += '<a href="/contributions/stories/">更多 PR 修复记录 →</a>'
     dates = f'<span>发布于 <time datetime="{esc(item["date"])}">{esc(item["date"])}</time></span>'
     if item.get('updated') and item['updated'] != item['date']:
         dates += f'<span>更新于 <time datetime="{esc(item["updated"])}">{esc(item["updated"])}</time></span>'
@@ -386,8 +392,53 @@ def article_page(item):
 def contributions_page(contributions, path="/contributions/"):
     items = contributions['projects']
     body = page_hero("OPEN SOURCE / CONTRIBUTOR TO", "参与贡献的开源项目", "从推理服务、GPU 算子到存储与 Python 工具。点击项目，查看我在该仓库已合并的 PR。", f'{len(items):02d} PROJECTS')
+    body += '<div class="shell"><div class="contributor-more"><span>想看问题怎么定位、为什么这样修？</span><a class="text-link" href="/contributions/stories/">读 PR 背后的故事 →</a></div></div>'
     body += f'''<div class="shell page-content">{recent_contributions(contributions)}<div class="contributor-intro"><p>按项目查看。下面每张卡片都链接到我在该仓库的公开合并记录。</p>{external(github_pr_search('merged'), '全部已合并 PR')}</div><div class="contributor-grid">{''.join(contributor_card(item, 'h2') for item in items)}</div><p class="section-footnote">项目名单核对于 {esc(contributions['checked_date'])}。卡片链接打开 GitHub 实时搜索，只显示我在对应仓库已合并的 PR；上方近期改动的日期为北京时间。</p><div class="contributor-more"><span>更多公开记录</span>{external(github_pr_search('open'), '进行中的 PR')}{external('https://github.com/adenzhou1350', 'GitHub 主页')}</div></div>'''
     return page("开源贡献", "周栩丞 Aden Zhou 参与贡献的开源项目：vLLM、SGLang、TensorRT-LLM、Triton、TileLang 等，附各仓库已合并 PR。", body, path, "contributions")
+
+
+def contribution_stories(catalog, contributions):
+    """Only associate published stories with PRs in the verified contribution snapshot."""
+    known = {pr['url'] for project in contributions['projects'] for pr in project['pull_requests']}
+    stories, by_pr = [], {}
+    for item in catalog:
+        if item.get('draft') or not item.get('contribution_prs'):
+            continue
+        urls = item['contribution_prs']
+        if not isinstance(urls, list) or any(not isinstance(url, str) or url not in known for url in urls):
+            raise ValueError(f'Unverified contribution PR in {item["slug"]}')
+        if len(set(urls)) != len(urls):
+            raise ValueError(f'Duplicate contribution PR in {item["slug"]}')
+        stories.append(item)
+        for url in urls:
+            by_pr.setdefault(url, []).append(item)
+    return sorted(stories, key=lambda item: item['date'], reverse=True), by_pr
+
+
+def pr_stories_page(catalog, contributions):
+    stories, by_pr = contribution_stories(catalog, contributions)
+    records = sorted(
+        [(project, pr) for project in contributions['projects'] for pr in project['pull_requests']],
+        key=lambda pair: (pair[1]['merged_at'], pair[1]['url']), reverse=True,
+    )
+    lookup = {pr['url']: (project, pr) for project, pr in records}
+    cards = []
+    for item in stories:
+        chips = ''.join(external(url, f'{esc(lookup[url][0]["name"])} #{lookup[url][1]["number"]}', 'story-pr') for url in item['contribution_prs'])
+        cards.append(f'''<article class="pr-story"><div class="pr-story-meta"><span>{esc(lookup[item['contribution_prs'][0]][0]['area'])}</span><span>约 {item['minutes']} 分钟</span></div><h3><a href="{article_url(item)}">{esc(item['title'])}<span aria-hidden="true"> →</span></a></h3><p>{esc(item['description'])}</p><div class="story-pr-links" aria-label="对应的原始 PR">{chips}</div></article>''')
+    rows = []
+    for project, pr in records:
+        related = by_pr.get(pr['url'], [])
+        date = datetime.fromisoformat(pr['merged_at']).astimezone(timezone(timedelta(hours=8))).date()
+        search = ' '.join([project['name'], project['repository'], pr['title'], f'#{pr["number"]}', *[s['title'] + ' ' + s['description'] for s in related]])
+        links = ''.join(f'<a class="text-link" href="{article_url(s)}">读修复过程 →</a>' for s in related) or '<span class="pr-unwritten">尚未整理成文</span>'
+        rows.append(f'''<li class="pr-index-row" data-pr-row data-project="{esc(project['repository'])}" data-search="{esc(search)}" data-written="{str(bool(related)).lower()}"><div class="pr-index-meta"><span>{esc(project['repository'])} · #{pr['number']}</span><time datetime="{date}">{date} 合并</time></div><h3>{external(pr['url'], esc(pr['title']), 'pr-original')}</h3><div class="pr-index-actions">{links}</div></li>''')
+    options = ''.join(f'<option value="{esc(p["repository"])}">{esc(p["name"])}</option>' for p in sorted(contributions['projects'], key=lambda p:p['name'].casefold()))
+    body = page_hero('OPEN SOURCE / INSIDE THE FIX', 'PR 背后的修复过程', '报错从哪里来，怎样缩小范围，为什么选择这个改法。把代码之外的排查过程也留下来。')
+    body += f'''<div class="shell page-content pr-stories-page"><div class="pr-story-summary"><p><strong>{len(stories)} 篇记录</strong><span>涉及 {len(by_pr)} 条已合并 PR</span></p><a class="text-link" href="#pr-index">查找具体 PR ↓</a></div><section aria-labelledby="written-stories"><h2 id="written-stories" class="sr-only">已写成文章的修复记录</h2><div class="pr-story-grid">{''.join(cards)}</div></section>
+<details class="pr-index" id="pr-index" data-pr-index><summary><span>按项目或问题查找 PR</span><span>{len(records)} 条已核对记录</span></summary><div class="pr-index-body"><p class="pr-index-note">截至 {esc(contributions['checked_date'])} 的公开合并记录，日期按北京时间显示。已经写成文章的附上阅读入口，其余保留原始 PR 标题与讨论。</p><noscript><p>搜索需要 JavaScript；下方完整列表仍可直接浏览。</p></noscript><div class="pr-index-controls"><label>关键词<input type="search" placeholder="如标量、TileLang、#4538" data-pr-query disabled></label><label>项目<select data-pr-project disabled><option value="">全部项目</option>{options}</select></label><label class="pr-written-toggle"><input type="checkbox" data-pr-written disabled>只看已有复盘</label><button type="button" data-pr-reset disabled>重置</button></div><p class="pr-index-status" data-pr-status role="status" aria-live="polite" aria-atomic="true">显示 {len(records)} / {len(records)} 条 PR</p><ol class="pr-index-list">{''.join(rows)}</ol><p class="pr-index-empty" data-pr-empty hidden>没有匹配的 PR，试试其他关键词，或重置筛选。</p></div></details>
+<div class="contributor-more"><a class="text-link" href="/contributions/">按开源项目浏览 →</a>{external(github_pr_search('merged'), 'GitHub 上的最新合并记录')}</div></div>'''
+    return page('PR 背后的修复过程', '从复现、定位到修改与验证，记录我参与的开源修复。附原始 PR、评审讨论和按项目查找的公开合并索引。', body, '/contributions/stories/', 'contributions')
 
 
 def about_page():
@@ -427,6 +478,7 @@ def outputs():
     validate_catalog(all_content)
     catalog = [item for item in all_content if not item.get('draft', False)]
     out = {'index.html': home(catalog, projects, contributions), 'projects/index.html': project_page(projects), 'blog/index.html': blog_page(catalog), 'learn/index.html': learning_page(catalog), 'about/index.html': about_page(), 'contributions/index.html': contributions_page(contributions), 'details.html': contributions_page(contributions)}
+    out['contributions/stories/index.html'] = pr_stories_page(catalog, contributions)
     for item in catalog:
         out[article_url(item).strip('/') + '/index.html'] = article_page(item)
     for item in all_content:
@@ -440,7 +492,7 @@ def outputs():
         date = format_datetime(datetime.fromisoformat(item['date']).replace(tzinfo=timezone.utc), usegmt=True)
         rss.append(f'<item><title>{xml_escape(item["title"])}</title><link>{BASE + article_url(item)}</link><guid isPermaLink="true">{BASE + article_url(item)}</guid><description>{xml_escape(item["description"])}</description><pubDate>{date}</pubDate></item>')
     out['feed.xml'] = '<?xml version="1.0" encoding="utf-8"?>\n<rss version="2.0"><channel><title>Aden 的技术笔记</title><link>' + BASE + '/blog/</link><description>Agent、推理系统与开源工程记录</description><language>zh-CN</language>' + ''.join(rss) + '</channel></rss>'
-    urls = ['/', '/projects/', '/blog/', '/learn/', '/contributions/', '/about/'] + [article_url(item) for item in catalog]
+    urls = ['/', '/projects/', '/blog/', '/learn/', '/contributions/', '/contributions/stories/', '/about/'] + [article_url(item) for item in catalog]
     dates = {article_url(item):item.get('updated', item['date']) for item in catalog}
     out['sitemap.xml'] = '<?xml version="1.0" encoding="utf-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + ''.join(f'<url><loc>{BASE+url}</loc><lastmod>{dates.get(url,SITE_DATE)}</lastmod></url>' for url in urls) + '</urlset>'
     out['robots.txt'] = f'User-agent: *\nAllow: /\nSitemap: {BASE}/sitemap.xml\n'

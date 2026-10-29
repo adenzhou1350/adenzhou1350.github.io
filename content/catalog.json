@@ -1,5 +1,47 @@
 [
   {
+    "slug": "tilelang-descriptor-map",
+    "section": "blog",
+    "title": "TileLang：返回 False 之前，字典已经被改了",
+    "description": "普通指针撞上了 TMA 描述符的命名规则。函数返回 False，映射表却已被改写：从包装器报错查到验证与登记的先后顺序。",
+    "category": "开源笔记",
+    "date": "2026-10-29",
+    "minutes": 5,
+    "tags": ["TileLang", "TMA", "Python", "状态修改"],
+    "source": "content/posts/tilelang-descriptor-map.md",
+    "kind": "PR 复盘",
+    "source_url": "https://github.com/tile-ai/tilelang/pull/3484",
+    "contribution_prs": ["https://github.com/tile-ai/tilelang/pull/3484"]
+  },
+  {
+    "slug": "deepspeed-scalar-byte-view",
+    "section": "blog",
+    "title": "一个标量参数，为什么让 DeepSpeed 初始化失败？",
+    "description": "float32 标量不能直接重解释成 uint8 字节视图。记录怎样保留原参数存储，修复广播入口，再用不同初值验证同步。",
+    "category": "开源笔记",
+    "date": "2026-10-29",
+    "minutes": 5,
+    "tags": ["DeepSpeed", "PyTorch", "ZeRO", "分布式"],
+    "source": "content/posts/deepspeed-scalar-byte-view.md",
+    "kind": "PR 复盘",
+    "source_url": "https://github.com/deepspeedai/DeepSpeed/pull/8642",
+    "contribution_prs": ["https://github.com/deepspeedai/DeepSpeed/pull/8642"]
+  },
+  {
+    "slug": "lancedb-empty-iterable",
+    "section": "blog",
+    "title": "空列表能建表，换成迭代器却报错",
+    "description": "同样给了 schema，空 list 和空 iterator 却走出不同结果。顺着共用转换器，检查第一批数据、字段推断和协程里的 StopIteration。",
+    "category": "开源笔记",
+    "date": "2026-10-29",
+    "minutes": 5,
+    "tags": ["LanceDB", "Python", "Apache Arrow", "迭代器"],
+    "source": "content/posts/lancedb-empty-iterable.md",
+    "kind": "PR 复盘",
+    "source_url": "https://github.com/lancedb/lancedb/pull/4538",
+    "contribution_prs": ["https://github.com/lancedb/lancedb/pull/4538"]
+  },
+  {
     "slug": "fsspec-relative-path",
     "section": "learn",
     "title": "同一个文件名，套进列表就下载失败了",
@@ -10,7 +52,8 @@
     "tags": ["浏览器演示", "Python", "路径处理", "回归测试"],
     "source": "content/learn/fsspec-relative-path.md",
     "kind": "交互教程",
-    "source_url": "https://github.com/fsspec/filesystem_spec/pull/2376"
+    "source_url": "https://github.com/fsspec/filesystem_spec/pull/2376",
+    "contribution_prs": ["https://github.com/fsspec/filesystem_spec/pull/2376"]
   },
   {
     "slug": "sglang-renderer-regression",
@@ -36,7 +79,13 @@
     "tags": ["Agent", "检索评测", "Token 预算", "开源贡献"],
     "source": "content/posts/agent-retrieval-read-budget.md",
     "kind": "PR 复盘",
-    "source_url": "https://github.com/eyuansu62/agent-retrieval-bench/pull/6"
+    "source_url": "https://github.com/eyuansu62/agent-retrieval-bench/pull/6",
+    "contribution_prs": [
+      "https://github.com/eyuansu62/agent-retrieval-bench/pull/4",
+      "https://github.com/eyuansu62/agent-retrieval-bench/pull/6",
+      "https://github.com/eyuansu62/agent-retrieval-bench/pull/13",
+      "https://github.com/eyuansu62/agent-retrieval-bench/pull/16"
+    ]
   },
   {
     "slug": "bonsai-5090-experiment",
@@ -63,7 +112,8 @@
     "tags": ["TileLang", "CUDA", "同步", "开源贡献"],
     "source": "content/posts/tilelang-grid-barrier.md",
     "kind": "PR 复盘",
-    "source_url": "https://github.com/tile-ai/tilelang/pull/3400"
+    "source_url": "https://github.com/tile-ai/tilelang/pull/3400",
+    "contribution_prs": ["https://github.com/tile-ai/tilelang/pull/3400"]
   },
   {
     "slug": "image-cache-identity",
@@ -99,7 +149,8 @@
     "source": "content/posts/kernel-report-boundaries.md",
     "kind": "PR 复盘",
     "source_url": "https://github.com/mlc-ai/TIRx-harness/pull/12",
-    "updated": "2026-10-10"
+    "updated": "2026-10-10",
+    "contribution_prs": ["https://github.com/mlc-ai/TIRx-harness/pull/12"]
   },
   {
     "slug": "jev-decision-model",
