@@ -46,6 +46,7 @@ python -X utf8 scripts/new_content.py blog my-first-note "文章标题" --descri
 
 | 栏目 | 文章 / 专题 | 源文件 |
 |---|---|---|
+| 博客 | 换了推理后端，为什么旧测试还不能丢？ | `content/posts/sglang-renderer-regression.md` |
 | 博客 | Agent 没读到的内容，不该影响检索结果 | `content/posts/agent-retrieval-read-budget.md` |
 | 博客 | 单张 5090 跑 122B MoE：显存、分数和没用上的优化 | `content/posts/bonsai-5090-experiment.md` |
 | 博客 | TileLang 同步修复：一个 block 报到了两次 | `content/posts/tilelang-grid-barrier.md` |
@@ -119,6 +120,7 @@ assets/images/                已公开项目的开发演示图片
 - 关于页和简历沿用原站已公开资料；这次没有新增电话或外部追踪服务。
 - 2026-10-28 的 Agent 检索案例依据公开已合并 PR #4/#6，补充 #13/#16。PR #6 的前后对照中，101 个公开样本的最终选择和非延迟指标不变；389/545 到 0/545 表示按项目正则计数的正文预算越界次数，不是供应商账单、模型准确率提升或本轮重跑结果。
 - Bonsai 首页与项目卡直链现行部署指南；三款 Hugging Face 固定版本于 2026-10-28 核对可公开访问，未下载或重跑模型。文章元数据显示原发布日和实际内容更新日，入口核对不改写实验日期。
+- 2026-10-29 的 SGLang 复现笔记依据 10 月 26 日固定版本的 CPU 原生组件实验。原问题由 05yuki 报告，旧语义断言来自上游；8 个现有 renderer 方法在披露过适配的环境中通过，不代表完整 CI。随附 JSON 是不含私有路径和原始对话的历史结果摘录，不是完整复现包；没有重跑最新版本、验证修复或测量模型质量。
 
 ## 发布检查
 

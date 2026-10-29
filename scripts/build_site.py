@@ -346,7 +346,7 @@ def blog_page(catalog):
     filters = ''.join(f'<button class="filter-button" type="button" data-filter="{category}" aria-pressed="{str(i==0).lower()}">{category}</button>' for i,category in enumerate(categories))
     body = page_hero("BLOG / FIELD NOTES", "技术笔记", "记录上游修复、模型量化和推理故障。问题怎么复现，改动有没有用，都尽量留下具体的测试和原始记录。", f'{len(posts):02d} ARTICLES')
     body += f'<div class="shell page-content"><div class="filter-bar"><div class="filters" aria-label="文章分类">{filters}</div><label><span class="sr-only">搜索文章标题、简介或标签</span><input class="search-input" type="search" placeholder="搜索标题、问题或标签…" data-search></label></div><p class="results-status" data-results-status aria-live="polite">显示 {len(posts)} 篇文章</p><div data-content-list>{"".join(note_row(item,True) for item in posts)}</div><p class="empty-state" data-empty hidden>没有找到相关文章，试试其他关键词或选择“全部”。</p></div>'
-    return page("博客", "TileLang 上游修复、Bonsai 模型量化、GPU 工具链与缓存故障的技术笔记，附测试结果和原始记录。", body, "/blog/", "blog")
+    return page("博客", "模型推理、Agent 检索评测、量化实验与上游修复的技术笔记，附测试条件、结果和原始记录。", body, "/blog/", "blog")
 
 
 def learning_page(catalog):

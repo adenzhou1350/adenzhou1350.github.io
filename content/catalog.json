@@ -1,5 +1,18 @@
 [
   {
+    "slug": "sglang-renderer-regression",
+    "section": "blog",
+    "title": "换了推理后端，为什么旧测试还不能丢？",
+    "description": "reasoning 已经解析出来，拼下次请求的输入时却丢了。复核一次 SGLang 渲染迁移：8 个现有测试方法通过，旧语义断言仍能抓住回归。",
+    "category": "开源笔记",
+    "date": "2026-10-29",
+    "minutes": 6,
+    "tags": ["SGLang", "推理服务", "工具调用", "回归测试"],
+    "source": "content/posts/sglang-renderer-regression.md",
+    "kind": "复现笔记",
+    "source_url": "https://github.com/sgl-project/sglang/issues/46348"
+  },
+  {
     "slug": "agent-retrieval-read-budget",
     "section": "blog",
     "title": "Agent 没读到的内容，不该影响检索结果",

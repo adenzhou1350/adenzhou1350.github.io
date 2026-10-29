@@ -1,0 +1,118 @@
+{
+  "artifact_kind": "Selected summary of saved experiment records; not a full reproduction package",
+  "experiment_date": "2026-10-26",
+  "summary_prepared_date": "2026-10-29",
+  "scope": {
+    "execution": "Original pinned CPU/native components with controlled assistant output fixtures",
+    "model_generation": false,
+    "gpu": false,
+    "http_service": false,
+    "full_upstream_ci": false,
+    "native_rerun_on_summary_date": false,
+    "current_upstream_bug_status_claimed": false,
+    "production_failure_rate_measured": false,
+    "fix_verified": false
+  },
+  "versions": {
+    "sglang": "933853a3f2632b10e0bf10d7ffd2f6f853f574fa",
+    "deepseek_recipe": "0.2.0",
+    "legacy_predicate_sglang": "c8df33228e1a1f0d4b7c2d5db788b28f01b9b904",
+    "checkpoint_reference": "deepseek-ai/DeepSeek-V4.1-Flash-1017",
+    "checkpoint_revision": "1bae0e1088993b9b82de08f59de5be5a34e42170"
+  },
+  "discovery_attribution": {
+    "author": "05yuki",
+    "issue": "https://github.com/sgl-project/sglang/issues/46348",
+    "our_contribution": "Independent pinned reproduction, boundary controls, stage trace and transfer of an existing published assertion"
+  },
+  "current_renderer_tests": {
+    "tests_run": 8,
+    "passed_ids": [
+      "upstream_renderer_tests.TestDeepSeekRecipe.test_api_validation_surfaces_as_value_error",
+      "upstream_renderer_tests.TestDeepSeekRecipe.test_effort_budget_rewrites_the_effort_line",
+      "upstream_renderer_tests.TestDeepSeekRecipe.test_encodes_with_the_served_vocabulary",
+      "upstream_renderer_tests.TestDeepSeekRecipe.test_tasks_replace_or_follow_the_generation_header",
+      "upstream_renderer_tests.TestEffortBudget.test_integer_and_float_budgets",
+      "upstream_renderer_tests.TestPreNormalize.test_developer_becomes_system",
+      "upstream_renderer_tests.TestPreNormalize.test_history_translation",
+      "upstream_renderer_tests.TestPreNormalize.test_tool_choice_renders_as_auto"
+    ],
+    "failures": [],
+    "errors": [],
+    "skipped": [],
+    "subtest_checks": 19,
+    "successful": true
+  },
+  "harness_adaptations": {
+    "test_base": "Project CustomTestCase replaced with unittest.TestCase",
+    "ci": "Registration recorded without executing CI registration logic; is_in_ci fixed to true",
+    "tokenizer": "Strict download-path stub supplied the previously verified local tokenizer",
+    "unchanged": "Product modules and test assertions"
+  },
+  "prior_predicate": {
+    "name": "test_dsv41_drop_thinking_without_tools",
+    "transfer": "Unchanged AST-extracted method; narrow signature-to-request and IDs-to-text bridge for the native arm",
+    "results": {
+      "original_legacy": true,
+      "checkpoint_reference": true,
+      "current_native_bridge": false
+    },
+    "native_failure": "Existing assertion requiring the current-turn fixture marker <think>r2</think> in the rendered prompt",
+    "native_later_assertions_exercised": false
+  },
+  "history_matrix": {
+    "parser_to_renderer_chains": 32,
+    "output_parser_preserved_expected_reasoning": true,
+    "rendering_failure_rows": 4,
+    "failure_condition": "Thinking enabled, no tools declared in this request, history ends with a tool result continuing the current user turn",
+    "failure_rows_are": "Two controlled payloads times two input partitions, not four independent defects",
+    "encoder_only_control_configurations": 4,
+    "presentation_rows": 40,
+    "presentation_note": "Four encoder-only controls are each displayed under two partition labels; do not count them as eight parser chains",
+    "passing_controls": [
+      "Tools declared",
+      "Real new user turn after tool result",
+      "Nonthinking",
+      "Plain user input"
+    ]
+  },
+  "stage_traces": [
+    {
+      "stage": "ongoing_tool_result",
+      "declared_tools": false,
+      "input_current_reasoning_present": true,
+      "normalized_current_reasoning_present": true,
+      "manual_native_encoding_equals_wrapper": true,
+      "encoded_current_reasoning_present": false
+    },
+    {
+      "stage": "new_user_after_result",
+      "declared_tools": false,
+      "input_current_reasoning_present": true,
+      "normalized_current_reasoning_present": true,
+      "manual_native_encoding_equals_wrapper": true,
+      "encoded_current_reasoning_present": false
+    },
+    {
+      "stage": "ongoing_tool_result",
+      "declared_tools": true,
+      "input_current_reasoning_present": true,
+      "normalized_current_reasoning_present": true,
+      "manual_native_encoding_equals_wrapper": true,
+      "encoded_current_reasoning_present": true
+    }
+  ],
+  "public_sources": {
+    "migration": "https://github.com/sgl-project/sglang/pull/45315",
+    "prior_semantic_fix": "https://github.com/sgl-project/sglang/pull/44751",
+    "current_tests": "https://github.com/sgl-project/sglang/blob/933853a3f2632b10e0bf10d7ffd2f6f853f574fa/test/registered/unit/parser/test_deepseek_recipe_renderer.py",
+    "legacy_test": "https://github.com/sgl-project/sglang/blob/c8df33228e1a1f0d4b7c2d5db788b28f01b9b904/test/registered/unit/entrypoints/openai/test_serving_chat.py",
+    "checkpoint_contract": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017/tree/1bae0e1088993b9b82de08f59de5be5a34e42170/encoding"
+  },
+  "saved_source_record_sha256": {
+    "regression-coverage-audit/result.json": "01df1b93ab7e8452cb5ba965105b1d4054c499f62025fc7b8c3e766e88f09622",
+    "history-rendering-case/result.json": "b9d7baac9033735c4576dd0ba717245737ef39f6b7c64ba24c8282e343bf0fe6",
+    "history-rendering-case/trace-result.json": "1cc3edc9057d0c838501d78cc06aa830541a7a42cf1b76066bb78e8f938f275f"
+  },
+  "reproducibility_note": "The source record hashes identify retained private audit files. Those files and the native runtime are not bundled here; this summary is not independent reproduction evidence."
+}
