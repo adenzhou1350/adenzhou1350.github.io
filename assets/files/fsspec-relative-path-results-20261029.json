@@ -1,0 +1,190 @@
+{
+  "status": "PASS",
+  "checked_at_utc": "2026-10-29T02:24:32.016585+00:00",
+  "operating_system": "Windows",
+  "python": "3.14.3",
+  "aiohttp": "3.13.5",
+  "source": "Adjacent public fsspec/filesystem_spec commits, imported from complete unmodified source archives.",
+  "scope": "Eight destination forms per revision plus a synchronous MemoryFileSystem control. Real HTTPFileSystem.get against a local loopback server. No cloud or full project suite.",
+  "comparison_meaning": "PASS means the original defect and accepted repair were both reproduced. Baseline has two expected failures.",
+  "changed_files": [
+    "docs/source/changelog.rst",
+    "fsspec/asyn.py",
+    "fsspec/implementations/tests/test_http.py"
+  ],
+  "arms": {
+    "baseline": {
+      "source_commit": "7aa038375b89d3191ebb81c70162d57441c19f89",
+      "asyn_sha256": "76528b464a1b7ea28d241c72d768068063341b04ccaeab41066528e9ffbefaca",
+      "source_unchanged": true,
+      "synchronous_memory_control_passed": true,
+      "http_client_closed": true,
+      "http_server_thread_stopped": true,
+      "archive_sha256": "e5d0a4495b6320d42b18dba698a08ec04a65d509fbf4d24bf5d0f8830ef9d82a",
+      "cases": [
+        {
+          "name": "scalar_str",
+          "error_type": null,
+          "http_requests": 2,
+          "output_present": true,
+          "bytes_equal": true,
+          "attempted_empty_parent": false,
+          "attempted_current_directory": false
+        },
+        {
+          "name": "scalar_Path",
+          "error_type": null,
+          "http_requests": 2,
+          "output_present": true,
+          "bytes_equal": true,
+          "attempted_empty_parent": false,
+          "attempted_current_directory": false
+        },
+        {
+          "name": "bare_list_str",
+          "error_type": "FileNotFoundError",
+          "http_requests": 0,
+          "output_present": false,
+          "bytes_equal": false,
+          "attempted_empty_parent": true,
+          "attempted_current_directory": false
+        },
+        {
+          "name": "bare_list_Path",
+          "error_type": "FileNotFoundError",
+          "http_requests": 0,
+          "output_present": false,
+          "bytes_equal": false,
+          "attempted_empty_parent": true,
+          "attempted_current_directory": false
+        },
+        {
+          "name": "nested_list_str",
+          "error_type": null,
+          "http_requests": 1,
+          "output_present": true,
+          "bytes_equal": true,
+          "attempted_empty_parent": false,
+          "attempted_current_directory": false
+        },
+        {
+          "name": "nested_list_Path",
+          "error_type": null,
+          "http_requests": 1,
+          "output_present": true,
+          "bytes_equal": true,
+          "attempted_empty_parent": false,
+          "attempted_current_directory": false
+        },
+        {
+          "name": "absolute_list_str",
+          "error_type": null,
+          "http_requests": 1,
+          "output_present": true,
+          "bytes_equal": true,
+          "attempted_empty_parent": false,
+          "attempted_current_directory": false
+        },
+        {
+          "name": "absolute_list_Path",
+          "error_type": null,
+          "http_requests": 1,
+          "output_present": true,
+          "bytes_equal": true,
+          "attempted_empty_parent": false,
+          "attempted_current_directory": false
+        }
+      ],
+      "stderr_empty": true
+    },
+    "fixed": {
+      "source_commit": "f4fd0f240eb86b5b66adc425f6c2655d839764a4",
+      "asyn_sha256": "4d0e32e4c51c9eb3c7330d72165e933a5c4a4b5f50b5c5263bdcf7063ec1d3b3",
+      "source_unchanged": true,
+      "synchronous_memory_control_passed": true,
+      "http_client_closed": true,
+      "http_server_thread_stopped": true,
+      "archive_sha256": "e1316638b8b36137bbd0e6afb80ce66ca0a34ee1617c8e1aa9730621981d9ecc",
+      "cases": [
+        {
+          "name": "scalar_str",
+          "error_type": null,
+          "http_requests": 2,
+          "output_present": true,
+          "bytes_equal": true,
+          "attempted_empty_parent": false,
+          "attempted_current_directory": false
+        },
+        {
+          "name": "scalar_Path",
+          "error_type": null,
+          "http_requests": 2,
+          "output_present": true,
+          "bytes_equal": true,
+          "attempted_empty_parent": false,
+          "attempted_current_directory": false
+        },
+        {
+          "name": "bare_list_str",
+          "error_type": null,
+          "http_requests": 1,
+          "output_present": true,
+          "bytes_equal": true,
+          "attempted_empty_parent": false,
+          "attempted_current_directory": false
+        },
+        {
+          "name": "bare_list_Path",
+          "error_type": null,
+          "http_requests": 1,
+          "output_present": true,
+          "bytes_equal": true,
+          "attempted_empty_parent": false,
+          "attempted_current_directory": false
+        },
+        {
+          "name": "nested_list_str",
+          "error_type": null,
+          "http_requests": 1,
+          "output_present": true,
+          "bytes_equal": true,
+          "attempted_empty_parent": false,
+          "attempted_current_directory": false
+        },
+        {
+          "name": "nested_list_Path",
+          "error_type": null,
+          "http_requests": 1,
+          "output_present": true,
+          "bytes_equal": true,
+          "attempted_empty_parent": false,
+          "attempted_current_directory": false
+        },
+        {
+          "name": "absolute_list_str",
+          "error_type": null,
+          "http_requests": 1,
+          "output_present": true,
+          "bytes_equal": true,
+          "attempted_empty_parent": false,
+          "attempted_current_directory": false
+        },
+        {
+          "name": "absolute_list_Path",
+          "error_type": null,
+          "http_requests": 1,
+          "output_present": true,
+          "bytes_equal": true,
+          "attempted_empty_parent": false,
+          "attempted_current_directory": false
+        }
+      ],
+      "stderr_empty": true
+    }
+  },
+  "script_sha256_at_packaging": "b202752116d88a75e2b341fb3bd4dcaa29d703812c0a619149667a80caec76ae",
+  "links": {
+    "pull_request": "https://github.com/fsspec/filesystem_spec/pull/2376",
+    "fixed_commit": "https://github.com/fsspec/filesystem_spec/commit/f4fd0f240eb86b5b66adc425f6c2655d839764a4"
+  }
+}

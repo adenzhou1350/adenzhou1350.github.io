@@ -9,6 +9,7 @@ AI Infra 与具身 Agent 的作品集、博客和教学空间。
 - `/projects/`：Jev 决策模型实战、Bonsai 低比特教学、模型实验、Agent 工具与 fork 扩展。
 - `/blog/`：技术复盘，支持分类和关键词筛选。
 - `/learn/`：Jev 决策模型、Bonsai 低比特专题和浏览器交互实验。Bonsai 主按钮直达三值编码实验，旁边保留完整导读与仓库入口。
+- `/learn/fsspec-relative-path/`：文件名与列表的路径练习。浏览器比较六种预设流程，下载包重跑公开修复前后的真实文件传输；首页练习入口直达 `#path-demo`。
 - `/learn/jev-decision-model/`：从随附的 CPU 推箱子策略进入候选打分、训练和页面按钮选择。
 - `/learn/bonsai-low-bit/`：先在浏览器里操作三值打包并复制当前 Python 示例，再进入 CPU / QAT 教学与 27B、35B、122B 单卡部署。`#ternary-demo` 可直接打开编码实验。
 - `/contributions/`：参与贡献的开源项目。首页展示 6 个重点项目，完整页列出已核对的 22 个项目；点击卡片，直接查看本人在对应仓库已合并的 PR。近期改动直链 TileLang、Agent Retrieval Bench、DeepSpeed 的具体修复，日期按北京时间显示。
@@ -52,6 +53,7 @@ python -X utf8 scripts/new_content.py blog my-first-note "文章标题" --descri
 | 博客 | TileLang 同步修复：一个 block 报到了两次 | `content/posts/tilelang-grid-barrier.md` |
 | 博客 | 截图更新了，为什么评分还是旧的？ | `content/posts/image-cache-identity.md` |
 | 博客 | ptxas 解析器混读了两份 kernel 报告 | `content/posts/kernel-report-boundaries.md` |
+| 交互教程 | 同一个文件名，套进列表就下载失败了 | `content/learn/fsspec-relative-path.md` |
 | 教学专题 | Jev 决策模型：从推箱子学候选打分 | `content/learn/jev-decision-model.md` |
 | 教学专题 | Bonsai 量化入门：三值编码、QAT 和单卡推理 | `content/learn/bonsai-low-bit.md` |
 | 交互教程 | 文件名没变，缓存为什么会返回旧结果？ | `content/learn/cache-identity.md` |
@@ -82,6 +84,7 @@ git diff --check
 - 独占一行的图片：`![图片说明](/assets/images/example.jpg)`。先把图片放入 `assets/images/`；说明同时用作替代文本和图注。暂不支持外链图片。
 - `{{CACHE_DEMO}}` 是本站缓存教学实验的专用组件标记。
 - `{{TERNARY_DEMO}}` 是 Bonsai 导读的三值编码组件：五个原生选项、当前展开式、打包整数、8 位二进制、解包结果和往返反馈。Python 示例随当前输入更新，可复制；关闭 JavaScript 时保留默认示例，修改选项禁用。
+- `{{PATH_DEMO}}` 从 `content/components/path-demo.html` 载入路径教学组件。六个固定组合只演示 Windows `C:/lesson` 下的分支和父目录；不执行下载。此教程单独加载 `assets/path-demo.css` 和 `assets/path-demo.js`，不增加其他页面的脚本。
 
 HTML 源码会被转义，正文不运行任意 HTML 或 JavaScript。复制代码需要浏览器允许剪贴板写入；失败时仍可手动选择代码。
 
@@ -121,6 +124,7 @@ assets/images/                已公开项目的开发演示图片
 - 2026-10-28 的 Agent 检索案例依据公开已合并 PR #4/#6，补充 #13/#16。PR #6 的前后对照中，101 个公开样本的最终选择和非延迟指标不变；389/545 到 0/545 表示按项目正则计数的正文预算越界次数，不是供应商账单、模型准确率提升或本轮重跑结果。
 - Bonsai 首页与项目卡直链现行部署指南；三款 Hugging Face 固定版本于 2026-10-28 核对可公开访问，未下载或重跑模型。文章元数据显示原发布日和实际内容更新日，入口核对不改写实验日期。
 - 2026-10-29 的 SGLang 复现笔记依据 10 月 26 日固定版本的 CPU 原生组件实验。原问题由 05yuki 报告，旧语义断言来自上游；8 个现有 renderer 方法在披露过适配的环境中通过，不代表完整 CI。随附 JSON 是不含私有路径和原始对话的历史结果摘录，不是完整复现包；没有重跑最新版本、验证修复或测量模型质量。
+- fsspec 路径教程对应公开已合入 PR #2376。浏览器模拟的六个组合与 Python `ntpath` 对照，显示源、目标同时采用标量或列表；实际 HTTP 回放为前版两项预期失败加六项成功、修复版八项成功，后者逐项核对完整文件字节。下载包只含原创复现脚本、公开说明、脱敏结果和来源，不含 Scout、依赖源码缓存或原始日志。上游源码由脚本按固定提交下载并保留 BSD-3-Clause；没有新增软件许可。真实回放已于 10 月 29 日在 Windows Python 3.14.3 / aiohttp 3.13.5 验证，本次教程整理没有重复执行 HTTP 实验。
 
 ## 发布检查
 
@@ -130,8 +134,11 @@ python -X utf8 scripts/check_site.py
 python -X utf8 -m unittest discover -s tests -v
 node --check assets/site.js
 node tests/test_ternary_demo.cjs
+node tests/test_path_demo.cjs
 ```
 
 `test_ternary_demo.cjs` 直接加载页面所用函数，穷举 243 种合法输入，检查编码唯一性、往返还原、默认值与两端值，并用 Python 实际执行全部 243 份当前输入代码。测试不另写一份编码器来代替页面实现。
+
+`test_path_demo.cjs` 将页面使用的六种路径结果与 Python `ntpath` 对照，并通过记录型 `fs` 执行同一份 API 参数示例，检查两端同时切换列表、父目录、初始化和重置。它不冒充真实下载测试。
 
 浏览器还需检查桌面和手机、菜单、博客筛选与空结果、复制代码、缓存实验的更新/改名/重置，以及三值实验的键盘选择、重置、代码更新和邮件预填。页面源码检查不替代浏览器验证。

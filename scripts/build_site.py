@@ -128,6 +128,10 @@ def markdown(source):
             output.append(ternary_demo())
             i += 1
             continue
+        if line == "{{PATH_DEMO}}":
+            output.append((ROOT / 'content/components/path-demo.html').read_text(encoding='utf-8'))
+            i += 1
+            continue
         if line.startswith("!["):
             picture = re.fullmatch(r"!\[([^\]]+)\]\((/assets/images/[^\s)]+)\)", line)
             if not picture:
@@ -221,8 +225,12 @@ def page(title, description, body, path="/", active="", article=None, noindex=Fa
     if article:
         data = {"@context": "https://schema.org", "@type": "TechArticle", "headline": article["title"], "description": article["description"], "datePublished": article["date"], "dateModified": article.get("updated", article["date"]), "author": {"@type": "Person", "name": "周栩丞", "url": BASE + "/about/"}, "mainEntityOfPage": canonical}
     encoded_data = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
+    lesson_assets = ''
+    if article and article['slug'] == 'fsspec-relative-path':
+        versions = {suffix: hashlib.sha256((ROOT / f'assets/path-demo.{suffix}').read_text(encoding='utf-8').encode('utf-8')).hexdigest()[:12] for suffix in ('css', 'js')}
+        lesson_assets = f'<link rel="stylesheet" href="/assets/path-demo.css?v={versions["css"]}"><script defer src="/assets/path-demo.js?v={versions["js"]}"></script>'
     return f'''<!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{esc(title)} · {esc(NAME)}</title><meta name="description" content="{esc(description)}">{robots_meta}<meta name="theme-color" content="#f5f4ef"><link rel="canonical" href="{canonical}"><meta property="og:type" content="{'article' if article else 'website'}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(description)}"><meta property="og:url" content="{canonical}"><meta property="og:locale" content="zh_CN"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css?v={style_version}"><link rel="alternate" type="application/rss+xml" title="Aden 的博客" href="/feed.xml"><script type="application/ld+json">{encoded_data}</script><script defer src="/assets/site.js?v={script_version}"></script></head><body>{header(active)}<main id="main">{body}</main>{footer()}</body></html>'''
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{esc(title)} · {esc(NAME)}</title><meta name="description" content="{esc(description)}">{robots_meta}<meta name="theme-color" content="#f5f4ef"><link rel="canonical" href="{canonical}"><meta property="og:type" content="{'article' if article else 'website'}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(description)}"><meta property="og:url" content="{canonical}"><meta property="og:locale" content="zh_CN"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css?v={style_version}"><link rel="alternate" type="application/rss+xml" title="Aden 的博客" href="/feed.xml"><script type="application/ld+json">{encoded_data}</script><script defer src="/assets/site.js?v={script_version}"></script>{lesson_assets}</head><body>{header(active)}<main id="main">{body}</main>{footer()}</body></html>'''
 
 
 def page_hero(kicker, title, description, number=""):
@@ -322,7 +330,7 @@ def home(catalog, projects, contributions):
 </section>
 <section class="section home-notes" id="field-notes">
   {section_head('02 / FIELD NOTES','工程笔记','/blog/','所有文章')}
-  <div class="home-reading-layout"><div class="home-note-list">{''.join(note_row(p) for p in posts)}</div><aside class="home-learning" aria-labelledby="home-learning-title"><p class="eyebrow">LEARN BY TRYING</p><h3 id="home-learning-title">先在浏览器里试试</h3><p>文件内容改了，缓存还会返回旧结果吗？点几下就能看到，不需要模型或 GPU。</p><a class="button button-outline" href="/learn/cache-identity/">打开缓存小实验<span aria-hidden="true">→</span></a><a class="text-link" href="/learn/">浏览全部教程<span class="arrow" aria-hidden="true">↗</span></a></aside></div>
+  <div class="home-reading-layout"><div class="home-note-list">{''.join(note_row(p) for p in posts)}</div><aside class="home-learning" aria-labelledby="home-learning-title"><p class="eyebrow">LEARN BY TRYING</p><h3 id="home-learning-title">先在浏览器里试试</h3><p>同一个文件名，放进列表就下载失败？切换输入，沿着一次真实修复找原因。</p><a class="button button-outline" href="/learn/fsspec-relative-path/#path-demo">打开路径小实验<span aria-hidden="true">→</span></a><a class="text-link" href="/learn/">浏览全部教程<span class="arrow" aria-hidden="true">↗</span></a></aside></div>
 </section>
 <section class="contact-strip home-contact"><div><p class="eyebrow">GET IN TOUCH</p><h2>聊聊具体的工程问题。</h2><p>具身 Agent、模型推理或开源协作，都可以发邮件联系。</p><p>邮箱：<span>{esc(EMAIL)}</span></p></div><a class="button" href="mailto:{EMAIL}">发邮件<span aria-hidden="true">↗</span></a></section>
 </div>'''
@@ -361,7 +369,7 @@ def learning_page(catalog):
         cards.append(f'<article id="{esc(item["slug"])}" class="learn-card{ " learn-card-preview" if preview else "" }"><div><p class="eyebrow orange">0{i+1} / {esc(item["category"])}</p><h2>{esc(item["title"])}</h2><p>{esc(item["description"])}</p><ul class="tag-list">{"".join(f"<li>{esc(tag)}</li>" for tag in item["tags"])}</ul><a class="text-link" href="{article_url(item)}">开始学习 · 约 {item["minutes"]} 分钟<span class="arrow">→</span></a></div>{media}</article>')
     cards = ''.join(cards)
     body += '<div class="shell page-content">' + (bonsai_feature(featured) if featured else '') + '<div class="learn-cards">' + cards + '</div><div class="learning-note">想继续读模型代码？可以从 <a class="text-link" href="https://github.com/adenzhou1350/minimind-diffusion/blob/master/tests/test_model.py">minimind-diffusion 的模型测试 ↗</a> 开始。测试能帮助理解张量形状和计算过程；生成效果还要另行评估。</div></div>'
-    return page("教学", "Jev 决策模型实战、Bonsai 量化教程与浏览器缓存实验，附环境要求与操作步骤。", body, "/learn/", "learn")
+    return page("教学", "Jev 决策模型、Bonsai 量化、路径与缓存小实验，附环境要求、实际结果和操作步骤。", body, "/learn/", "learn")
 
 
 def article_page(item):

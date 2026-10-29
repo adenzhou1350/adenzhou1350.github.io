@@ -1,5 +1,18 @@
 [
   {
+    "slug": "fsspec-relative-path",
+    "section": "learn",
+    "title": "同一个文件名，套进列表就下载失败了",
+    "description": "切换文件名与传参形式，看看路径在哪一步变了。沿着 fsspec 的一次真实修复，学习怎样复现错误、保留正常输入的对照，再用 Python 重跑。",
+    "category": "调试练习",
+    "date": "2026-10-29",
+    "minutes": 7,
+    "tags": ["浏览器演示", "Python", "路径处理", "回归测试"],
+    "source": "content/learn/fsspec-relative-path.md",
+    "kind": "交互教程",
+    "source_url": "https://github.com/fsspec/filesystem_spec/pull/2376"
+  },
+  {
     "slug": "sglang-renderer-regression",
     "section": "blog",
     "title": "换了推理后端，为什么旧测试还不能丢？",

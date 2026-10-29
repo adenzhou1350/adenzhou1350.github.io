@@ -1,0 +1,34 @@
+<section class="path-demo" id="path-demo" data-path-demo aria-labelledby="path-demo-heading">
+  <h3 id="path-demo-heading">给文件名套个列表，会发生什么？</h3>
+  <p>教学模拟 · 工作目录 <code>C:/lesson</code> 已存在，父目录允许创建。只展示普通文件的路径处理，不访问文件或网络。</p>
+  <div class="path-demo-controls">
+    <label for="path-demo-kind">目标路径</label>
+    <select id="path-demo-kind" data-path-kind disabled>
+      <option value="bare" selected>裸名 · result.bin</option>
+      <option value="nested">嵌套 · nested/result.bin</option>
+      <option value="absolute">绝对 · C:/lesson/result.bin</option>
+    </select>
+    <label for="path-demo-shape">源和目标的传参形式</label>
+    <select id="path-demo-shape" data-path-shape disabled>
+      <option value="scalar">标量</option>
+      <option value="list" selected>列表</option>
+    </select>
+    <button type="button" data-path-reset disabled>重置</button>
+  </div>
+  <p data-path-route>源和目标同时传列表：走快捷分支，保留目标路径原样。</p>
+  <dl>
+    <dt>传入的目标</dt><dd><code data-path-input>["result.bin"]</code></dd>
+    <dt>进入目录处理时的单个目标</dt><dd><code data-path-target>result.bin</code></dd>
+    <dt>dirname 得到的父目录</dt><dd><code data-path-parent>""（空字符串）</code></dd>
+  </dl>
+  <div class="path-demo-comparison">
+    <section aria-label="原版"><h3>原版</h3><p data-path-original>os.makedirs("", exist_ok=True) → 空路径失败，流程停止。</p></section>
+    <section aria-label="修复版"><h3>修复版</h3><p data-path-fixed>父目录为空 → 跳过 os.makedirs，流程可继续（未执行下载）。</p></section>
+  </div>
+  <h3>对应的 Python 调用形式</h3>
+  <pre><code data-path-api># 假设 fs 是已配置好的 HTTPFileSystem；此处只展示参数形式。
+# example.invalid 是示例地址，不用于实际下载。
+source = "https://example.invalid/payload"
+fs.get([source], ["result.bin"])</code></pre>
+  <p data-path-status role="status" aria-live="polite" aria-atomic="true">教学模拟：默认展示列表裸名。原版尝试创建空目录而失败，修复版跳过这一步，流程可继续。启用 JavaScript 后可切换其余组合。</p>
+</section>

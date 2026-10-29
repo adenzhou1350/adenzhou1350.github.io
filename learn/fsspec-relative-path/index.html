@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>同一个文件名，套进列表就下载失败了 · 周栩丞 · Aden Zhou</title><meta name="description" content="切换文件名与传参形式，看看路径在哪一步变了。沿着 fsspec 的一次真实修复，学习怎样复现错误、保留正常输入的对照，再用 Python 重跑。"><meta name="theme-color" content="#f5f4ef"><link rel="canonical" href="https://adenzhou1350.github.io/learn/fsspec-relative-path/"><meta property="og:type" content="article"><meta property="og:title" content="同一个文件名，套进列表就下载失败了"><meta property="og:description" content="切换文件名与传参形式，看看路径在哪一步变了。沿着 fsspec 的一次真实修复，学习怎样复现错误、保留正常输入的对照，再用 Python 重跑。"><meta property="og:url" content="https://adenzhou1350.github.io/learn/fsspec-relative-path/"><meta property="og:locale" content="zh_CN"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css?v=6618bf132eb9"><link rel="alternate" type="application/rss+xml" title="Aden 的博客" href="/feed.xml"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "同一个文件名，套进列表就下载失败了", "description": "切换文件名与传参形式，看看路径在哪一步变了。沿着 fsspec 的一次真实修复，学习怎样复现错误、保留正常输入的对照，再用 Python 重跑。", "datePublished": "2026-10-29", "dateModified": "2026-10-29", "author": {"@type": "Person", "name": "周栩丞", "url": "https://adenzhou1350.github.io/about/"}, "mainEntityOfPage": "https://adenzhou1350.github.io/learn/fsspec-relative-path/"}</script><script defer src="/assets/site.js?v=eb7100c20674"></script><link rel="stylesheet" href="/assets/path-demo.css?v=cd97833f3b52"><script defer src="/assets/path-demo.js?v=8f498e5c8bf1"></script></head><body><a class="skip" href="#main">跳到正文</a><header class="site-header"><div class="header-inner shell"><a class="brand" href="/" aria-label="周栩丞，首页"><span class="brand-symbol" aria-hidden="true">a.</span><span class="brand-name">Aden<span>周栩丞</span></span></a><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">菜单 +</button><nav id="site-nav" class="site-nav" aria-label="主导航"><a href="/projects/">项目</a><a href="/blog/">博客</a><a href="/learn/" aria-current="page">教学</a><a href="/contributions/">开源贡献</a><a href="/about/">关于</a><a class="github-link" href="https://github.com/adenzhou1350" target="_blank" rel="noopener noreferrer">GitHub ↗<span class="sr-only">（新窗口）</span></a></nav></div></header><main id="main"><div class="shell"><header class="article-top"><div class="breadcrumb"><a href="/">首页</a><span>/</span><a href="/learn/">教学</a></div><p class="eyebrow orange">调试练习 / 交互教程</p><h1>同一个文件名，套进列表就下载失败了</h1><p class="article-deck">切换文件名与传参形式，看看路径在哪一步变了。沿着 fsspec 的一次真实修复，学习怎样复现错误、保留正常输入的对照，再用 Python 重跑。</p><div class="article-meta"><span>周栩丞 · Aden</span><span>发布于 <time datetime="2026-10-29">2026-10-29</time></span><span>约 7 分钟</span></div></header><div class="article-layout"><article class="article-body"><p>先看两行 Python。<code>fs</code> 是 fsspec 的 HTTP 文件系统，<code>url</code> 指向一个能正常下载的小文件。当前目录已存在且可以写入，<code>result.bin</code> 还不存在。</p>
+<div class="code-wrap"><div class="code-label">python</div><button class="copy-code" type="button" aria-label="复制代码">复制</button><pre><code>fs.get(url, &quot;result.bin&quot;)
+fs.get([url], [&quot;result.bin&quot;])</code></pre></div>
+<p>你觉得它们会有什么区别？第二行只是把来源和目标都放进列表，按理说仍然是下载一个文件。</p>
+<p>在这次修复之前，第一行能完成，第二行却抛出 <code>FileNotFoundError</code>。服务器甚至没有收到请求。失败发生得比下载更早：程序试图创建一个名字为空的目录。</p>
+<h2 id="section-12">先猜，再点开路径</h2>
+<p>试着把目标换成 <code>nested/result.bin</code>，或者一个绝对路径，再看它们会走到哪里。</p>
+<p>下面的演示把工作目录设为 <code>C:/lesson</code>，只处理普通文件路径，不考虑通配符、递归和尾斜杠。它只模拟路径处理流程，<strong>不访问你的文件系统，也不执行真实下载</strong>。</p>
+<p>演示也展示嵌套、绝对路径的标量分支，方便比较流程；这两种标量形式没有列入本次八项实测，实测范围见后面的表格。</p>
+<section class="path-demo" id="path-demo" data-path-demo aria-labelledby="path-demo-heading">
+  <h3 id="path-demo-heading">给文件名套个列表，会发生什么？</h3>
+  <p>教学模拟 · 工作目录 <code>C:/lesson</code> 已存在，父目录允许创建。只展示普通文件的路径处理，不访问文件或网络。</p>
+  <div class="path-demo-controls">
+    <label for="path-demo-kind">目标路径</label>
+    <select id="path-demo-kind" data-path-kind disabled>
+      <option value="bare" selected>裸名 · result.bin</option>
+      <option value="nested">嵌套 · nested/result.bin</option>
+      <option value="absolute">绝对 · C:/lesson/result.bin</option>
+    </select>
+    <label for="path-demo-shape">源和目标的传参形式</label>
+    <select id="path-demo-shape" data-path-shape disabled>
+      <option value="scalar">标量</option>
+      <option value="list" selected>列表</option>
+    </select>
+    <button type="button" data-path-reset disabled>重置</button>
+  </div>
+  <p data-path-route>源和目标同时传列表：走快捷分支，保留目标路径原样。</p>
+  <dl>
+    <dt>传入的目标</dt><dd><code data-path-input>["result.bin"]</code></dd>
+    <dt>进入目录处理时的单个目标</dt><dd><code data-path-target>result.bin</code></dd>
+    <dt>dirname 得到的父目录</dt><dd><code data-path-parent>""（空字符串）</code></dd>
+  </dl>
+  <div class="path-demo-comparison">
+    <section aria-label="原版"><h3>原版</h3><p data-path-original>os.makedirs("", exist_ok=True) → 空路径失败，流程停止。</p></section>
+    <section aria-label="修复版"><h3>修复版</h3><p data-path-fixed>父目录为空 → 跳过 os.makedirs，流程可继续（未执行下载）。</p></section>
+  </div>
+  <h3>对应的 Python 调用形式</h3>
+  <pre><code data-path-api># 假设 fs 是已配置好的 HTTPFileSystem；此处只展示参数形式。
+# example.invalid 是示例地址，不用于实际下载。
+source = "https://example.invalid/payload"
+fs.get([source], ["result.bin"])</code></pre>
+  <p data-path-status role="status" aria-live="polite" aria-atomic="true">教学模拟：默认展示列表裸名。原版尝试创建空目录而失败，修复版跳过这一步，流程可继续。启用 JavaScript 后可切换其余组合。</p>
+</section>
+
+<h2 id="section-22">列表省掉了一步，后面却还在等它</h2>
+<p>下载实现为两个列表准备了一条快捷分支：既然调用者已经逐项指定来源和目标，就直接使用这些路径。标量输入走另一条分支，会先做路径规范化和目标推导。</p>
+<p>两个分支最后汇合到同一段准备工作：取出每个目标的父目录，确保它存在，然后开始下载。问题就在这儿。<code>nested/result.bin</code> 有父目录 <code>nested</code>，而裸文件名没有：</p>
+<div class="code-wrap"><div class="code-label">python</div><button class="copy-code" type="button" aria-label="复制代码">复制</button><pre><code>os.path.dirname(&quot;result.bin&quot;)  # &quot;&quot;</code></pre></div>
+<p>空字符串被交给 <code>os.makedirs</code>，于是报错。标量分支前面已经处理过路径，列表分支保留了裸文件名。看起来相同的用户意图，到了公共逻辑这里，路径的形态已经不同。<a href="https://github.com/fsspec/filesystem_spec/blob/7aa038375b89d3191ebb81c70162d57441c19f89/fsspec/asyn.py#L822">合入前源码</a></p>
+<p>换成 <code>Path(&quot;result.bin&quot;)</code> 也不会绕过这个问题。这里调用的是 <code>os.path.dirname</code>，得到的仍然是空字符串；它和 <code>Path(&quot;result.bin&quot;).parent</code> 返回 <code>.</code> 是两回事。</p>
+<h2 id="section-36">修复里还有一次小讨论</h2>
+<p>我最初用了当前目录作为空父目录的替代值。维护者指出，当前目录本来就不需要创建。这也让修复更准确了：父目录非空时才创建，裸文件名直接写入已有工作目录。</p>
+<div class="code-wrap"><div class="code-label">python</div><button class="copy-code" type="button" aria-label="复制代码">复制</button><pre><code>for lp in lpaths:
+    if parent := os.path.dirname(lp):
+        os.makedirs(parent, exist_ok=True)</code></pre></div>
+<p>这段是上游最终接受的实现。回归测试同时检查：裸文件名能下载，程序也没有偷偷去创建空路径或 <code>.</code>。我以 adenzhou1350 提交的 <a href="https://github.com/fsspec/filesystem_spec/pull/2376">PR #2376</a> 由 martindurant 于 2026 年 10 月 27 日合入。</p>
+<h2 id="section-48">修好的同时，正常输入也要能用</h2>
+<p>只看到报错消失还不够。如果修复把创建父目录的动作全部删掉，裸文件名可能好了，嵌套目录却会坏掉。所以我在 10 月 29 日用公开的相邻两个提交重新跑了这些形式：</p>
+<div class="table-wrap"><table><thead><tr><th scope="col">目标形式，每种含 str 和 Path</th><th scope="col">修复前</th><th scope="col">修复后</th></tr></thead><tbody><tr><td>直接传相对文件名</td><td>2 项成功</td><td>2 项成功</td></tr><tr><td>相对文件名列表</td><td>2 项失败，请求数均为 0</td><td>2 项成功</td></tr><tr><td>嵌套相对路径列表</td><td>2 项成功</td><td>2 项成功</td></tr><tr><td>绝对路径列表</td><td>2 项成功</td><td>2 项成功</td></tr></tbody></table></div>
+<p>成功项都检查了完整文件字节，同步 MemoryFileSystem 的列表下载也作为参考跑过。这里检查的是同一个问题的不同输入；没有测吞吐，也没有覆盖全部云存储后端。</p>
+<h2 id="section-61">在自己电脑上重放</h2>
+<p><a href="/assets/files/fsspec-relative-path-replay.zip">下载回放包</a>，解压后在目录里运行：</p>
+<div class="code-wrap"><div class="code-label">powershell</div><button class="copy-code" type="button" aria-label="复制代码">复制</button><pre><code>python -B -X utf8 run_case.py</code></pre></div>
+<p>本次验证环境是 Windows、Python 3.14.3 和 aiohttp 3.13.5。包内 README 有独立虚拟环境的准备命令。首次运行会下载两个固定提交的完整公开源码，并核对哈希；测试通过本机环回 HTTP 提供文件，不需要云账号。缓存齐备后可以加 <code>--offline</code> 重跑。</p>
+<p>脚本保留每种输入的异常、请求数和字节校验结果。你也可以先看<a href="/assets/files/fsspec-relative-path-results-20261029.json">这次的结果 JSON</a>。遇到类似的“单个能用，批量失败”，先把两个入口走过的路径画出来，再给正常输入留几个对照，往往比盯着最后一行异常更容易找到问题。</p><div class="article-end"><p>本文使用 AI 工具辅助整理。实验设置和测试结果见正文。</p><a href="https://github.com/fsspec/filesystem_spec/pull/2376">相关原始记录 ↗</a><a href="mailto:aden1350@outlook.com">讨论这个问题 ↗</a></div></article><aside class="article-aside"><p class="eyebrow">ON THIS PAGE / 目录</p><ol class="toc"><li><a href="#section-12">先猜，再点开路径</a></li><li><a href="#section-22">列表省掉了一步，后面却还在等它</a></li><li><a href="#section-36">修复里还有一次小讨论</a></li><li><a href="#section-48">修好的同时，正常输入也要能用</a></li><li><a href="#section-61">在自己电脑上重放</a></li></ol><p class="aside-note">交互教程</p></aside></div></div></main><footer class="site-footer"><div class="shell"><div class="footer-top"><a href="/" class="footer-signature">Aden / 周栩丞</a><div class="footer-links"><a href="mailto:aden1350@outlook.com">工作联系 ↗</a><a href="https://github.com/adenzhou1350">GitHub ↗</a><a href="/feed.xml">RSS ↗</a><a href="/about/">关于本站</a></div></div><div class="footer-bottom"><span>© 2026 周栩丞 · ADEN ZHOU</span><span>AI INFRA / EMBODIED AGENTS / OPEN SOURCE</span></div></div></footer></body></html>
