@@ -81,5 +81,17 @@
     "url": "https://github.com/adenzhou1350/kernel_opt_agent",
     "guide": "https://github.com/adenzhou1350/kernel_opt_agent/blob/main/PUBLIC_ENTRY.md",
     "guide_label": "从 CPU 试跑开始"
+  },
+  {
+    "name": "桐人 × 亚丝娜 · 黑金 PCB",
+    "repo": "sao-enig-pcb",
+    "category": "动手制作",
+    "description": "桐人正面、亚丝娜背面的双面艺术通行证。用沉金、哑黑阻焊和普通白色丝印形成图案，公开新增图层、EDA 构建脚本与打板指南。",
+    "tags": ["PCB 艺术", "沉金", "Python", "可复刻"],
+    "status": "已打样 · 待实物验收",
+    "boundary": "工程已通过 EDA 检查，实物尚未收到。板框与孔槽来自 observer0703 的红莉栖 PCB，脚本获取上游后本地组装。新增程序代码采用 MIT，不含上游及角色/IP授权。",
+    "url": "https://github.com/adenzhou1350/sao-enig-pcb",
+    "guide": "/blog/sao-enig-pcb/",
+    "guide_label": "看制作记录与工程预览"
   }
 ]

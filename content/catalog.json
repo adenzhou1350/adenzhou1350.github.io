@@ -1,5 +1,19 @@
 [
   {
+    "slug": "sao-enig-pcb",
+    "section": "blog",
+    "title": "给桐人和亚丝娜做一张黑金 PCB 通行证",
+    "description": "把角色图稿整理成铜、阻焊开窗和丝印图层，减小金色面积，再打样和公开复刻包。工程已检查，实物仍待验收。",
+    "category": "动手制作",
+    "date": "2026-11-10",
+    "minutes": 5,
+    "tags": ["刀剑神域", "PCB", "沉金", "AI 辅助图稿", "可复刻"],
+    "source": "content/posts/sao-enig-pcb.md",
+    "kind": "制作记录",
+    "source_url": "https://github.com/adenzhou1350/sao-enig-pcb",
+    "home_featured": false
+  },
+  {
     "slug": "tilelang-descriptor-map",
     "section": "blog",
     "title": "TileLang：返回 False 之前，字典已经被改了",

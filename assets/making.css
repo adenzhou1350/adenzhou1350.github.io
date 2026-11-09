@@ -1,0 +1,19 @@
+/* This small section is loaded only on the homepage; existing site styles stay intact. */
+.home-making{border-top:1px solid var(--line);padding:43px 0 48px}
+.making-card{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);border:1px solid var(--line);background:var(--white)}
+.making-preview{margin:0;padding:20px;background:#e9e8e4;border-right:1px solid var(--line);display:flex;flex-direction:column;justify-content:center}
+.making-preview a{display:block}
+.making-preview img{display:block;width:100%;height:330px;object-fit:contain}
+.making-preview figcaption{margin-top:13px;color:#59665e;font-size:11px;line-height:1.7;text-align:center}
+.making-copy{padding:32px 34px;align-self:center;min-width:0}
+.making-copy>.eyebrow{font-size:10px}
+.making-copy h3{font-size:27px;letter-spacing:-.04em;margin:13px 0 16px}
+.making-copy>p:not(.eyebrow){font-size:13px;color:#59665e;line-height:1.95}
+.making-copy .making-status{margin:19px 0 16px;padding-left:12px;border-left:2px solid #d9decd;font-size:11px}
+.making-copy .making-credit{font-size:11px;margin-bottom:23px}
+.making-credit a{text-decoration:underline;text-underline-offset:3px}
+.making-copy .project-links{gap:22px;flex-wrap:wrap}
+.making-copy .button{font-size:12px;padding:10px 14px}
+.making-copy .text-link{font-size:12px}
+@media(max-width:780px){.home-making{padding:34px 0 39px}.making-card{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}.making-preview{padding:15px}.making-preview img{height:270px}.making-copy{padding:25px}.making-copy h3{font-size:23px}.making-copy .project-links{gap:16px}}
+@media(max-width:600px){.making-card{grid-template-columns:1fr}.making-preview{padding:18px;border-right:0;border-bottom:1px solid var(--line)}.making-preview img{height:auto;max-height:330px}.making-preview figcaption{font-size:10px}.making-copy{padding:25px}.making-copy h3{font-size:25px}.making-copy>p:not(.eyebrow){font-size:13px}.making-copy .making-status,.making-copy .making-credit{font-size:11px}}

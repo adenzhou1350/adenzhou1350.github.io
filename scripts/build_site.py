@@ -226,6 +226,9 @@ def page(title, description, body, path="/", active="", article=None, noindex=Fa
         data = {"@context": "https://schema.org", "@type": "TechArticle", "headline": article["title"], "description": article["description"], "datePublished": article["date"], "dateModified": article.get("updated", article["date"]), "author": {"@type": "Person", "name": "周栩丞", "url": BASE + "/about/"}, "mainEntityOfPage": canonical}
     encoded_data = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
     lesson_assets = ''
+    if path == '/':
+        making_version = hashlib.sha256((ROOT / 'assets/making.css').read_bytes()).hexdigest()[:12]
+        lesson_assets += f'<link rel="stylesheet" href="/assets/making.css?v={making_version}">'
     if article and article['slug'] == 'fsspec-relative-path':
         versions = {suffix: hashlib.sha256((ROOT / f'assets/path-demo.{suffix}').read_text(encoding='utf-8').encode('utf-8')).hexdigest()[:12] for suffix in ('css', 'js')}
         lesson_assets = f'<link rel="stylesheet" href="/assets/path-demo.css?v={versions["css"]}"><script defer src="/assets/path-demo.js?v={versions["js"]}"></script>'
@@ -284,7 +287,7 @@ def recent_contributions(contributions, compact=False):
 
 
 def home(catalog, projects, contributions):
-    posts = sorted([p for p in catalog if p['section'] == 'blog'], key=lambda p: p['date'], reverse=True)[:2]
+    posts = sorted([p for p in catalog if p['section'] == 'blog' and p.get('home_featured', True)], key=lambda p: p['date'], reverse=True)[:2]
     project_by_repo = {item['repo']: item for item in projects}
     featured_contributors = [item for item in contributions['projects'] if item.get('featured')]
     contributor_links = ''.join(
@@ -335,6 +338,13 @@ def home(catalog, projects, contributions):
 <section class="section home-notes" id="field-notes">
   {section_head('02 / FIELD NOTES','工程笔记','/blog/','所有文章')}
   <div class="home-reading-layout"><div class="home-note-list">{''.join(note_row(p) for p in posts)}</div><aside class="home-learning" aria-labelledby="home-learning-title"><p class="eyebrow">LEARN BY TRYING</p><h3 id="home-learning-title">先在浏览器里试试</h3><p>同一个文件名，放进列表就下载失败？切换输入，沿着一次真实修复找原因。</p><a class="button button-outline" href="/learn/fsspec-relative-path/#path-demo">打开路径小实验<span aria-hidden="true">→</span></a><a class="text-link" href="/learn/">浏览全部教程<span class="arrow" aria-hidden="true">↗</span></a></aside></div>
+</section>
+<section class="section home-making" id="hands-on">
+  {section_head('03 / HANDS-ON','动手制作','/blog/sao-enig-pcb/','制作记录')}
+  <article class="making-card">
+    <figure class="making-preview"><a href="/blog/sao-enig-pcb/" aria-label="阅读桐人与亚丝娜黑金 PCB 制作记录"><img src="/assets/images/sao-enig-preview.png" width="1900" height="1850" loading="lazy" alt="桐人正面、亚丝娜背面的黑金白 PCB 工程预览，不是实物照片"></a><figcaption>工程预览 · 已打样，待实物验收</figcaption></figure>
+    <div class="making-copy"><p class="eyebrow orange">KIRITO × ASUNA / PCB ART</p><h3>一张黑金通行证</h3><p>把全身侧站的桐人和亚丝娜放在同一块板的两面。金色对应沉金，黑色是阻焊，白色是普通丝印；从 AI 辅助图稿整理到可以导入 EDA 的工程。</p><p class="making-status">约 50 × 100 mm · 双面 · 5 片打样已下单<br>公开复刻包已验证，实物细节仍待到货核对。</p><p class="making-credit">板框、孔槽与制作思路来自 <a href="https://github.com/observer0703/-kurisu-enig-pcb">observer0703 的红莉栖 PCB</a>。</p><div class="project-links"><a class="button button-outline" href="/blog/sao-enig-pcb/">看制作过程<span aria-hidden="true">→</span></a>{external(project_by_repo['sao-enig-pcb']['url'],'复刻仓库')}</div></div>
+  </article>
 </section>
 <section class="contact-strip home-contact"><div><p class="eyebrow">GET IN TOUCH</p><h2>聊聊具体的工程问题。</h2><p>具身 Agent、模型推理或开源协作，都可以发邮件联系。</p><p>邮箱：<span>{esc(EMAIL)}</span></p></div><a class="button" href="mailto:{EMAIL}">发邮件<span aria-hidden="true">↗</span></a></section>
 </div>'''
