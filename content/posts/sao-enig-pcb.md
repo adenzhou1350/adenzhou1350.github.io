@@ -4,7 +4,7 @@
 
 ![桐人正面与亚丝娜背面：工程预览 · 已打样，待实物验收](/assets/images/sao-enig-preview.png)
 
-板框、孔槽与制作思路来自 [observer0703 的红莉栖沉金 PCB](https://github.com/observer0703/-kurisu-enig-pcb/releases/tag/v1.0.0)。感谢原作者分享这条制作路线。本版新增了刀剑神域图案、图层工程化处理和姓名描边，完整来源写在 [CREDITS](https://github.com/adenzhou1350/sao-enig-pcb/blob/main/CREDITS.md)。
+板框、孔槽与制作思路来自 [observer0703 的红莉栖沉金 PCB](https://github.com/observer0703/-kurisu-enig-pcb/releases/tag/v1.0.0)。感谢原作者分享这条制作路线。本版新增了刀剑神域图案、图层工程化处理和姓名描边，完整来源写在 [CREDITS](https://github.com/adenzhou1350/enig-pcb-art/blob/main/CREDITS.md)。
 
 ## 把画面拆成三种材料
 
@@ -22,7 +22,7 @@ AI 辅助图稿能帮助确定姿态和构图，上板还需要重新整理图�
 
 ## 复刻包里有什么
 
-[公开仓库](https://github.com/adenzhou1350/sao-enig-pcb) 和 [v1.0.0 资料包](https://github.com/adenzhou1350/sao-enig-pcb/releases/tag/v1.0.0) 包含新增的 SVG、二值图层、锁定原生路径、构建脚本与中文打板指南。安装 Python 3.10 或更新版本，解压后运行：
+[SAO v1.0.0 资料包](https://github.com/adenzhou1350/enig-pcb-art/releases/tag/v1.0.0) 保留本版新增的 SVG、二值图层、锁定原生路径、构建脚本与中文打板指南。安装 Python 3.10 或更新版本，解压该版本资料包后运行：
 
 ```powershell
 python scripts/build.py --download-upstream
@@ -35,3 +35,5 @@ python scripts/build.py --download-upstream
 从公开下载包重新生成的工程，与下单版的 1194 个艺术填充、2865 个环及板框、孔槽几何一致。公开构建文件已实际导入 EDA，完成 141 项 DRC、0 问题，并核对两面预览。
 
 这些结果说明文件结构和设计规则检查通过，不能代替厂家的工艺审查或实物验收。细小尖端会不会丢失、丝印是否糊在一起、金色在日常光线下怎样，都留到样板到手后再记录。到时会补上正反面实拍和细节对照，继续保留这版工程预览作为比较。
+
+这版现收录在[黑金 PCB 作品集](https://github.com/adenzhou1350/enig-pcb-art)，同合集的 Mob 与夏油杰目前是工程预览。本文继续保留 SAO 的制作过程和本次打样记录。
