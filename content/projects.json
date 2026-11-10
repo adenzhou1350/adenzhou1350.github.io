@@ -88,8 +88,8 @@
     "category": "动手制作",
     "description": "用沉金、黑色阻焊和白色丝印制作双面角色图案。合集收录刀剑神域、Mob 和夏油杰，提供图层、构建脚本与各版验证记录。",
     "tags": ["PCB 艺术", "沉金", "Python", "可复刻"],
-    "status": "SAO 已打样 · Mob / 夏油杰为预览",
-    "boundary": "SAO 待实物验收；Mob / 夏油杰为工程预览，细线与实物效果仍待验证。板框与孔槽来自 observer0703 的红莉栖 PCB，脚本获取上游后本地组装。新增程序代码采用 MIT，不含上游及角色/IP授权。",
+    "status": "SAO 已打样 · Mob / 夏油杰制造版",
+    "boundary": "SAO 待实物验收；Mob / 夏油杰制造文件已发布，未下单、待实物验收。板框与孔槽来自 observer0703 的红莉栖 PCB，脚本获取上游后本地组装。新增程序代码采用 MIT，不含上游及角色/IP授权。",
     "url": "https://github.com/adenzhou1350/enig-pcb-art",
     "guide": "/blog/sao-enig-pcb/",
     "guide_label": "看 SAO 制作记录"

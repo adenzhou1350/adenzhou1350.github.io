@@ -22,7 +22,7 @@ AI 辅助图稿能帮助确定姿态和构图，上板还需要重新整理图�
 
 ## 复刻包里有什么
 
-[SAO v1.0.0 资料包](https://github.com/adenzhou1350/enig-pcb-art/releases/tag/v1.0.0) 保留本版新增的 SVG、二值图层、锁定原生路径、构建脚本与中文打板指南。安装 Python 3.10 或更新版本，解压该版本资料包后运行：
+[SAO v1.1.0 资料包](https://github.com/adenzhou1350/enig-pcb-art/releases/tag/sao-v1.1.0) 保留本版新增的 SVG、二值图层、锁定原生路径、构建脚本与中文打板指南，板子图案与本次打样相同。安装 Python 3.10 或更新版本，解压该版本资料包后运行：
 
 ```powershell
 python scripts/build.py --download-upstream
@@ -36,4 +36,4 @@ python scripts/build.py --download-upstream
 
 这些结果说明文件结构和设计规则检查通过，不能代替厂家的工艺审查或实物验收。细小尖端会不会丢失、丝印是否糊在一起、金色在日常光线下怎样，都留到样板到手后再记录。到时会补上正反面实拍和细节对照，继续保留这版工程预览作为比较。
 
-这版现收录在[黑金 PCB 作品集](https://github.com/adenzhou1350/enig-pcb-art)，同合集的 Mob 与夏油杰目前是工程预览。本文继续保留 SAO 的制作过程和本次打样记录。
+这版现收录在[黑金 PCB 作品集](https://github.com/adenzhou1350/enig-pcb-art)，同合集的 Mob 与夏油杰制造文件已发布，未下单、待实物验收。本文继续保留 SAO 的制作过程和本次打样记录。
