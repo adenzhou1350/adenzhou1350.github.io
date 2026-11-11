@@ -282,7 +282,7 @@ def recent_contributions(contributions, compact=False):
         links.append(f'''<li><a href="{esc(item['url'])}" target="_blank" rel="noopener noreferrer"><div class="recent-pr-meta"><span>{esc(names[item['repository']])}</span><time datetime="{date}">{date:%m.%d} 合并</time></div><strong>{esc(item['title'])}<span aria-hidden="true"> ↗</span></strong>{description}<span class="sr-only">PR #{item['number']}，新窗口</span></a></li>''')
     if not links:
         return ''
-    heading = '<p class="recent-pr-label">近期改动</p>' if compact else '<h2 class="recent-pr-label">近期改动</h2>'
+    heading = '<p class="recent-pr-label">几项具体修复</p>' if compact else '<h2 class="recent-pr-label">几项具体修复</h2>'
     return f'<div class="recent-contributions{ " recent-contributions-compact" if compact else "" }">{heading}<ul class="recent-pr-list">{"".join(links)}</ul></div>'
 
 
@@ -311,7 +311,7 @@ def home(catalog, projects, contributions):
   </nav>
 </section>
 <section class="contributor-strip" id="open-source" aria-labelledby="home-contributor-title">
-  <div class="contributor-strip-heading"><div><p class="eyebrow">CONTRIBUTOR TO</p><h2 id="home-contributor-title">参与贡献的开源项目</h2></div><a class="text-link" href="/contributions/">全部 {len(contributions['projects'])} 个项目<span class="arrow" aria-hidden="true">→</span></a></div>
+  <div class="contributor-strip-heading"><div><p class="eyebrow">OPEN-SOURCE PATCHES</p><h2 id="home-contributor-title">参与贡献的开源项目</h2></div><a class="text-link" href="/contributions/">按项目查看贡献<span class="arrow" aria-hidden="true">→</span></a></div>
   <div class="contributor-strip-links">{contributor_links}</div>
   {recent_contributions(contributions, compact=True)}
   <div class="contributor-more"><span>代码之外，也记下排查过程</span><a class="text-link" href="/contributions/stories/">读 PR 背后的故事<span class="arrow" aria-hidden="true">→</span></a></div>
@@ -453,7 +453,7 @@ def pr_stories_page(catalog, contributions):
 
 def about_page():
     body = page_hero("ABOUT / ADEN ZHOU", "关于我", "我是周栩丞，也叫 Aden，现在在深圳做 AI Agent 研发。")
-    body += f'''<div class="shell page-content"><div class="about-layout"><section><h2>我平时做什么</h2><p>目前主要做具身 Agent，处理语音交互、意图理解、工具调用和动作执行。任务超时后怎么恢复、消息和执行状态怎么同步，也是工作中要解决的问题。</p><p>我也做过模型部署、权重量化、批处理调度和 KV Cache 调优。多模态输入与推理服务的资源管理，是我一直在关注的方向。</p><p>Jev、Bonsai 和 minimind-diffusion 是我的个人项目与实验。这里会记录遇到的故障、修复办法和测试结果；还没解决的问题也会写出来。</p><p>可以从两篇公开记录看起：<a class="text-link" href="/blog/tilelang-grid-barrier/">TileLang 同步修复</a>、<a class="text-link" href="/blog/bonsai-5090-experiment/">5090 量化实测</a>。</p><ul class="tag-list"><li>AI Infra</li><li>具身 Agent</li><li>推理服务</li><li>系统可靠性</li></ul><p>邮箱：<span>{esc(EMAIL)}</span></p><div class="project-links"><a class="button" href="mailto:{EMAIL}">工作联系 ↗</a><a class="text-link" href="/assets/files/aden-zhou-xucheng-cv.pdf">查看中文简历 ↗</a></div></section><section><h2>工作与教育</h2><ol class="timeline"><li><span class="date">2026.03 至今</span><h3>自变量机器人</h3><p>AI Agent 研发工程师 · 具身任务链、工具调用、超时与消息同步。</p></li><li><span class="date">2025.03 至 2026.03</span><h3>华为 OD · 大模型平台</h3><p>软件开发工程师 · 模型部署流水线、Q4 权重量化、批处理调度与 KV Cache 调优。</p></li><li><span class="date">2023.02 至 2025.01</span><h3>悉尼大学</h3><p>硕士 · 网络与分布式系统</p></li><li><span class="date">2018.08 至 2022.12</span><h3>宾夕法尼亚州立大学</h3><p>学士 · 计算机工程</p></li></ol></section></div></div>'''
+    body += f'''<div class="shell page-content"><div class="about-layout"><section><h2>我平时做什么</h2><p>目前主要做具身 Agent，处理语音交互、意图理解、工具调用和动作执行。任务超时后怎么恢复、消息和执行状态怎么同步，也是工作中要解决的问题。</p><p>我也做过模型部署、权重量化、批处理调度和 KV Cache 调优。多模态输入与推理服务的资源管理，是我一直在关注的方向。</p><p>Jev、Bonsai 和 minimind-diffusion 是我的个人项目与实验。这里会记录遇到的故障、修复办法和测试结果；还没解决的问题也会写出来。</p><h2 id="case-studies">从这些记录看起</h2><p><strong>推理与 GPU</strong> · <a class="text-link" href="/blog/tilelang-grid-barrier/">一次同步修复</a>，以及 <a class="text-link" href="/blog/bonsai-5090-experiment/">Bonsai 单卡量化实验</a>。分别记录故障怎么复现、显存与质量怎么一起测。</p><p><strong>Agent 与可靠性</strong> · <a class="text-link" href="/blog/agent-retrieval-read-budget/">检索工具的读取边界</a>，以及 <a class="text-link" href="/blog/image-cache-identity/">截图缓存失效实验</a>。关注系统实际读了什么、返回的结果是否对应当前输入。</p><ul class="tag-list"><li>AI Infra</li><li>具身 Agent</li><li>推理服务</li><li>系统可靠性</li></ul><p>邮箱：<span>{esc(EMAIL)}</span></p><div class="project-links"><a class="button" href="mailto:{EMAIL}">工作联系 ↗</a><a class="text-link" href="/contributions/stories/">更多修复记录 →</a></div></section><section><h2>工作与教育</h2><ol class="timeline"><li><span class="date">2026.03 至今</span><h3>自变量机器人</h3><p>AI Agent 研发工程师 · 具身任务链、工具调用、超时与消息同步。</p></li><li><span class="date">2025.03 至 2026.03</span><h3>华为 OD · 大模型平台</h3><p>软件开发工程师 · 模型部署流水线、Q4 权重量化、批处理调度与 KV Cache 调优。</p></li><li><span class="date">2023.02 至 2025.01</span><h3>悉尼大学</h3><p>硕士 · 网络与分布式系统</p></li><li><span class="date">2018.08 至 2022.12</span><h3>宾夕法尼亚州立大学</h3><p>学士 · 计算机工程</p></li></ol></section></div></div>'''
     return page("关于", "周栩丞 Aden Zhou：AI Agent 研发工程师，关注具身 Agent、LLM 推理和系统可靠性。", body, "/about/", "about")
 
 
